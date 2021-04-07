@@ -1,0 +1,8 @@
+name: Kubernetes_1.16
+title: Kubernetes 1.16 Based upon Kubernetes 1.16 Security Technical Implementation Guideline (STIG) 
+maintainer: DISA DevSecOps Team 
+copyright: Defense Information Systems Agency (DISA)
+summary: InSpec testing for baseline compliance with the Kubernetes STIG
+description: An InSpec profile verifying compliance with Kubernetes STIG version 1.16 
+version: 1.0.0
+inspec_version: ">= 4.0"
