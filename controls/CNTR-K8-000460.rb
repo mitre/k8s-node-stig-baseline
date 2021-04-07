@@ -50,5 +50,26 @@ kubelet config file is changed.
   tag fix_id: 'F-CNTR-K8-000460_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+
+  describe kube_scheduler do
+    its('feature-gates.to_s') { should match /DynamicKubeletConfig=[F|f]alse/ }
+  end
+
+  describe kube_controller_manager do
+    its('feature-gates.to_s') { should match /DynamicKubeletConfig=[F|f]alse/ }
+  end
+
+  describe kube_apiserver do
+    its('feature-gates.to_s') { should match /DynamicKubeletConfig=[F|f]alse/ }
+  end
+
+  describe.one do
+    describe kubelet do
+      its('feature-gates.to_s') { should match /DynamicKubeletConfig=[F|f]alse/ }
+    end
+    describe kubelet_config_file do
+      its(['featureGates','DynamicKubeletConfig']) { should_not cmp 'false' }
+    end
+  end
 end
 

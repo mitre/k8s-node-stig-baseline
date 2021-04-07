@@ -34,5 +34,14 @@ value of \"peer-auto-tls\" to \"false\"."
   tag fix_id: 'F-CNTR-K8-000190_fix'
   tag cci: ['CCI-000068']
   tag nist: ['AC-17 (2)']
+
+  unless etcd.exist?
+    impact 0.0
+    desc 'caveat','ETCD process is not running on the target.'
+  end
+
+  describe etcd do
+    its('peer-auto-tls') { should cmp "false" }
+  end
 end
 

@@ -36,5 +36,14 @@ value for the --insecure-bind-address setting."
   tag fix_id: 'F-CNTR-K8-000340_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('insecure-bind-address') { should be_nil }
+  end
 end
 

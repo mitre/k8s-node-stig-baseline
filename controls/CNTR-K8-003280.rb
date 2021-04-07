@@ -30,5 +30,14 @@ argument \"--audit-policy-file\" to \"log file directory\"."
   tag fix_id: 'F-CNTR-K8-003280_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
+
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('audit-policy-file') { should_not be_nil }
+  end
 end
 

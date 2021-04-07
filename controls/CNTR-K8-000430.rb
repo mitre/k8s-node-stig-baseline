@@ -33,5 +33,14 @@ kubectl."
   tag fix_id: 'F-CNTR-K8-000430_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+
+  unless command(input('kubectl_path')).exist?
+    impact 0.0
+    desc 'caveat','Kubelet process is not running on the target.'
+  end
+
+  describe json(command: "#{input('kubectl_path')} version --client --output=json" ) do
+    its (['clientVersion','gitVersion']) { should cmp > '1.12.9'}
+  end
 end
 

@@ -58,5 +58,15 @@ set the parameter in KUBELET_SYSTEM_PODS_ARGS variable to
   tag fix_id: 'F-CNTR-K8-000330_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+
+  describe.one do
+    describe kubelet do
+      its('read-only-port') { should cmp 0 }
+    end
+    
+    describe kubelet_config_file do
+      its('readOnlyPort') { should cmp 0 }
+    end
+  end
 end
 

@@ -35,5 +35,9 @@ the service after the change is made by running:
   tag fix_id: 'F-CNTR-K8-000850_fix'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
+
+  describe kubelet do
+    its('hostname-override') { should be_nil }
+  end
 end
 

@@ -42,5 +42,15 @@ Kubernetes Master Node.
   tag fix_id: 'F-CNTR-K8-000370_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+
+  describe.one do
+    describe kubelet do
+      its('anonymous-auth') { should cmp 'false' }
+    end
+    
+    describe kubelet_config_file do
+      its(['authentication','anonymous','enabled']) { should cmp 'false' }
+    end
+  end
 end
 

@@ -38,5 +38,9 @@ settings can be made if the session is interrupted.
   tag fix_id: 'F-CNTR-K8-000410_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+
+  describe service('sshd') do
+    it { should_not be_enabled}
+  end
 end
 

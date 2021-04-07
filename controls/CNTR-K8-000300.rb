@@ -32,5 +32,14 @@ argument \"--bind-address\" to \"127.0.0.1\"."
   tag fix_id: 'F-CNTR-K8-000300_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+
+  unless kube_scheduler.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes Scheduler process is not running on the target.'
+  end
+
+  describe kube_scheduler do
+    its('bind-address.to_s') { should cmp '127.0.0.1' }
+  end
 end
 

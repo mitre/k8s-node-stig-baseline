@@ -36,5 +36,14 @@ file resides.
   tag fix_id: 'F-CNTR-K8-000600_fix'
   tag cci: ['CCI-001464']
   tag nist: ['AU-14 (1)']
+
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('audit-policy-file') { should_not be_nil }
+  end
 end
 

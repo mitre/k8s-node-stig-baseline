@@ -76,5 +76,22 @@ following:
 'CCI-001404', 'CCI-001487', 'CCI-001814', 'CCI-002234']
   tag nist: ['AC-2 (4)', 'AU-3', 'AU-3', 'AU-3', 'AU-3', 'AU-3', 'AU-3 (1)',
 'AU-12 c', 'AC-2 (4)', 'AC-2 (4)', 'AU-3', 'CM-5 (1)', 'AC-6 (9)']
+
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('audit-policy-file') { should_not be_nil }
+  end
+
+  policy_file = kube_apiserver.params['audit-policy-file'].join
+
+  if file(policy_file).exist?
+    describe yaml(policy_file) do
+      its('rules') { should cmp [{"level"=>"RequestResponse"}] }
+    end
+  end
 end
 

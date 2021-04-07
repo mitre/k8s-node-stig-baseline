@@ -33,5 +33,14 @@ argument --secure-port to a value greater than \"0\"."
   tag fix_id: 'F-CNTR-K8-000350_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('secure-port') { should cmp > 0 }
+  end
 end
 

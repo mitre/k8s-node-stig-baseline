@@ -34,5 +34,25 @@ setting completely.
   tag fix_id: 'F-CNTR-K8-000470_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+
+  describe kube_scheduler do
+    its('feature-gates.to_s') { should_not match /AllAlpha=[T|t]rue/ }
+  end
+
+  describe kube_controller_manager do
+    its('feature-gates.to_s') { should_not match /AllAlpha=[T|t]rue/ }
+  end
+
+  describe kube_apiserver do
+    its('feature-gates.to_s') { should_not match /AllAlpha=[T|t]rue/ }
+  end
+
+  describe kubelet do
+    its('feature-gates.to_s') { should_not match /AllAlpha=[T|t]rue/ }
+  end
+
+  describe kubelet_config_file do
+    its(['featureGates','AllAlpha']) { should_not cmp 'true' }
+  end
 end
 

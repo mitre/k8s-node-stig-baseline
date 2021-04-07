@@ -36,5 +36,12 @@ the command:
   tag fix_id: 'F-CNTR-K8-000440_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-end
 
+  describe kubelet do
+    its('staticPodPath') { should be_nil }
+  end
+  
+  describe kubelet_config_file do
+    its('staticPodPath') { should be_nil }
+  end
+end

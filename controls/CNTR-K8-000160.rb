@@ -35,5 +35,16 @@ value of \"--tls-min-version\" to \"VersionTLS12\" or higher."
   tag fix_id: 'F-CNTR-K8-000160_fix'
   tag cci: ['CCI-000068']
   tag nist: ['AC-17 (2)']
+
+  unless kube_scheduler.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes Scheduler process is not running on the target.'
+  end
+
+  describe kube_scheduler do
+    its('tls-min-version') { should_not be_nil }
+    its('tls-min-version') { should_not cmp 'VersionTLS10' }
+    its('tls-min-version') { should_not cmp 'VersionTLS11' }
+  end
 end
 
