@@ -6,5 +6,3 @@ summary: InSpec testing for baseline compliance with the Kubernetes STIG Node OS
 description: An InSpec profile verifying compliance with Kubernetes STIG version 1.16 Node OS Checks.
 version: 1.0.0
 inspec_version: ">= 4.0"
-
-
