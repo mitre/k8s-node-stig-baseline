@@ -40,5 +40,14 @@ value of client-ca-file to path containing Approved Organizational Certificate."
   tag fix_id: 'F-CNTR-K8-001410_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
+
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('client-ca-file') { should_not be_nil }
+  end
 end
 

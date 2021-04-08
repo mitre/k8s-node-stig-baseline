@@ -35,5 +35,17 @@ Kubelet service using the following command:
   tag fix_id: 'F-CNTR-K8-001300_fix'
   tag cci: ['CCI-001133']
   tag nist: ['SC-10']
+
+  describe.one do
+    describe kubelet do
+      its('streaming-connection-idle-timeout') { should_not be_nil }
+      its('streaming-connection-idle-timeout') { should_not cmp 0 }
+    end
+    
+    describe kubelet_config_file do
+      its('streamingConnectionIdleTimeout') { should_not be_nil }
+      its('streamingConnectionIdleTimeout') { should_not cmp 0 }
+    end
+  end
 end
 

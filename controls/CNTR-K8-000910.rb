@@ -28,5 +28,13 @@ argument \"--profiling value\" to \"false\"."
   tag fix_id: 'F-CNTR-K8-000910_fix'
   tag cci: ['CCI-000381']
   tag nist: ['CM-7 a']
-end
 
+  unless kube_controller_manager.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes Controller Manager process is not running on the target.'
+  end
+
+  describe kube_controller_manager do
+    its('profiling') { should cmp 'false' }
+  end
+end

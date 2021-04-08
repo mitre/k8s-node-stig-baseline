@@ -45,5 +45,15 @@ Approved Organizational Certificate.
   tag fix_id: 'F-CNTR-K8-001420_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
+
+  describe.one do
+    describe kubelet do
+      its('client-ca-file') { should_not be_nil }
+    end
+    
+    describe kubelet_config_file do
+      its(['authentication','x509','clientCAFile']) { should_not be_nil }
+    end
+  end
 end
 

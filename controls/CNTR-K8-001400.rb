@@ -40,5 +40,20 @@ _SHA384
   tag fix_id: 'F-CNTR-K8-001400_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
+
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe "kube-apiserver tls-cipher-suites" do
+    subject { kube_apiserver.params['tls-cipher-suites'].join.split(',') }
+    it { should include 'TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256' }
+    it { should include 'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256' }
+    it { should include 'TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305' }
+    it { should include 'TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384' }
+    it { should include 'TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305' }
+    it { should include 'TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384' }
+  end
 end
 
