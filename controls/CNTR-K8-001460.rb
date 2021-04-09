@@ -45,5 +45,15 @@ Organization Certificate. Reset Kubelet service using the following command:
   tag fix_id: 'F-CNTR-K8-001460_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
+
+  describe.one do
+    describe kubelet do
+      its('tls-private-key-file') { should_not be_nil }
+    end
+    
+    describe kubelet_config_file do
+      its('tlsPrivateKeyFile') { should_not be_nil }
+    end
+  end
 end
 

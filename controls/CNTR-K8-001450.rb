@@ -41,14 +41,19 @@ value of \"--client-cert-auth\" to \"true\" for the etcd."
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 
-  unless kube_apiserver.exist?
+  unless etcd.exist?
     impact 0.0
-    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+    desc 'caveat','ETCD process is not running on the target.'
   end
 
-  describe kube_apiserver do
-    its('tls-cert-file') { should_not be_nil }
-    its('tls-private-key-file') { should_not be_nil }
+  describe.one do
+    describe etcd do
+      its('client-cert-auth') { should cmp "true" }
+    end
+
+    describe process_env_var('etcd') do
+      its(:ETCD_CLIENT_CERT_AUTH) { should cmp "true" }
+    end
   end
 end
 

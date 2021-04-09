@@ -40,5 +40,14 @@ with etcd."
   tag fix_id: 'F-CNTR-K8-001530_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
+
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('etcd-keyfile') { should_not be_nil }
+  end
 end
 

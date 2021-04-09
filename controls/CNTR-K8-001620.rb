@@ -36,5 +36,15 @@ Kubernetes Master Node. Set the argument \"--protect-kernel-defaults\" to
   tag fix_id: 'F-CNTR-K8-001620_fix'
   tag cci: ['CCI-001084']
   tag nist: ['SC-3']
+
+  describe.one do
+    describe kubelet do
+      its('protect-kernel-defaults') { should cmp "true" }
+    end
+    
+    describe kubelet_config_file do
+      its('protectKernelDefaults') { should cmp "true" }
+    end
+  end
 end
 
