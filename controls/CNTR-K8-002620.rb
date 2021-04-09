@@ -31,5 +31,14 @@ setting \"--basic-auth-file\"."
   tag fix_id: 'F-CNTR-K8-002620_fix'
   tag cci: ['CCI-002418']
   tag nist: ['SC-8']
+
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('basic-auth-file') { should be_nil }
+  end
 end
 

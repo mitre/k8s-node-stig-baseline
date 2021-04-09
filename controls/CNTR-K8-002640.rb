@@ -48,5 +48,15 @@ Approved Organizational Certificate and key pair."
   tag fix_id: 'F-CNTR-K8-002640_fix'
   tag cci: ['CCI-002418']
   tag nist: ['SC-8']
+
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('kubelet-client-certificate') { should_not be_nil }
+    its('kubelet-client-key') { should_not be_nil }
+  end
 end
 

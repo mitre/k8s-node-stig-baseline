@@ -35,5 +35,14 @@ value of request-timeout greater than \"0\"."
   tag fix_id: 'F-CNTR-K8-002600_fix'
   tag cci: ['CCI-002385']
   tag nist: ['SC-5']
-end
 
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('request-timeout') { should_not be_nil }
+    its('request-timeout') { should_not cmp '0' }
+  end
+end

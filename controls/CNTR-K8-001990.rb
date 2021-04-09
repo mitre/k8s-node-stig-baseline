@@ -54,5 +54,15 @@ AlwaysAllow."
   tag fix_id: 'F-CNTR-K8-001990_fix'
   tag cci: ['CCI-000213', 'CCI-001812', 'CCI-002235']
   tag nist: ['AC-3', 'CM-11 (2)', 'AC-6 (10)']
+
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('authorization-mode') { should_not be_nil }
+    its('authorization-mode') { should_not cmp 'AlwaysAllow' }
+  end
 end
 

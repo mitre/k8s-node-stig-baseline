@@ -39,5 +39,16 @@ otherwise a denial of service may occur.
   tag fix_id: 'F-CNTR-K8-002000_fix'
   tag cci: ['CCI-002233']
   tag nist: ['AC-6 (8)']
+
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('enable-admission-plugins.to_s') { should include 'ValidatingAdmissionWebhook' }
+  end
 end
+
+
 
