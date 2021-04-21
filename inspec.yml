@@ -8,8 +8,14 @@ version: 1.0.0
 inspec_version: ">= 4.0"
 
 inputs:
-  - name: kubectl_path
-    description: 'Path to kubectl on the target node'
+  - name: manifests_path
+    description: 'Path to Kubernetes manifest files on the target node'
     type: string
-    value: '/usr/local/bin/kubectl'
+    value: '/etc/kubernetes/manifests'
+    required: true
+
+  - name: pki_path
+    description: 'Path to Kubernetes manifest files on the target node'
+    type: string
+    value: '/etc/kubernetes/pki/'
     required: true
