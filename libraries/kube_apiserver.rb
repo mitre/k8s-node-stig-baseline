@@ -17,4 +17,8 @@ class KubeAPIServer < KubeProcessBaseResource
     @process = process || inspec.kubernetes.apiserver_bin
     return skip_resource "Process #{@process} does not exist on the target node." unless inspec.processes(@process).exist?
   end
+
+  def tls_cipher_suites
+    self.params['tls-cipher-suites'].join.split(',')
+  end
 end
