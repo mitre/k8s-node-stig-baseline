@@ -40,10 +40,9 @@ the command:
   tag nist: ['CM-5 (6)']
 
   manifests_path = input('manifests_path')
-  manifests_files = command('find /etc/kubernetes/manifests -type f').stdout.split
+  manifests_files = command("find #{manifests_path} -type f").stdout.split
 
   if manifests_files.empty?
-    impact 0.0
     desc 'caveat', "Kubernetes Manifest files not present of the target at specified path #{manifests_path}."
 
     describe "Kubernetes Manifest files not present of the target at specified path #{manifests_path}."

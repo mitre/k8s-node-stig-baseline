@@ -37,5 +37,15 @@ command:
   tag fix_id: 'F-CNTR-K8-003160_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
+
+  describe.one do
+    describe file(kubelet.params['client-ca-file'].first) do
+      it { should_not be_more_permissive_than('0644')}
+    end
+
+    describe file(kubelet_config_file.params['authentication']['x509']['clientCAFile']) do
+      it { should_not be_more_permissive_than('0644')}
+    end
+  end
 end
 

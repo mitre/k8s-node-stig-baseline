@@ -30,5 +30,23 @@ finding.
   tag fix_id: 'F-CNTR-K8-003180_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
+
+  pki_path = input('pki_path')
+  pki_files = command("find #{pki_path} -type f").stdout.split
+
+  if pki_files.empty?
+    desc 'caveat', "Kubernetes PKI files not present of the target at specified path #{pki_path}."
+
+    describe "Kubernetes Manifest files not present of the target at specified path #{pki_path}."
+      skip
+    end
+  end
+
+  pki_files.each do |file_name|
+    describe file(file_name) do
+      it { should be_owned_by('root')}
+      it { should be_grouped_into('root')}
+    end
+  end
 end
 

@@ -40,7 +40,7 @@ the command:
   describe kubelet do
     its('staticPodPath') { should be_nil }
   end
-  
+
   describe kubelet_config_file do
     its('staticPodPath') { should be_nil }
   end

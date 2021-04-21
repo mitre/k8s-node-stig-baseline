@@ -30,5 +30,20 @@ value of \"--audit-log-path\" to valid location."
   tag fix_id: 'F-CNTR-K8-003320_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
+
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('audit-log-path') { should_not be_nil }
+  end
+
+  if kube_apiserver.exist?
+    describe directory(kube_apiserver.params['audit-log-path'].join) do
+      it { should exist }
+    end
+  end
 end
 

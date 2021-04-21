@@ -28,5 +28,13 @@ value of –\"--audit-log-maxsize\" to a minimum of \"100\"."
   tag fix_id: 'F-CNTR-K8-003290_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-end
 
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('audit-log-maxsize') { should cmp > 100 }
+  end
+end

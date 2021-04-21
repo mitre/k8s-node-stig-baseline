@@ -31,5 +31,9 @@ is a finding.
   tag fix_id: 'F-CNTR-K8-003190_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
+
+  describe file(kubelet.params['kubeconfig'].first) do
+    it { should_not be_more_permissive_than('0644')}
+  end
 end
 

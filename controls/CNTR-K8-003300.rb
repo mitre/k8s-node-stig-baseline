@@ -27,5 +27,14 @@ value of \"--audit-log-maxbackup\" to a minimum of \"10\"."
   tag fix_id: 'F-CNTR-K8-003300_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
+
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('audit-log-maxbackup') { should cmp > 10 }
+  end
 end
 

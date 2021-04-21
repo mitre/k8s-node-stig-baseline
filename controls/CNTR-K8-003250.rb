@@ -32,5 +32,22 @@ the command:
   tag fix_id: 'F-CNTR-K8-003250_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
+
+  manifests_path = input('manifests_path')
+  manifests_files = command("find #{manifests_path} -type f").stdout.split
+
+  if manifests_files.empty?
+    desc 'caveat', "Kubernetes Manifest files not present of the target at specified path #{manifests_path}."
+
+    describe "Kubernetes Manifest files not present of the target at specified path #{manifests_path}."
+      skip
+    end
+  end
+
+  manifests_files.each do |file_name|
+    describe file(file_name) do
+      it { should_not be_more_permissive_than('0644')}
+    end
+  end
 end
 

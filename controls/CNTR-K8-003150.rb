@@ -35,5 +35,14 @@ command:
   tag fix_id: 'F-CNTR-K8-003150_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-end
 
+  unless kube_proxy.exist?
+    impact 0.0
+    desc 'caveat', 'Kube-Proxy process is not running on the target.'
+  end
+
+  describe file(kube_proxy.params['kubeconfig'].first) do
+    it { should be_owned_by('root')}
+    it { should be_grouped_into('root')}
+  end
+end
