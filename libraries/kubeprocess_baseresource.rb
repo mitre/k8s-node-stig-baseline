@@ -26,6 +26,7 @@ class KubeProcessBaseResource < Inspec.resource(1)
 
   def read_params
     return @params if defined?(@params)
+    return {} unless exist?
 
     options = {
       assignment_regex: /--([^:]*?)=(.*?)\s*$/,
