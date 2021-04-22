@@ -40,5 +40,9 @@ the command:
   tag fix_id: 'F-CNTR-K8-000890_fix'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
+
+  describe file(kubelet.params['config'].first) do
+    it { should_not be_more_permissive_than('0644') }
+  end
 end
 

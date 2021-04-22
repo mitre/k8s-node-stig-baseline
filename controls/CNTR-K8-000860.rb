@@ -45,7 +45,7 @@ the command:
   if manifests_files.empty?
     desc 'caveat', "Kubernetes Manifest files not present of the target at specified path #{manifests_path}."
 
-    describe "Kubernetes Manifest files not present of the target at specified path #{manifests_path}."
+    describe "Kubernetes Manifest files not present of the target at specified path #{manifests_path}." do
       skip
     end
   end

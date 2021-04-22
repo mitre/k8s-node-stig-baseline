@@ -40,8 +40,14 @@ value of \"peer-auto-tls\" to \"false\"."
     desc 'caveat','ETCD process is not running on the target.'
   end
 
-  describe etcd do
-    its('peer-auto-tls') { should cmp "false" }
+  describe.one do
+    describe etcd do
+      its('peer-auto-tls') { should cmp "false" }
+    end
+
+    describe process_env_var('etcd') do
+      its(:ETCD_PEER_AUTO_TLS) { should cmp "false" }
+    end
   end
 end
 

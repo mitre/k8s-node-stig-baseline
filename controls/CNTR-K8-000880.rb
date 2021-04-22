@@ -38,5 +38,10 @@ the command:
   tag fix_id: 'F-CNTR-K8-000880_fix'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
+
+  describe file(kubelet.params['config'].first) do
+    it { should be_owned_by('root')}
+    it { should be_grouped_into('root')}
+  end
 end
 

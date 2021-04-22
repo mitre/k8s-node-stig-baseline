@@ -37,5 +37,16 @@ value of \"--tls-min-version\" to either \"VersionTLS12\" or higher."
   tag fix_id: 'F-CNTR-K8-003350_fix'
   tag cci: ['CCI-001453']
   tag nist: ['AC-17 (2)']
+
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('tls-min-version') { should_not be_nil }
+    its('tls-min-version') { should_not cmp 'VersionTLS10' }
+    its('tls-min-version') { should_not cmp 'VersionTLS11' }
+  end
 end
 

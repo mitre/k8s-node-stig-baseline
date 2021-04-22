@@ -49,14 +49,13 @@ the command:
   if manifests_files.empty?
     desc 'caveat', "Kubernetes Manifest files not present of the target at specified path #{manifests_path}."
 
-    describe "Kubernetes Manifest files not present of the target at specified path #{manifests_path}."
+    describe "Kubernetes Manifest files not present of the target at specified path #{manifests_path}." do
       skip
     end
   end
 
   manifests_files.each do |file_name|
     describe file(file_name) do
-      it { should_not be_more_permissive_than('0644') }
       it { should_not be_more_permissive_than('0644') }
     end
   end

@@ -32,12 +32,12 @@ finding.
   tag nist: ['CM-6 b']
 
   pki_path = input('pki_path')
-  pki_files = command("find #{pki_path} -type f").stdout.split
+  pki_files = command("find #{pki_path}/ -type f").stdout.split
 
   if pki_files.empty?
     desc 'caveat', "Kubernetes PKI files not present of the target at specified path #{pki_path}."
 
-    describe "Kubernetes Manifest files not present of the target at specified path #{pki_path}."
+    describe "Kubernetes Manifest files not present of the target at specified path #{pki_path}." do
       skip
     end
   end

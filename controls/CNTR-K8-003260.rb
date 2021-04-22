@@ -45,4 +45,4 @@ command:
       it { should_not be_more_permissive_than('0644')}
     end
   end
-
+end

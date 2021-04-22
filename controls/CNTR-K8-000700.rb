@@ -86,10 +86,10 @@ following:
     its('audit-policy-file') { should_not be_nil }
   end
 
-  policy_file = kube_apiserver.params['audit-policy-file'].join
+  if !kube_apiserver.params['audit-policy-file'].nil? &&
+     file(kube_apiserver.params['audit-policy-file'].join).exist?
 
-  if file(policy_file).exist?
-    describe yaml(policy_file) do
+    describe yaml( kube_apiserver.params['audit-policy-file'].join) do
       its('rules') { should cmp [{"level"=>"RequestResponse"}] }
     end
   end

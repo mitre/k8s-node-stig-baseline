@@ -31,5 +31,22 @@ is a finding.
   tag fix_id: 'F-CNTR-K8-003330_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
+
+  pki_path = input('pki_path')
+  pki_files = command("find #{pki_path}/ -name \"*.crt\"").stdout.split
+
+  if pki_files.empty?
+    desc 'caveat', "Kubernetes PKI files not present of the target at specified path #{pki_path}."
+
+    describe "Kubernetes Manifest files not present of the target at specified path #{pki_path}." do
+      skip
+    end
+  end
+
+  pki_files.each do |file_name|
+    describe file(file_name) do
+      it { should_not be_more_permissive_than('0644') }
+    end
+  end
 end
 
