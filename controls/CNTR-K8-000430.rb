@@ -34,13 +34,21 @@ kubectl."
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 
-  unless command('kubectl').exist?
+  kubectl = command(input('kubectl_path'))
+
+  unless kubectl.exist?
     impact 0.0
     desc 'caveat','kubectl command available on target on the target.'
+
+    describe "kubectl command not found on target" do
+      skip
+    end
   end
 
-  describe json(command: "kubectl version --client --output=json" ) do
-    its (['clientVersion','gitVersion']) { should cmp > '1.12.9'}
+  if kubectl.exist?
+    describe json(command: "#{input('kubectl_path')} version --client --output=json" ) do
+      its (['clientVersion','gitVersion']) { should cmp > '1.12.9'}
+    end
   end
 end
 

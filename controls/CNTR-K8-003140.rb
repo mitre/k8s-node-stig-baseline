@@ -42,8 +42,9 @@ command:
     desc 'caveat', 'Kube-Proxy process is not running on the target.'
   end
 
-  describe file(kube_proxy.params['kubeconfig'].first) do
-    it { should_not be_more_permissive_than('0644')}
+  describe kube_proxy do
+    its('kubeconfig_file') { should_not be_nil }
+    its('kubeconfig_file') { should_not be_more_permissive_than('0644')}
   end
 end
 

@@ -41,8 +41,8 @@ the command:
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
 
-  describe file(kubelet.params['config'].first) do
-    it { should_not be_more_permissive_than('0644') }
+  describe kubelet do
+    its('config_file') { should_not be_more_permissive_than('0644') }
   end
 end
 

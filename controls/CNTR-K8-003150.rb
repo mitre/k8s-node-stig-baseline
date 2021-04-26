@@ -41,8 +41,9 @@ command:
     desc 'caveat', 'Kube-Proxy process is not running on the target.'
   end
 
-  describe file(kube_proxy.params['kubeconfig'].first) do
-    it { should be_owned_by('root')}
-    it { should be_grouped_into('root')}
+  describe kube_proxy do
+    its('kubeconfig_file') { should_not be_nil }
+    its('kubeconfig_file') { should be_owned_by('root')}
+    its('kubeconfig_file') { should be_grouped_into('root')}
   end
 end

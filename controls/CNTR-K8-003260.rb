@@ -37,8 +37,10 @@ command:
   end
 
   describe.one do
-    describe file(etcd.params['data-dir']) do
-      it { should_not be_more_permissive_than('0644')}
+    if etcd.params['data-dir']
+      describe file(etcd.params['data-dir'].join) do
+        it { should_not be_more_permissive_than('0644')}
+      end
     end
 
     describe file(process_env_var('etcd').params['ETCD_DATA_DIR']) do

@@ -40,5 +40,25 @@ value of \"--client-cert-auth\" to \"true\" for the etcd."
   tag fix_id: 'F-CNTR-K8-001480_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
+
+  # The check/fix text is likely a wrong guidance.
+  # This control likely will refer to peer-client-cert-auth config.
+  #`client-cert-auth` config is already addressed in `CNTR-K8-001450`.
+  # Automation code created matches the expect correct guidance.
+
+  unless etcd.exist?
+    impact 0.0
+    desc 'caveat','ETCD process is not running on the target.'
+  end
+
+  describe.one do
+    describe etcd do
+      its('peer-client-cert-auth') { should_not be_nil }
+    end
+
+    describe process_env_var('etcd') do
+      its(:ETCD_PEER_CA_FILE) { should_not be_nil }
+    end
+  end
 end
 

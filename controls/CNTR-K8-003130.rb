@@ -35,5 +35,24 @@ command:
   tag fix_id: 'F-CNTR-K8-003130_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
+
+  input('kubernetes_conf_files').each do |file_name|
+    if file(file_name).exist?
+      describe file(file_name) do
+        it { should be_owned_by('root') }
+        it { should be_grouped_into('root') }
+      end
+    else
+      describe "Kubernetes Conf file #{file_name} not found on target" do
+        skip
+      end
+    end
+  end
+
+  if input('kubernetes_conf_files').empty?
+    describe "No `kubernetes_conf_files` provided through input values." do 
+      skip
+    end
+  end
 end
 

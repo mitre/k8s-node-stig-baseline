@@ -30,5 +30,10 @@ command:
   tag fix_id: 'F-CNTR-K8-003230_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
+
+  describe kubelet do
+    its('config_file') { should_not be_nil }
+    its('config_file') { should_not be_more_permissive_than('0644')}
+  end
 end
 

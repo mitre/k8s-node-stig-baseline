@@ -39,9 +39,9 @@ the command:
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
 
-  describe file(kubelet.params['config'].first) do
-    it { should be_owned_by('root')}
-    it { should be_grouped_into('root')}
+  describe kubelet do
+    its('config_file') { should be_owned_by('root')}
+    its('config_file') { should be_grouped_into('root')}
   end
 end
 

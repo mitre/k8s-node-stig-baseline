@@ -47,4 +47,3 @@ Kubernetes Master Node. Set the argument \"--protect-kernel-defaults\" to
     end
   end
 end
-

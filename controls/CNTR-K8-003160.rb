@@ -39,12 +39,16 @@ command:
   tag nist: ['CM-6 b']
 
   describe.one do
-    describe file(kubelet.params['client-ca-file'].first) do
-      it { should_not be_more_permissive_than('0644')}
+    describe kubelet do
+      its('client_ca_file') { should_not be_nil }
+      its('client_ca_file') { should_not be_more_permissive_than('0644')}
     end
 
-    describe file(kubelet_config_file.params['authentication']['x509']['clientCAFile']) do
-      it { should_not be_more_permissive_than('0644')}
+    client_ca_file = kubelet_config_file.params.dig('authentication','x509','clientCAFile')
+    if client_ca_file
+      describe file(client_ca_file) do
+        it { should_not be_more_permissive_than('0644')}
+      end
     end
   end
 end

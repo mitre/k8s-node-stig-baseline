@@ -32,9 +32,10 @@ command:
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  describe file(kubelet.params['kubeconfig'].first) do
-    it { should be_owned_by('root')}
-    it { should be_grouped_into('root')}
+  describe kubelet do
+    its('kubeconfig_file') { should_not be_nil }
+    its('kubeconfig_file') { should be_owned_by('root') }
+    its('kubeconfig_file') { should be_grouped_into('root') }
   end
 end
 

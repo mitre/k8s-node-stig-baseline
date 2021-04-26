@@ -32,8 +32,9 @@ is a finding.
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  describe file(kubelet.params['kubeconfig'].first) do
-    it { should_not be_more_permissive_than('0644')}
+  describe kubelet do
+    its('kubeconfig_file') { should_not be_nil }
+    its('kubeconfig_file') { should_not be_more_permissive_than('0644')}
   end
 end
 
