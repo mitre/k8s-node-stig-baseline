@@ -17,4 +17,8 @@ class KubeProxy < KubeProcessBaseResource
     @process = process || inspec.kubernetes.kube_proxy_bin
     return skip_resource "Process #{@process} does not exist on the target node." unless inspec.processes(@process).exist?
   end
+
+  def kubeconfig_file
+    inspec.file(self.params['kubeconfig'].join) if self.params['kubeconfig']
+  end
 end

@@ -17,4 +17,16 @@ class Kubelet < KubeProcessBaseResource
     @process = process || inspec.kubernetes.kubelet_bin
     return skip_resource "Process #{@process} does not exist on the target node." unless inspec.processes(@process).exist?
   end
+
+  def config_file
+    inspec.file(self.params['config'].join) if self.params['config']
+  end
+
+  def kubeconfig_file
+    inspec.file(self.params['kubeconfig'].join) if self.params['kubeconfig']
+  end
+
+  def client_ca_file
+    inspec.file(self.params['client-ca-file'].join) if self.params['client-ca-file']
+  end
 end

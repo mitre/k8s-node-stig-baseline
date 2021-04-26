@@ -18,7 +18,7 @@ class KubeletConfigFile < Inspec.resource(1)
   KUBELET_CONFIG = '/etc/kubernetes/kubelet-config.yaml'
 
   def initialize(conf_path = nil)
-    @conf_path = conf_path || inspec.kubelet.config.first || KUBELET_CONFIG
+    @conf_path = conf_path || inspec.kubelet.config || KUBELET_CONFIG
     read_params
   end
 
@@ -47,6 +47,9 @@ class KubeletConfigFile < Inspec.resource(1)
 
   def read_params
     return @params if defined?(@params)
+
+    # inspec.kubelet.config in initialize is returned as an array, convert to string
+    @conf_path = @conf_path.join if @conf_path.kind_of?(Array)
 
     unless exist?
       skip_resource "Kubelet Config file #{@conf_path} does not exist."
