@@ -53,11 +53,11 @@ value of \"--client-cert-auth\" to \"true\" for the etcd."
 
   describe.one do
     describe etcd do
-      its('peer-client-cert-auth') { should_not be_nil }
+      its('peer-client-cert-auth') { should cmp 'true' }
     end
 
     describe process_env_var('etcd') do
-      its(:ETCD_PEER_CA_FILE) { should_not be_nil }
+      its(:ETCD_PEER_CLIENT_CERT_AUTH) { should cmp 'true' }
     end
   end
 end
