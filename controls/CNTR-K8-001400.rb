@@ -22,7 +22,7 @@ _SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM
 _SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM
 _SHA384, this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 value of tls-cipher-suites to:
@@ -56,4 +56,3 @@ _SHA384
     its('tls_cipher_suites.count') { should cmp 6 }
   end
 end
-

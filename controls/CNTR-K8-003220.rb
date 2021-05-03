@@ -16,7 +16,7 @@ the security settings within the document are implemented through this file."
     If any of the files have permissions more permissive than \"644\", this is
 a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the permissions of Kubeadm to \"644\" by executing the command:
 
     chown 644 /usr/bin/kubeadm
@@ -32,7 +32,6 @@ a finding.
   tag nist: ['CM-6 b']
 
   describe file(input('kubeadm_path')) do
-    it { should_not be_more_permissive_than('0644')}
+    it { should_not be_more_permissive_than('0644') }
   end
 end
-

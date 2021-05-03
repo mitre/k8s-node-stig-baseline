@@ -16,7 +16,7 @@ through this file."
     If the command returns any non root:root file permissions, this is a
 finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the ownership of the kubelet.conf to root: root by executing the
 command:
 
@@ -38,4 +38,3 @@ command:
     its('kubeconfig_file') { should be_grouped_into('root') }
   end
 end
-

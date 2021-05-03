@@ -20,7 +20,7 @@ implemented through this file."
     If the command returns any non root:root file permissions, this is a
 finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the ownership of the Kube Proxy to root:root by executing the
 command:
 
@@ -43,7 +43,7 @@ command:
 
   describe kube_proxy do
     its('kubeconfig_file') { should_not be_nil }
-    its('kubeconfig_file') { should be_owned_by('root')}
-    its('kubeconfig_file') { should be_grouped_into('root')}
+    its('kubeconfig_file') { should be_owned_by('root') }
+    its('kubeconfig_file') { should be_grouped_into('root') }
   end
 end

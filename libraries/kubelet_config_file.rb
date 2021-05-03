@@ -1,4 +1,4 @@
-require "inspec/utils/object_traversal"
+require 'inspec/utils/object_traversal'
 
 class KubeletConfigFile < Inspec.resource(1)
   name 'kubelet_config_file'
@@ -15,7 +15,7 @@ class KubeletConfigFile < Inspec.resource(1)
 
   include ObjectTraverser
 
-  KUBELET_CONFIG = '/etc/kubernetes/kubelet-config.yaml'
+  KUBELET_CONFIG = '/etc/kubernetes/kubelet-config.yaml'.freeze
 
   def initialize(conf_path = nil)
     @conf_path = conf_path || inspec.kubelet.config || KUBELET_CONFIG
@@ -49,7 +49,7 @@ class KubeletConfigFile < Inspec.resource(1)
     return @params if defined?(@params)
 
     # inspec.kubelet.config in initialize is returned as an array, convert to string
-    @conf_path = @conf_path.join if @conf_path.kind_of?(Array)
+    @conf_path = @conf_path.join if @conf_path.is_a?(Array)
 
     unless exist?
       skip_resource "Kubelet Config file #{@conf_path} does not exist."

@@ -27,7 +27,7 @@ Node. Run the command:
     If the setting \"etcd-certfile\" is not configured in the Kubernetes etcd
 manifest file, this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes etcd manifest file in the
+  desc 'fix', "Edit the Kubernetes etcd manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 value of \"--etcd-certfile\" to the Approved Organizational Certificate."
   impact 0.5
@@ -46,7 +46,7 @@ value of \"--etcd-certfile\" to the Approved Organizational Certificate."
 
   unless etcd.exist?
     impact 0.0
-    desc 'caveat','ETCD process is not running on the target.'
+    desc 'caveat', 'ETCD process is not running on the target.'
   end
 
   describe.one do
@@ -59,4 +59,3 @@ value of \"--etcd-certfile\" to the Approved Organizational Certificate."
     end
   end
 end
-

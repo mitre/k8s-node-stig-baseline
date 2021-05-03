@@ -19,6 +19,6 @@ class KubeProxy < KubeProcessBaseResource
   end
 
   def kubeconfig_file
-    inspec.file(self.params['kubeconfig'].join) if self.params['kubeconfig']
+    inspec.file(params['kubeconfig'].join) if params['kubeconfig']
   end
 end

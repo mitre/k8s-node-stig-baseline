@@ -19,7 +19,7 @@ and run the command:
     If any of the nodes have the setting \"hostname-override\" present, this is
 a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Edit the Kubernetes Kubelet file in the /etc/sysconfig directory on the
 Master and Worker nodes and remove the \"--hostname-override\" setting. Restart
 the service after the change is made by running:
@@ -40,4 +40,3 @@ the service after the change is made by running:
     its('hostname-override') { should be_nil }
   end
 end
-

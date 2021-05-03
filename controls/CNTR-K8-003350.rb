@@ -25,7 +25,7 @@ Node. Run the command:
 Server manifest file or it is set to \"VersionTLS10\" or \"VersionTLS11\", this
 is a finding.
   "
-  desc  'fix', "Edit the Kubernetes API Server manifest file in the
+  desc 'fix', "Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 value of \"--tls-min-version\" to either \"VersionTLS12\" or higher."
   impact 0.5
@@ -49,4 +49,3 @@ value of \"--tls-min-version\" to either \"VersionTLS12\" or higher."
     its('tls-min-version') { should_not cmp 'VersionTLS11' }
   end
 end
-

@@ -20,7 +20,7 @@ the command:
 
     If any manifest file is less restrictive than \"644\", this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     On the Master node, change to the /etc/kubernetes/manifest directory. Run
 the command:
 
@@ -60,4 +60,3 @@ the command:
     end
   end
 end
-

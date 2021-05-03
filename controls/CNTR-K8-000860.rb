@@ -17,7 +17,7 @@ the command:
 
     If any manifest file is not owned by root:root, this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     On the Master node, change to the /etc/kubernetes/manifest directory. Run
 the command:
 
@@ -52,9 +52,8 @@ the command:
 
   manifests_files.each do |file_name|
     describe file(file_name) do
-      it { should be_owned_by('root')}
-      it { should be_grouped_into('root')}
+      it { should be_owned_by('root') }
+      it { should be_grouped_into('root') }
     end
   end
 end
-

@@ -1,8 +1,7 @@
 require 'kubeprocess_baseresource'
 
 class Etcd < KubeProcessBaseResource
-
-# class Etcd < Inspec.resource(1)
+  # class Etcd < Inspec.resource(1)
   name 'etcd'
   desc 'Custom resource to validate etcd configs'
   example "

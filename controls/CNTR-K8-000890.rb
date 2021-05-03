@@ -19,7 +19,7 @@ restrictive.
     If any kubelet configuration file is less restrictive than \"644\", this is
 a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     On the Master node, change to the /etc/kubernetes/manifest directory. Run
 the command:
 
@@ -45,4 +45,3 @@ the command:
     its('config_file') { should_not be_more_permissive_than('0644') }
   end
 end
-

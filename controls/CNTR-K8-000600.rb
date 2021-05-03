@@ -19,7 +19,7 @@ Node. Run the command:
 
     If the audit-policy-file is not set, this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Edit the Kubernetes API Server manifest and set \"--audit-policy-file\" to
 the audit policy file.
 
@@ -46,4 +46,3 @@ file resides.
     its('audit-policy-file') { should_not be_nil }
   end
 end
-

@@ -21,7 +21,7 @@ Node. Run the command:
 Kubernetes Controller Manager manifest file or it is set to \"false\", this is
 a finding.
   "
-  desc  'fix', "Edit the Kubernetes Controller Manager manifest file in the
+  desc 'fix', "Edit the Kubernetes Controller Manager manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 value of \"use-service-account-credential\" to \"true\"."
   impact 0.7
@@ -43,4 +43,3 @@ value of \"use-service-account-credential\" to \"true\"."
     its('use-service-account-credential') { should cmp 'true' }
   end
 end
-

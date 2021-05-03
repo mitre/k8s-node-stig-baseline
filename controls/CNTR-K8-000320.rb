@@ -23,7 +23,7 @@ Node. Run the command:
     If the setting insecure-port is not set to \"0\" or is not configured in
 the Kubernetes API server manifest file, this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes API Server manifest file in the
+  desc 'fix', "Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 argument --insecure-port to \"0\"."
   impact 0.7
@@ -45,4 +45,3 @@ argument --insecure-port to \"0\"."
     its('insecure-port') { should cmp '0' }
   end
 end
-

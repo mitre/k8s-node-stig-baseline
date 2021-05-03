@@ -19,6 +19,6 @@ class KubeAPIServer < KubeProcessBaseResource
   end
 
   def tls_cipher_suites
-    self.params['tls-cipher-suites'].join.split(',')
+    params['tls-cipher-suites'].join.split(',')
   end
 end

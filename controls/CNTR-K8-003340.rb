@@ -16,7 +16,7 @@ would become unsecure and compromised."
     If any of the files are have permissions more permissive than \"600\", this
 is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the ownership of the cert files to \"600\" by executing the command:
 
     chmod -R 600 /etc/kubernetes/pki/*.key
@@ -48,4 +48,3 @@ is a finding.
     end
   end
 end
-

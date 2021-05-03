@@ -36,7 +36,7 @@ and execute the command:
     If any feature-gates setting is available and contains the
 \"DynamicAuditing\" flag set to \"true\", this is a finding.
   "
-  desc  'fix', "Edit any manifest files or kubelet config files that contain
+  desc 'fix', "Edit any manifest files or kubelet config files that contain
 the feature-gates setting with DynamicAuditing set to \"true\". Set the flag to
 \"false\" or remove the \"DynamicAuditing\" setting completely. Restart the
 kubelet service if the kubelet config file is changed."
@@ -67,7 +67,6 @@ kubelet service if the kubelet config file is changed."
   end
 
   describe kubelet_config_file do
-    its(['featureGates','DynamicAuditing']) { should_not cmp 'true' }
+    its(%w(featureGates DynamicAuditing)) { should_not cmp 'true' }
   end
 end
-

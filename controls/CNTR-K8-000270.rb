@@ -30,7 +30,7 @@ Node. Run the command:
     If the setting \"authorization-mode\" is not configured in the Kubernetes
 API Server manifest file or is not set to \"Node,RBAC\", this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes API Server manifest file in the
+  desc 'fix', "Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 value of \"--authorization-mode\" to \"Node,RBAC\"."
   impact 0.5
@@ -53,5 +53,3 @@ value of \"--authorization-mode\" to \"Node,RBAC\"."
     its('authorization-mode') { should cmp 'Node,RBAC' }
   end
 end
-
-

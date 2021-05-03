@@ -17,7 +17,7 @@ settings within the document are implemented through these manifests."
     If any of the files are have permissions more permissive than \"644\", this
 is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the permissions of the manifest files to \"root: root\" by executing
 the command:
 
@@ -46,8 +46,7 @@ the command:
 
   manifests_files.each do |file_name|
     describe file(file_name) do
-      it { should_not be_more_permissive_than('0644')}
+      it { should_not be_more_permissive_than('0644') }
     end
   end
 end
-

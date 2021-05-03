@@ -21,7 +21,7 @@ following command:
 
     If the file has permissions more permissive than \"644\", this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the permissions of the Kube Proxy to \"644\" by executing the
 command:
 
@@ -44,7 +44,6 @@ command:
 
   describe kube_proxy do
     its('kubeconfig_file') { should_not be_nil }
-    its('kubeconfig_file') { should_not be_more_permissive_than('0644')}
+    its('kubeconfig_file') { should_not be_more_permissive_than('0644') }
   end
 end
-

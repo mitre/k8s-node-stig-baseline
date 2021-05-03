@@ -27,7 +27,7 @@ Node. Run the command:
     If the setting \"etcd-certfile\" is not set in the Kubernetes API Server
 manifest file, this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes API Server manifest file in the
+  desc 'fix', "Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 value of \"--etcd-certfile\" to the certificate to be used for communication
 with etcd."
@@ -50,4 +50,3 @@ with etcd."
     its('etcd-certfile') { should_not be_nil }
   end
 end
-

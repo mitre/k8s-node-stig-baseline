@@ -28,7 +28,7 @@ Node. Run the command:
     If the setting client-cert-auth is not configured in the Kubernetes etcd
 manifest file or set to \"false\", this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes API Server manifest file in the
+  desc 'fix', "Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 value of \"--client-cert-auth\" to \"true\" for the etcd."
   impact 0.5
@@ -43,17 +43,16 @@ value of \"--client-cert-auth\" to \"true\" for the etcd."
 
   unless etcd.exist?
     impact 0.0
-    desc 'caveat','ETCD process is not running on the target.'
+    desc 'caveat', 'ETCD process is not running on the target.'
   end
 
   describe.one do
     describe etcd do
-      its('client-cert-auth') { should cmp "true" }
+      its('client-cert-auth') { should cmp 'true' }
     end
 
     describe process_env_var('etcd') do
-      its(:ETCD_CLIENT_CERT_AUTH) { should cmp "true" }
+      its(:ETCD_CLIENT_CERT_AUTH) { should cmp 'true' }
     end
   end
 end
-

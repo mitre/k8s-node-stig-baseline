@@ -18,7 +18,7 @@ Node. Run the command:
     If the setting \"audit-policy-file\" is not set or is found in the
 Kubernetes API manifest file without valid content, this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes API Server manifest file in the
+  desc 'fix', "Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 argument \"--audit-policy-file\" to \"log file directory\"."
   impact 0.5
@@ -40,4 +40,3 @@ argument \"--audit-policy-file\" to \"log file directory\"."
     its('audit-policy-file') { should_not be_nil }
   end
 end
-

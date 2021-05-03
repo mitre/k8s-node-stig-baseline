@@ -20,7 +20,7 @@ Node. Run the command:
     If \"token-auth-file\" is set in the Kubernetes API server manifest file,
 this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes API Server manifest file in the
+  desc 'fix', "Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Remove
 parameter \"--token-auth-file\"."
   impact 0.5

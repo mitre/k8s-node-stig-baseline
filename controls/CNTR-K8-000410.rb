@@ -18,7 +18,7 @@ validate the service is not enabled, run the command:
     Note: If console access is not available, SSH access can be attempted. If
 the worker nodes cannot be reached, this requirement is \"not a finding\".
   "
-  desc  'fix', "
+  desc 'fix', "
     To disable the sshd service, run the command:
 
     chkconfig sshd off
@@ -40,7 +40,6 @@ settings can be made if the session is interrupted.
   tag nist: ['AC-3']
 
   describe service('sshd') do
-    it { should_not be_enabled}
+    it { should_not be_enabled }
   end
 end
-

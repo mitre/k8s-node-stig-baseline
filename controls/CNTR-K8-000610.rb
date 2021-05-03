@@ -19,7 +19,7 @@ Node. Run the command:
 
     If the audit-log-path is not set, this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Edit the Kubernetes API Server manifest and set \"--audit-log-path\" to a
 secure location for the audit logs to be written.
 
@@ -46,4 +46,3 @@ is to be written.
     its('audit-log-path') { should_not be_nil }
   end
 end
-

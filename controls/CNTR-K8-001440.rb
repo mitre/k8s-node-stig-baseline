@@ -29,7 +29,7 @@ Node. Run the command:
     If the setting tls-cert-file and private-key-file is not set in the
 Kubernetes API server manifest file or contains no value, this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes API Server manifest file in the
+  desc 'fix', "Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 value of tls-cert-file and tls-private-key-file to path containing Approved
 Organizational Certificate."
@@ -53,4 +53,3 @@ Organizational Certificate."
     its('tls-private-key-file') { should_not be_nil }
   end
 end
-

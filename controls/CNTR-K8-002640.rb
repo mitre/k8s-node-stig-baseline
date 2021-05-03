@@ -35,7 +35,7 @@ Kubernetes API server manifest file or contains no value, this is a finding.
     If the setting \"--kubelet-client-key\" is not configured in the Kubernetes
 API server manifest file or contains no value, this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes API Server manifest file in the
+  desc 'fix', "Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 value of \"--kubelet-client-certificate\" and \"--kubelet-client-key\" to an
 Approved Organizational Certificate and key pair."
@@ -59,4 +59,3 @@ Approved Organizational Certificate and key pair."
     its('kubelet-client-key') { should_not be_nil }
   end
 end
-

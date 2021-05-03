@@ -17,7 +17,7 @@ the command:
 
     If any manifest file is not owned by root:root, this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     On the Master and Worker nodes, change to the /etc/sysconfig directory. Run
 the command:
 
@@ -40,8 +40,7 @@ the command:
   tag nist: ['CM-5 (6)']
 
   describe kubelet do
-    its('config_file') { should be_owned_by('root')}
-    its('config_file') { should be_grouped_into('root')}
+    its('config_file') { should be_owned_by('root') }
+    its('config_file') { should be_grouped_into('root') }
   end
 end
-

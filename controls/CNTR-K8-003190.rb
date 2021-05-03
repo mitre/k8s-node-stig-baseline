@@ -17,7 +17,7 @@ document are implemented through this file."
     If any of the files are have permissions more permissive than \"644\", this
 is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the permissions of the Kubelet to \"644\" by executing the command:
 
     chown 644 /etc/kubernetes/kubelet.conf
@@ -34,7 +34,6 @@ is a finding.
 
   describe kubelet do
     its('kubeconfig_file') { should_not be_nil }
-    its('kubeconfig_file') { should_not be_more_permissive_than('0644')}
+    its('kubeconfig_file') { should_not be_more_permissive_than('0644') }
   end
 end
-

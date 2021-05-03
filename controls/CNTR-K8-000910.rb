@@ -16,7 +16,7 @@ Node. Run the command:
     If the setting \"profiling\" is not configured in the Kubernetes Controller
 Manager manifest file or it is set to \"True\", this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes Controller Manager manifest file in the
+  desc 'fix', "Edit the Kubernetes Controller Manager manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 argument \"--profiling value\" to \"false\"."
   impact 0.5

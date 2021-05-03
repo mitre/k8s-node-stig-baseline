@@ -19,14 +19,14 @@ class Kubelet < KubeProcessBaseResource
   end
 
   def config_file
-    inspec.file(self.params['config'].join) if self.params['config']
+    inspec.file(params['config'].join) if params['config']
   end
 
   def kubeconfig_file
-    inspec.file(self.params['kubeconfig'].join) if self.params['kubeconfig']
+    inspec.file(params['kubeconfig'].join) if params['kubeconfig']
   end
 
   def client_ca_file
-    inspec.file(self.params['client-ca-file'].join) if self.params['client-ca-file']
+    inspec.file(params['client-ca-file'].join) if params['client-ca-file']
   end
 end

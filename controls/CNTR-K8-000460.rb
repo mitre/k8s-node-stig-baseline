@@ -33,7 +33,7 @@ and execute the command:
 contain the DynamicKubeletConfig flag or the DynamicKubletConfig flag is set to
 \"true\", this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Edit any manifest file or kubelet config file that does not contain a
 feature-gates setting or has DynamicKubeletConfig set to \"true\".
 
@@ -68,8 +68,7 @@ kubelet config file is changed.
       its('feature-gates.to_s') { should match /DynamicKubeletConfig=[F|f]alse/ }
     end
     describe kubelet_config_file do
-      its(['featureGates','DynamicKubeletConfig']) { should_not cmp 'false' }
+      its(%w(featureGates DynamicKubeletConfig)) { should_not cmp 'false' }
     end
   end
 end
-

@@ -18,7 +18,7 @@ immediately."
     If any of the files are have permissions more permissive than \"644\", this
 is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the permissions of the conf files to \"644\" by executing the
 command:
 
@@ -35,11 +35,11 @@ command:
   tag fix_id: 'F-CNTR-K8-003270_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
- 
+
   input('kubernetes_conf_files').each do |file_name|
     if file(file_name).exist?
       describe file(file_name) do
-        it { should_not be_more_permissive_than('0644')}
+        it { should_not be_more_permissive_than('0644') }
       end
     else
       describe "Kubernetes Conf file #{file_name} not found on target" do
@@ -49,9 +49,8 @@ command:
   end
 
   if input('kubernetes_conf_files').empty?
-    describe "No `kubernetes_conf_files` provided through input values." do 
+    describe 'No `kubernetes_conf_files` provided through input values.' do
       skip
     end
   end
 end
-

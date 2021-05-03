@@ -1,7 +1,6 @@
 require 'kubernetes'
 
 class KubeProcessBaseResource < Inspec.resource(1)
-
   def initialize(process = nil)
     @process = process
   end
@@ -31,9 +30,8 @@ class KubeProcessBaseResource < Inspec.resource(1)
     options = {
       assignment_regex: /--([^:]*?)=(.*?)\s*$/,
       multiple_values: true,
-      line_separator: ' '
+      line_separator: ' ',
     }
-
 
     commands = inspec.processes(@process).commands.join
     process_args = commands.split(' ')[1..-1].join(' ')

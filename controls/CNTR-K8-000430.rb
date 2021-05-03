@@ -22,7 +22,7 @@ executing the command:
     If the Master or any Work nodes are not using kubectl version 1.12.9 or
 newer, this is a finding.
   "
-  desc  'fix', "Upgrade the Master and Worker nodes to the latest version of
+  desc 'fix', "Upgrade the Master and Worker nodes to the latest version of
 kubectl."
   impact 0.5
   tag severity: 'medium'
@@ -38,17 +38,16 @@ kubectl."
 
   unless kubectl.exist?
     impact 0.0
-    desc 'caveat','kubectl command available on target on the target.'
+    desc 'caveat', 'kubectl command available on target on the target.'
 
-    describe "kubectl command not found on target" do
+    describe 'kubectl command not found on target' do
       skip
     end
   end
 
   if kubectl.exist?
-    describe json(command: "#{input('kubectl_path')} version --client --output=json" ) do
-      its (['clientVersion','gitVersion']) { should cmp > '1.12.9'}
+    describe json(command: "#{input('kubectl_path')} version --client --output=json") do
+      its(%w(clientVersion gitVersion)) { should cmp > '1.12.9' }
     end
   end
 end
-

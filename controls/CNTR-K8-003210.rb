@@ -15,7 +15,7 @@ the security settings within the document are implemented through this file."
     If the command returns any non root:root file permissions, this is a
 finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the ownership of the kubeadm to root: root by executing the command:
 
     chown root:root /user/bin/kubeadm
@@ -31,8 +31,7 @@ finding.
   tag nist: ['CM-6 b']
 
   describe  file(input('kubeadm_path')) do
-    it { should be_owned_by('root')}
-    it { should be_grouped_into('root')}
+    it { should be_owned_by('root') }
+    it { should be_grouped_into('root') }
   end
 end
-

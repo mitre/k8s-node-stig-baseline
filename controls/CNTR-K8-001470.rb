@@ -29,7 +29,7 @@ the commands:
     If the setting \"tls-cert-file\" is not configured in the Kubernetes
 Kubelet, this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Edit the Kubernetes Kuberlet file in the /etc/sysconfig directory on the
 Kubernetes Master Node. Set the argument \"tls-cert-file\" to an Approved
 Organization Certificate. Reset Kubelet service using the following command:
@@ -50,10 +50,9 @@ Organization Certificate. Reset Kubelet service using the following command:
     describe kubelet do
       its('tls-cert-file') { should_not be_nil }
     end
-    
+
     describe kubelet_config_file do
       its('tlsCertFile') { should_not be_nil }
     end
   end
 end
-

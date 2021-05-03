@@ -16,7 +16,7 @@ document are implemented through this file."
     If the command returns any non root:root file permissions, this is a
 finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the ownership of the PKI to root: root by executing the command:
 
     chown -R root:root /etc/kubernetes/pki/
@@ -44,9 +44,8 @@ finding.
 
   pki_files.each do |file_name|
     describe file(file_name) do
-      it { should be_owned_by('root')}
-      it { should be_grouped_into('root')}
+      it { should be_owned_by('root') }
+      it { should be_grouped_into('root') }
     end
   end
 end
-

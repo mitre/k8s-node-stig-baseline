@@ -19,7 +19,7 @@ cluster secure and stable, these alpha features must not be used."
     If the feature-gates setting is available and contains the AllAlpha flag
 set to \"true\", this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Edit any manifest files that contain the feature-gates setting with
 AllAlpha set to \"true\". Set the flag to \"false\" or remove the AllAlpha
 setting completely.
@@ -52,7 +52,6 @@ setting completely.
   end
 
   describe kubelet_config_file do
-    its(['featureGates','AllAlpha']) { should_not cmp 'true' }
+    its(%w(featureGates AllAlpha)) { should_not cmp 'true' }
   end
 end
-

@@ -22,7 +22,7 @@ Node. Run the command:
     If the setting \"peer-auto-tls\" is not configured in the Kubernetes etcd
 manifest file or it is set to \"true\", this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes etcd manifest file in the
+  desc 'fix', "Edit the Kubernetes etcd manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 value of \"peer-auto-tls\" to \"false\"."
   impact 0.5
@@ -37,17 +37,16 @@ value of \"peer-auto-tls\" to \"false\"."
 
   unless etcd.exist?
     impact 0.0
-    desc 'caveat','ETCD process is not running on the target.'
+    desc 'caveat', 'ETCD process is not running on the target.'
   end
 
   describe.one do
     describe etcd do
-      its('peer-auto-tls') { should cmp "false" }
+      its('peer-auto-tls') { should cmp 'false' }
     end
 
     describe process_env_var('etcd') do
-      its(:ETCD_PEER_AUTO_TLS) { should cmp "false" }
+      its(:ETCD_PEER_AUTO_TLS) { should cmp 'false' }
     end
   end
 end
-

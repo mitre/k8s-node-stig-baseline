@@ -15,7 +15,7 @@ node would be compromised."
     If any of the files are have permissions more permissive than \"644\", this
 is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the permissions of the manifest files to \"644\" by executing the
 command:
 
@@ -33,18 +33,18 @@ command:
 
   unless etcd.exist?
     impact 0.0
-    desc 'caveat','ETCD process is not running on the target.'
+    desc 'caveat', 'ETCD process is not running on the target.'
   end
 
   describe.one do
     if etcd.params['data-dir']
       describe file(etcd.params['data-dir'].join) do
-        it { should_not be_more_permissive_than('0644')}
+        it { should_not be_more_permissive_than('0644') }
       end
     end
 
     describe file(process_env_var('etcd').params['ETCD_DATA_DIR']) do
-      it { should_not be_more_permissive_than('0644')}
+      it { should_not be_more_permissive_than('0644') }
     end
   end
 end

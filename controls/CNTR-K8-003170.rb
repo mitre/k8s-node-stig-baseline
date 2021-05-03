@@ -21,7 +21,7 @@ following command:
     If the command returns any non root:root file permissions, this is a
 finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the permissions of the Kube Proxy to \"root\" by executing the
 command:
 
@@ -48,13 +48,12 @@ command:
       its('client_ca_file') { should be_grouped_into('root') }
     end
 
-    client_ca_file = kubelet_config_file.params.dig('authentication','x509','clientCAFile')
+    client_ca_file = kubelet_config_file.params.dig('authentication', 'x509', 'clientCAFile')
     if client_ca_file
       describe file(client_ca_file) do
-        it { should be_owned_by('root')}
-        it { should be_grouped_into('root')}
+        it { should be_owned_by('root') }
+        it { should be_grouped_into('root') }
       end
     end
   end
 end
-

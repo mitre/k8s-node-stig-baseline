@@ -18,7 +18,7 @@ validate that the service is not running, run the command:
     Note: If console access is not available, SSH access can be attempted. If
 the worker nodes cannot be reached, this requirement is \"not a finding\".
   "
-  desc  'fix', "
+  desc 'fix', "
     To stop the sshd service, run the command:
 
     systemctl stop sshd
@@ -40,6 +40,6 @@ settings can be made if the session is interrupted.
   tag nist: ['AC-3']
 
   describe service('sshd') do
-    it { should_not be_running}
+    it { should_not be_running }
   end
 end

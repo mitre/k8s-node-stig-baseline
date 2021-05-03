@@ -15,7 +15,7 @@ Node. Run the command:
     If the setting \"audit-log-maxbackup\" is not set in the Kubernetes API
 Server manifest file or it is set less than \"10\", this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes API Server manifest file in the
+  desc 'fix', "Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 value of \"--audit-log-maxbackup\" to a minimum of \"10\"."
   impact 0.5
@@ -37,4 +37,3 @@ value of \"--audit-log-maxbackup\" to a minimum of \"10\"."
     its('audit-log-maxbackup') { should cmp > 10 }
   end
 end
-

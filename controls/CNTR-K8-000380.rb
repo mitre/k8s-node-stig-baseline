@@ -24,7 +24,7 @@ command:
     If authorization-mode is missing or is set to \"AllowAlways\" on the Master
 node or any of the Worker nodes, this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Edit the Kubernetes Kubelet file in the/etc/sysconfig/ directory on the
 Kubernetes Master and Worker nodes.
 
@@ -47,10 +47,9 @@ Kubernetes Master and Worker nodes.
     describe kubelet do
       its('authorization-mode') { should cmp 'Webhook' }
     end
-    
+
     describe kubelet_config_file do
-      its(['authorization','mode']) { should cmp 'Webhook' }
+      its(%w(authorization mode)) { should cmp 'Webhook' }
     end
   end
 end
-

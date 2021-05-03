@@ -15,7 +15,7 @@ Node. Run the command:
     If the setting \"audit-log-path\" is not set in the Kubernetes API Server
 manifest file or it is set less than \"30\", this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes API Server manifest file in the
+  desc 'fix', "Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 value of \"--audit-log-maxage\" to a minimum of \"30\"."
   impact 0.5
@@ -37,4 +37,3 @@ value of \"--audit-log-maxage\" to a minimum of \"30\"."
     its('audit-log-maxage') { should cmp > 30 }
   end
 end
-

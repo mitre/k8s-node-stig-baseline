@@ -17,7 +17,7 @@ command:
     If any of the files are have permissions more permissive than \"644\", this
 is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the ownership of the cert files to \"644\" by executing the command:
 
     chmod -R 644 /etc/kubernetes/pki/*.crt
@@ -49,4 +49,3 @@ is a finding.
     end
   end
 end
-

@@ -14,7 +14,7 @@ the information system would be unaware of pod or container degradation."
     If the command returns any non root:root file permissions, this is a
 finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the ownership of the kubelet config to \"root: root\" by executing
 the command:
 
@@ -31,8 +31,7 @@ the command:
   tag nist: ['CM-6 b']
 
   describe kubelet do
-    its('config_file') { should be_owned_by('root')}
-    its('config_file') { should be_grouped_into('root')}
+    its('config_file') { should be_owned_by('root') }
+    its('config_file') { should be_grouped_into('root') }
   end
 end
-

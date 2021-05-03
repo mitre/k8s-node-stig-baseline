@@ -18,7 +18,7 @@ through this file."
     If the command returns any non root:root file permissions, this is a
 finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the ownership of the conf files to root: root by executing the
 command:
 
@@ -50,9 +50,8 @@ command:
   end
 
   if input('kubernetes_conf_files').empty?
-    describe "No `kubernetes_conf_files` provided through input values." do 
+    describe 'No `kubernetes_conf_files` provided through input values.' do
       skip
     end
   end
 end
-

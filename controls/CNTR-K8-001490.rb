@@ -27,7 +27,7 @@ Node. Run the command:
     If the setting \"etcd-keyfile\" is not configured in the Kubernetes etcd
 manifest file, this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes API Server manifest file in the
+  desc 'fix', "Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 value of \"--etcd-keyfile\" to the Approved Organizational Certificate."
   impact 0.5
@@ -49,4 +49,3 @@ value of \"--etcd-keyfile\" to the Approved Organizational Certificate."
     its('etcd-keyfile') { should_not be_nil }
   end
 end
-

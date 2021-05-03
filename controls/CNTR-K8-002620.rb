@@ -19,7 +19,7 @@ Node. Run the command:
     If \"basic-auth-file\" is set in the Kubernetes API server manifest file,
 or is not configured this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes API Server manifest file in the
+  desc 'fix', "Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Remove the
 setting \"--basic-auth-file\"."
   impact 0.7
@@ -41,4 +41,3 @@ setting \"--basic-auth-file\"."
     its('basic-auth-file') { should be_nil }
   end
 end
-

@@ -21,7 +21,7 @@ Node. Run the command:
     If the setting bind-address is not set to \"127.0.0.1\" or is not found in
 the Kubernetes Controller Manager manifest file, this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes Controller Manager manifest file in the
+  desc 'fix', "Edit the Kubernetes Controller Manager manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 argument \"--bind-address\" to \"127.0.0.1\"."
   impact 0.5
@@ -43,4 +43,3 @@ argument \"--bind-address\" to \"127.0.0.1\"."
     its('bind-address.to_s') { should cmp '127.0.0.1' }
   end
 end
-

@@ -15,7 +15,7 @@ the information system would be unaware of pod or container degradation."
     If any of the files are have permissions more permissive than \"644\", this
 is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the permissions of the config.yaml to \"644\" by executing the
 command:
 
@@ -33,7 +33,6 @@ command:
 
   describe kubelet do
     its('config_file') { should_not be_nil }
-    its('config_file') { should_not be_more_permissive_than('0644')}
+    its('config_file') { should_not be_more_permissive_than('0644') }
   end
 end
-
