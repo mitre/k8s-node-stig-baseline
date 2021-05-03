@@ -77,6 +77,7 @@ Results:
      ✔  root-ca-file is expected not to be nil
 
 ```
+
 ## Inspecting Kubelet
 
 Kubelet options are validated by flags on the `kubelet` process or kubelet config file.
