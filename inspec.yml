@@ -2,6 +2,7 @@ name: k8s-node-stig-baseline
 title: Kubernetes 1.16 Based upon Kubernetes 1.16 Security Technical Implementation Guideline (STIG) Node OS Checks.
 maintainer: DISA DevSecOps Team 
 copyright: Defense Information Systems Agency (DISA)
+license: Apache-2.0
 summary: InSpec testing for baseline compliance with the Kubernetes STIG Node OS Checks.
 description: An InSpec profile verifying compliance with Kubernetes STIG version 1.16 Node OS Checks.
 version: 1.0.0
