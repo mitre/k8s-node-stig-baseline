@@ -16,7 +16,7 @@ document are implemented through this file."
     If the command returns any non root:root file permissions, this is a
 finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the ownership of the PKI to root: root by executing the command:
 
     chown -R root:root /etc/kubernetes/pki/
@@ -30,5 +30,22 @@ finding.
   tag fix_id: 'F-CNTR-K8-003180_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-end
 
+  pki_path = input('pki_path')
+  pki_files = command("find #{pki_path}/ -type f").stdout.split
+
+  if pki_files.empty?
+    desc 'caveat', "Kubernetes PKI files not present of the target at specified path #{pki_path}."
+
+    describe "Kubernetes Manifest files not present of the target at specified path #{pki_path}." do
+      skip
+    end
+  end
+
+  pki_files.each do |file_name|
+    describe file(file_name) do
+      it { should be_owned_by('root') }
+      it { should be_grouped_into('root') }
+    end
+  end
+end

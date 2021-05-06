@@ -21,7 +21,7 @@ Node. Run the command:
     If the setting secure-port is set to \"0\" or is not configured in the
 Kubernetes API manifest file, this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes API Server manifest file in the
+  desc 'fix', "Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 argument --secure-port to a value greater than \"0\"."
   impact 0.5
@@ -33,5 +33,13 @@ argument --secure-port to a value greater than \"0\"."
   tag fix_id: 'F-CNTR-K8-000350_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-end
 
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('secure-port') { should cmp > 0 }
+  end
+end

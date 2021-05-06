@@ -21,7 +21,7 @@ Node. Run the command:
     If a line is not returned that includes enable-admission-plugins and
 ValidatingAdmissionWebhook, this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 argument \"--enable-admission-plugins\" to include
@@ -39,5 +39,13 @@ otherwise a denial of service may occur.
   tag fix_id: 'F-CNTR-K8-002000_fix'
   tag cci: ['CCI-002233']
   tag nist: ['AC-6 (8)']
-end
 
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('enable-admission-plugins.to_s') { should include 'ValidatingAdmissionWebhook' }
+  end
+end

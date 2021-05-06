@@ -20,7 +20,7 @@ Node. Run the command:
     If \"token-auth-file\" is set in the Kubernetes API server manifest file,
 this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes API Server manifest file in the
+  desc 'fix', "Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Remove
 parameter \"--token-auth-file\"."
   impact 0.5
@@ -32,5 +32,13 @@ parameter \"--token-auth-file\"."
   tag fix_id: 'F-CNTR-K8-002630_fix'
   tag cci: ['CCI-002418']
   tag nist: ['SC-8']
-end
 
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('token-auth-file') { should be_nil }
+  end
+end

@@ -39,7 +39,7 @@ Node. Run the command:
     If the setting authorization-mode is set to \"AlwaysAllow\" in the
 Kubernetes API Server manifest file or is not configured, this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes API Server manifest file in the
+  desc 'fix', "Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 argument \"--authorization-mode\" to any valid authorization mode other than
 AlwaysAllow."
@@ -47,12 +47,21 @@ AlwaysAllow."
   tag severity: 'high'
   tag gtitle: 'SRG-APP-000340-CTR-000770'
   tag satisfies: ['SRG-APP-000340-CTR-000770', 'SRG-APP-000033-CTR-000095',
-'SRG-APP-000378-CTR-000880']
+                  'SRG-APP-000378-CTR-000880']
   tag gid: 'CNTR-K8-001990'
   tag rid: 'CNTR-K8-001990_rule'
   tag stig_id: 'CNTR-K8-001990'
   tag fix_id: 'F-CNTR-K8-001990_fix'
   tag cci: ['CCI-000213', 'CCI-001812', 'CCI-002235']
   tag nist: ['AC-3', 'CM-11 (2)', 'AC-6 (10)']
-end
 
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('authorization-mode') { should_not be_nil }
+    its('authorization-mode') { should_not cmp 'AlwaysAllow' }
+  end
+end

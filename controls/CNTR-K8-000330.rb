@@ -37,7 +37,7 @@ finding.
     If \"--read-only-port=0\" argument does not exist on the worker node and
 the master node, this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Edit the Kubernetes Kubelet file in the --config directory on the
 Kubernetes Master Node. Set the argument --read-only-port to 0.
 
@@ -58,5 +58,14 @@ set the parameter in KUBELET_SYSTEM_PODS_ARGS variable to
   tag fix_id: 'F-CNTR-K8-000330_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-end
 
+  describe.one do
+    describe kubelet do
+      its('read-only-port') { should cmp 0 }
+    end
+
+    describe kubelet_config_file do
+      its('readOnlyPort') { should cmp 0 }
+    end
+  end
+end

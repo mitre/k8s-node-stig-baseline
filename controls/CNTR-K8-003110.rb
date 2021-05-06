@@ -16,7 +16,7 @@ settings within the document are implemented through these manifests."
     If the command returns any non root:root file permissions, this is a
 finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the ownership of the manifest files to root: root by executing the
 command:
 
@@ -31,5 +31,22 @@ command:
   tag fix_id: 'F-CNTR-K8-003110_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-end
 
+  manifests_path = input('manifests_path')
+  manifests_files = command("find #{manifests_path} -type f").stdout.split
+
+  if manifests_files.empty?
+    desc 'caveat', "Kubernetes Manifest files not present of the target at specified path #{manifests_path}."
+
+    describe "Kubernetes Manifest files not present of the target at specified path #{manifests_path}." do
+      skip
+    end
+  end
+
+  manifests_files.each do |file_name|
+    describe file(file_name) do
+      it { should be_owned_by('root') }
+      it { should be_grouped_into('root') }
+    end
+  end
+end

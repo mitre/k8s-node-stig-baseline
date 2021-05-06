@@ -2,7 +2,42 @@ name: k8s-node-stig-baseline
 title: Kubernetes 1.16 Based upon Kubernetes 1.16 Security Technical Implementation Guideline (STIG) Node OS Checks.
 maintainer: DISA DevSecOps Team 
 copyright: Defense Information Systems Agency (DISA)
+license: Apache-2.0
 summary: InSpec testing for baseline compliance with the Kubernetes STIG Node OS Checks.
 description: An InSpec profile verifying compliance with Kubernetes STIG version 1.16 Node OS Checks.
 version: 1.0.0
 inspec_version: ">= 4.0"
+
+inputs:
+  - name: manifests_path
+    description: 'Path to Kubernetes manifest files on the target node'
+    type: string
+    value: '/etc/kubernetes/manifests'
+    required: true
+
+  - name: pki_path
+    description: 'Path to Kubernetes PKI files on the target node'
+    type: string
+    value: '/etc/kubernetes/pki/'
+    required: true
+
+  - name: kubeadm_path
+    description: 'Path to kubeadm file on the target node'
+    type: string
+    value: '/usr/local/bin/kubeadm'
+    required: true
+
+  - name: kubectl_path
+    description: 'Path to kubectl on the target node'
+    type: string
+    value: '/usr/local/bin/kubectl'
+    required: true
+
+  - name: kubernetes_conf_files
+    description: 'Path to Kubernetes conf files on the target node'
+    type: array
+    value:
+        - /etc/kubernetes/admin.conf
+        - /etc/kubernetes/scheduler.conf
+        - /etc/kubernetes/controller-manager.conf
+    required: true

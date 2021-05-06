@@ -19,7 +19,7 @@ cluster secure and stable, these alpha features must not be used."
     If the feature-gates setting is available and contains the AllAlpha flag
 set to \"true\", this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Edit any manifest files that contain the feature-gates setting with
 AllAlpha set to \"true\". Set the flag to \"false\" or remove the AllAlpha
 setting completely.
@@ -34,5 +34,24 @@ setting completely.
   tag fix_id: 'F-CNTR-K8-000470_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-end
 
+  describe kube_scheduler do
+    its('feature-gates.to_s') { should_not match /AllAlpha=[T|t]rue/ }
+  end
+
+  describe kube_controller_manager do
+    its('feature-gates.to_s') { should_not match /AllAlpha=[T|t]rue/ }
+  end
+
+  describe kube_apiserver do
+    its('feature-gates.to_s') { should_not match /AllAlpha=[T|t]rue/ }
+  end
+
+  describe kubelet do
+    its('feature-gates.to_s') { should_not match /AllAlpha=[T|t]rue/ }
+  end
+
+  describe kubelet_config_file do
+    its(%w(featureGates AllAlpha)) { should_not cmp 'true' }
+  end
+end

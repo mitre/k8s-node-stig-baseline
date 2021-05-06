@@ -18,7 +18,7 @@ the command:
     If the setting streaming-connection-idle-timeout is set to \"0\" or the
 parameter is not configured in the Kubernetes Kubelet, this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Edit the Kubernetes Kubelet file in the /etc/sysconfig directory on the
 Kubernetes Master Node. Set the argument
 \"--streaming-connection-idle-timeout\" to a value other than \"0\". Reset
@@ -35,5 +35,16 @@ Kubelet service using the following command:
   tag fix_id: 'F-CNTR-K8-001300_fix'
   tag cci: ['CCI-001133']
   tag nist: ['SC-10']
-end
 
+  describe.one do
+    describe kubelet do
+      its('streaming-connection-idle-timeout') { should_not be_nil }
+      its('streaming-connection-idle-timeout') { should_not cmp 0 }
+    end
+
+    describe kubelet_config_file do
+      its('streamingConnectionIdleTimeout') { should_not be_nil }
+      its('streamingConnectionIdleTimeout') { should_not cmp 0 }
+    end
+  end
+end

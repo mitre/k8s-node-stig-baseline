@@ -17,7 +17,7 @@ the command:
 
     If any manifest file is not owned by root:root, this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     On the Master node, change to the /etc/kubernetes/manifest directory. Run
 the command:
 
@@ -38,5 +38,22 @@ the command:
   tag fix_id: 'F-CNTR-K8-000860_fix'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
-end
 
+  manifests_path = input('manifests_path')
+  manifests_files = command("find #{manifests_path} -type f").stdout.split
+
+  if manifests_files.empty?
+    desc 'caveat', "Kubernetes Manifest files not present of the target at specified path #{manifests_path}."
+
+    describe "Kubernetes Manifest files not present of the target at specified path #{manifests_path}." do
+      skip
+    end
+  end
+
+  manifests_files.each do |file_name|
+    describe file(file_name) do
+      it { should be_owned_by('root') }
+      it { should be_grouped_into('root') }
+    end
+  end
+end

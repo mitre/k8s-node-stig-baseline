@@ -36,7 +36,7 @@ and execute the command:
     If any feature-gates setting is available and contains the
 \"DynamicAuditing\" flag set to \"true\", this is a finding.
   "
-  desc  'fix', "Edit any manifest files or kubelet config files that contain
+  desc 'fix', "Edit any manifest files or kubelet config files that contain
 the feature-gates setting with DynamicAuditing set to \"true\". Set the flag to
 \"false\" or remove the \"DynamicAuditing\" setting completely. Restart the
 kubelet service if the kubelet config file is changed."
@@ -49,5 +49,24 @@ kubelet service if the kubelet config file is changed."
   tag fix_id: 'F-CNTR-K8-000450_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-end
 
+  describe kube_scheduler do
+    its('feature-gates.to_s') { should_not match /DynamicAuditing=[T|t]rue/ }
+  end
+
+  describe kube_controller_manager do
+    its('feature-gates.to_s') { should_not match /DynamicAuditing=[T|t]rue/ }
+  end
+
+  describe kube_apiserver do
+    its('feature-gates.to_s') { should_not match /DynamicAuditing=[T|t]rue/ }
+  end
+
+  describe kubelet do
+    its('feature-gates.to_s') { should_not match /DynamicAuditing=[T|t]rue/ }
+  end
+
+  describe kubelet_config_file do
+    its(%w(featureGates DynamicAuditing)) { should_not cmp 'true' }
+  end
+end

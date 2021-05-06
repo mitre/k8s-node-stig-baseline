@@ -28,7 +28,7 @@ Node. Run the command:
     If the setting \"client-cert-auth\" is not configured in the Kubernetes
 etcd manifest file or set to \"false\", this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes etcd manifest file in the
+  desc 'fix', "Edit the Kubernetes etcd manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 value of \"--client-cert-auth\" to \"true\" for the etcd."
   impact 0.5
@@ -40,5 +40,24 @@ value of \"--client-cert-auth\" to \"true\" for the etcd."
   tag fix_id: 'F-CNTR-K8-001480_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
-end
 
+  # The check/fix text is likely a wrong guidance.
+  # This control likely will refer to peer-client-cert-auth config.
+  # `client-cert-auth` config is already addressed in `CNTR-K8-001450`.
+  # Automation code created matches the expect correct guidance.
+
+  unless etcd.exist?
+    impact 0.0
+    desc 'caveat', 'ETCD process is not running on the target.'
+  end
+
+  describe.one do
+    describe etcd do
+      its('peer-client-cert-auth') { should cmp 'true' }
+    end
+
+    describe process_env_var('etcd') do
+      its(:ETCD_PEER_CLIENT_CERT_AUTH) { should cmp 'true' }
+    end
+  end
+end

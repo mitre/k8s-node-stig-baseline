@@ -18,7 +18,7 @@ the command:
     If the setting \"protect-kernel-defaults\" is set to false or not set in
 the Kubernetes Kubelet, this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Edit the Kubernetes Kuberlet file in the /etc/sysconfig directory on the
 Kubernetes Master Node. Set the argument \"--protect-kernel-defaults\" to
 \"true\".
@@ -36,5 +36,14 @@ Kubernetes Master Node. Set the argument \"--protect-kernel-defaults\" to
   tag fix_id: 'F-CNTR-K8-001620_fix'
   tag cci: ['CCI-001084']
   tag nist: ['SC-3']
-end
 
+  describe.one do
+    describe kubelet do
+      its('protect-kernel-defaults') { should cmp 'true' }
+    end
+
+    describe kubelet_config_file do
+      its('protectKernelDefaults') { should cmp 'true' }
+    end
+  end
+end

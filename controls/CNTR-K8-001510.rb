@@ -27,7 +27,7 @@ Node. Run the command:
     If the setting \"etcd-cafile\" is not configured in the Kubernetes API
 Server manifest file, this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes API Server manifest file in the
+  desc 'fix', "Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 value of \"--etcd-cafile\" to the Certificate Authority for etcd."
   impact 0.5
@@ -39,5 +39,13 @@ value of \"--etcd-cafile\" to the Certificate Authority for etcd."
   tag fix_id: 'F-CNTR-K8-001510_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
-end
 
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('etcd-cafile') { should_not be_nil }
+  end
+end

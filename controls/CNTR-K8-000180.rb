@@ -22,7 +22,7 @@ Node. Run the command:
     If the setting \"auto-tls\" is not configured in the Kubernetes etcd
 manifest file or it is set to true, this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes etcd manifest file in the
+  desc 'fix', "Edit the Kubernetes etcd manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 value of \"-auto-tls\" to \"false\"."
   impact 0.5
@@ -34,5 +34,19 @@ value of \"-auto-tls\" to \"false\"."
   tag fix_id: 'F-CNTR-K8-000180_fix'
   tag cci: ['CCI-000068']
   tag nist: ['AC-17 (2)']
-end
 
+  unless etcd.exist?
+    impact 0.0
+    desc 'caveat', 'ETCD process is not running on the target.'
+  end
+
+  describe.one do
+    describe etcd do
+      its('auto-tls') { should cmp 'false' }
+    end
+
+    describe process_env_var('etcd') do
+      its(:ETCD_AUTO_TLS) { should cmp 'false' }
+    end
+  end
+end

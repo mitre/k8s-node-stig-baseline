@@ -21,7 +21,7 @@ Node. Run the command:
 Kubernetes Controller Manager manifest file or it is set to \"false\", this is
 a finding.
   "
-  desc  'fix', "Edit the Kubernetes Controller Manager manifest file in the
+  desc 'fix', "Edit the Kubernetes Controller Manager manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 value of \"use-service-account-credential\" to \"true\"."
   impact 0.7
@@ -33,5 +33,13 @@ value of \"use-service-account-credential\" to \"true\"."
   tag fix_id: 'F-CNTR-K8-000220_fix'
   tag cci: ['CCI-000015']
   tag nist: ['AC-2 (1)']
-end
 
+  unless kube_controller_manager.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes Controller Manager process is not running on the target.'
+  end
+
+  describe kube_controller_manager do
+    its('use-service-account-credential') { should cmp 'true' }
+  end
+end

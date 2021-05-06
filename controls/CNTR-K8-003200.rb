@@ -16,7 +16,7 @@ through this file."
     If the command returns any non root:root file permissions, this is a
 finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the ownership of the kubelet.conf to root: root by executing the
 command:
 
@@ -31,5 +31,10 @@ command:
   tag fix_id: 'F-CNTR-K8-003200_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-end
 
+  describe kubelet do
+    its('kubeconfig_file') { should_not be_nil }
+    its('kubeconfig_file') { should be_owned_by('root') }
+    its('kubeconfig_file') { should be_grouped_into('root') }
+  end
+end

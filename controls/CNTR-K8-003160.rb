@@ -22,7 +22,7 @@ command:
     If the ca-file argument location file has permissions more permissive than
 \"644\", this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the permissions of the --client-ca-file to \"644\" by executing the
 command:
 
@@ -37,5 +37,18 @@ command:
   tag fix_id: 'F-CNTR-K8-003160_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-end
 
+  describe.one do
+    describe kubelet do
+      its('client_ca_file') { should_not be_nil }
+      its('client_ca_file') { should_not be_more_permissive_than('0644') }
+    end
+
+    client_ca_file = kubelet_config_file.params.dig('authentication', 'x509', 'clientCAFile')
+    if client_ca_file
+      describe file(client_ca_file) do
+        it { should_not be_more_permissive_than('0644') }
+      end
+    end
+  end
+end

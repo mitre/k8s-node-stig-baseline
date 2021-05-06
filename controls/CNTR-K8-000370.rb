@@ -24,7 +24,7 @@ the command:
     If the setting \"anonymous-auth\" is set to \"true\" or the parameter not
 set in the Kubernetes Kubelet configuration file, this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Edit the Kubernetes Kubelet file in the/etc/sysconfig/ directory on the
 Kubernetes Master Node.
 
@@ -42,5 +42,14 @@ Kubernetes Master Node.
   tag fix_id: 'F-CNTR-K8-000370_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-end
 
+  describe.one do
+    describe kubelet do
+      its('anonymous-auth') { should cmp 'false' }
+    end
+
+    describe kubelet_config_file do
+      its(%w(authentication anonymous enabled)) { should cmp 'false' }
+    end
+  end
+end

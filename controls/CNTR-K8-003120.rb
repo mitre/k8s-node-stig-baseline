@@ -16,7 +16,7 @@ through this file."
     If the command returns any non etcd:etcd file permissions, this is a
 finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the ownership of the manifest files to etcd:etcd by executing the
 command:
 
@@ -31,5 +31,23 @@ command:
   tag fix_id: 'F-CNTR-K8-003120_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-end
 
+  unless etcd.exist?
+    impact 0.0
+    desc 'caveat', 'ETCD process is not running on the target.'
+  end
+
+  describe.one do
+    if etcd.params['data-dir']
+      describe file(etcd.params['data-dir'].join) do
+        it { should be_owned_by('etcd') }
+        it { should be_grouped_into('etcd') }
+      end
+    end
+
+    describe file(process_env_var('etcd').params['ETCD_DATA_DIR']) do
+      it { should be_owned_by('etcd') }
+      it { should be_grouped_into('etcd') }
+    end
+  end
+end

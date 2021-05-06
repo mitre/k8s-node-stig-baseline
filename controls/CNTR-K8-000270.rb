@@ -30,7 +30,7 @@ Node. Run the command:
     If the setting \"authorization-mode\" is not configured in the Kubernetes
 API Server manifest file or is not set to \"Node,RBAC\", this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes API Server manifest file in the
+  desc 'fix', "Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 value of \"--authorization-mode\" to \"Node,RBAC\"."
   impact 0.5
@@ -43,5 +43,13 @@ value of \"--authorization-mode\" to \"Node,RBAC\"."
   tag fix_id: 'F-CNTR-K8-000270_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-end
 
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('authorization-mode') { should cmp 'Node,RBAC' }
+  end
+end

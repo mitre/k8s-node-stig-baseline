@@ -20,7 +20,7 @@ implemented through this file."
     If the command returns any non root:root file permissions, this is a
 finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Change the ownership of the Kube Proxy to root:root by executing the
 command:
 
@@ -35,5 +35,15 @@ command:
   tag fix_id: 'F-CNTR-K8-003150_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-end
 
+  unless kube_proxy.exist?
+    impact 0.0
+    desc 'caveat', 'Kube-Proxy process is not running on the target.'
+  end
+
+  describe kube_proxy do
+    its('kubeconfig_file') { should_not be_nil }
+    its('kubeconfig_file') { should be_owned_by('root') }
+    its('kubeconfig_file') { should be_grouped_into('root') }
+  end
+end

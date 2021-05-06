@@ -24,7 +24,7 @@ Node. Run the command:
     If the setting insecure-bind-address is found and set to \"localhost\" in
 the Kubernetes API manifest file, this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes API Server manifest file in the
+  desc 'fix', "Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Remove the
 value for the --insecure-bind-address setting."
   impact 0.7
@@ -36,5 +36,13 @@ value for the --insecure-bind-address setting."
   tag fix_id: 'F-CNTR-K8-000340_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-end
 
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('insecure-bind-address') { should be_nil }
+  end
+end

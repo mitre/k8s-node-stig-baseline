@@ -20,7 +20,7 @@ run the command:
 
     If any of the nodes return a value for staticPodPath, this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Edit the kubelet file on each node under the /etc/sysconfig directory to
 remove the staticPodPath setting and restart the kubelet service by executing
 the command:
@@ -36,5 +36,12 @@ the command:
   tag fix_id: 'F-CNTR-K8-000440_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-end
 
+  describe kubelet do
+    its('staticPodPath') { should be_nil }
+  end
+
+  describe kubelet_config_file do
+    its('staticPodPath') { should be_nil }
+  end
+end

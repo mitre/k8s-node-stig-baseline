@@ -26,7 +26,7 @@ Node. Run the command:
     If the setting anonymous-auth is set to \"true\" in the Kubernetes API
 Server manifest file, this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes API Server manifest file in the
+  desc 'fix', "Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 argument --anonymous-auth to \"false\"."
   impact 0.7
@@ -38,5 +38,13 @@ argument --anonymous-auth to \"false\"."
   tag fix_id: 'F-CNTR-K8-000360_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-end
 
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('anonymous-auth') { should_not cmp 'true' }
+  end
+end

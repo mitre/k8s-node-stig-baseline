@@ -27,7 +27,7 @@ Node. Run the command:
     If the setting \"etcd-certfile\" is not configured in the Kubernetes etcd
 manifest file, this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes etcd manifest file in the
+  desc 'fix', "Edit the Kubernetes etcd manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 value of \"--etcd-certfile\" to the Approved Organizational Certificate."
   impact 0.5
@@ -39,5 +39,23 @@ value of \"--etcd-certfile\" to the Approved Organizational Certificate."
   tag fix_id: 'F-CNTR-K8-001500_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
-end
 
+  # The check/fix text is likely a wrong guidance.
+  # This control matches `cert-file`; `etcd-certfile` is configured at Kubelet-apiserver level and addressed in CNTR-K8-001520
+  # Automation code created matches the expect correct guidance.
+
+  unless etcd.exist?
+    impact 0.0
+    desc 'caveat', 'ETCD process is not running on the target.'
+  end
+
+  describe.one do
+    describe etcd do
+      its('cert-file') { should_not be_nil }
+    end
+
+    describe process_env_var('etcd') do
+      its(:ETCD_CERT_FILE) { should_not be_nil }
+    end
+  end
+end

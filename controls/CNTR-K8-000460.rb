@@ -33,7 +33,7 @@ and execute the command:
 contain the DynamicKubeletConfig flag or the DynamicKubletConfig flag is set to
 \"true\", this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Edit any manifest file or kubelet config file that does not contain a
 feature-gates setting or has DynamicKubeletConfig set to \"true\".
 
@@ -50,5 +50,25 @@ kubelet config file is changed.
   tag fix_id: 'F-CNTR-K8-000460_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-end
 
+  describe kube_scheduler do
+    its('feature-gates.to_s') { should match /DynamicKubeletConfig=[F|f]alse/ }
+  end
+
+  describe kube_controller_manager do
+    its('feature-gates.to_s') { should match /DynamicKubeletConfig=[F|f]alse/ }
+  end
+
+  describe kube_apiserver do
+    its('feature-gates.to_s') { should match /DynamicKubeletConfig=[F|f]alse/ }
+  end
+
+  describe.one do
+    describe kubelet do
+      its('feature-gates.to_s') { should match /DynamicKubeletConfig=[F|f]alse/ }
+    end
+    describe kubelet_config_file do
+      its(%w(featureGates DynamicKubeletConfig)) { should_not cmp 'false' }
+    end
+  end
+end

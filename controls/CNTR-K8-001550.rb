@@ -28,7 +28,7 @@ Node. Run the command:
     If the setting \"peer-key-file\" is not set in the Kubernetes etcd manifest
 file, this is a finding.
   "
-  desc  'fix', "Edit the Kubernetes etcd manifest file in the
+  desc 'fix', "Edit the Kubernetes etcd manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
 value of \"--peer-key-file\" to the certificate to be used for communication
 with etcd."
@@ -41,5 +41,19 @@ with etcd."
   tag fix_id: 'F-CNTR-K8-001550_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
-end
 
+  unless etcd.exist?
+    impact 0.0
+    desc 'caveat', 'ETCD process is not running on the target.'
+  end
+
+  describe.one do
+    describe etcd do
+      its('peer-key-file') { should_not be_nil }
+    end
+
+    describe process_env_var('etcd') do
+      its(:ETCD_PEER_KEY_FILE) { should_not be_nil }
+    end
+  end
+end

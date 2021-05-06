@@ -28,7 +28,7 @@ the command:
     If the setting client-ca-file is not set in the Kubernetes API server
 manifest file or contains no value, this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Edit the Kubernetes Kubelet file in the /etc/sysconfig/ directory on the
 Kubernetes Master Node. Set the value of client-ca-file to path containing
 Approved Organizational Certificate.
@@ -45,5 +45,14 @@ Approved Organizational Certificate.
   tag fix_id: 'F-CNTR-K8-001420_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
-end
 
+  describe.one do
+    describe kubelet do
+      its('client-ca-file') { should_not be_nil }
+    end
+
+    describe kubelet_config_file do
+      its(%w(authentication x509 clientCAFile)) { should_not be_nil }
+    end
+  end
+end

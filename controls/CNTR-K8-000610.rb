@@ -19,7 +19,7 @@ Node. Run the command:
 
     If the audit-log-path is not set, this is a finding.
   "
-  desc  'fix', "
+  desc 'fix', "
     Edit the Kubernetes API Server manifest and set \"--audit-log-path\" to a
 secure location for the audit logs to be written.
 
@@ -36,5 +36,13 @@ is to be written.
   tag fix_id: 'F-CNTR-K8-000610_fix'
   tag cci: ['CCI-001464']
   tag nist: ['AU-14 (1)']
-end
 
+  unless kube_apiserver.exist?
+    impact 0.0
+    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  end
+
+  describe kube_apiserver do
+    its('audit-log-path') { should_not be_nil }
+  end
+end
