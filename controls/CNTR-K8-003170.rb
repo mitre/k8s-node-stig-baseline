@@ -2,30 +2,32 @@
 
 control 'CNTR-K8-003170' do
   title 'The Kubernetes Kubelet certificate authority must be owned by root.'
-  desc  "The Kubernetes kube proxy kubeconfig contain the argument and setting
-for the Master Nodes. These settings contain network rules for restricting
-network communication between pods, clusters, and networks. If these files can
-be changed, data traversing between the Kubernetes Control Panel components
-would be compromised. Many of the security settings within the document are
-implemented through this file."
+  desc  "The Kubernetes kubelet certificate authority file contains settings
+for the Kubernetes Node TLS certificate authority. Any request presenting a
+client certificate signed by one of the authorities in the client-ca-file is
+authenticated with an identity corresponding to the CommonName of the client
+certificate. If this file can be changed, the Kubernetes architecture could
+be compromised. The scheduler will implement the changes immediately. Many of
+the security settings within the document are implemented through this file."
   desc  'rationale', ''
   desc  'check', "
-    Check if Kube-Proxy is running and obtain --kubeconfig parameter use the
-following command:
-    ps -ef | grep kube-proxy
+    Change to the /etc/sysconfig/ directory on the Kubernetes Master Node.
+Review the ownership of the Kubernetes  client-ca-file by using the command:
 
-    If Kube-Proxy exists:
-    Review the permissions of the Kubernetes Kube Proxy by using the command:
-    stat -c %a <location from --kubeconfig>
+more kubelet
+--client-ca-file argument
+Note certificate location
 
-    If the command returns any non root:root file permissions, this is a
-finding.
-  "
+Review the ownership of the Kubernetes client-ca-file by using the command:
+stat -c   %U:%G <location from --client-ca-file argument>| grep -v root:root
+
+If the command returns any non root:root file permissions, this is a finding.
+"
   desc 'fix', "
-    Change the permissions of the Kube Proxy to \"root\" by executing the
-command:
+    Change the permissions of the --client-ca-file to \"root\" by executing 
+the command:
 
-    chown root:root <location from kubeconfig>.
+chown root:root <location from --client-ca-file argument>/ *
   "
   impact 0.5
   tag severity: 'medium'

@@ -12,7 +12,7 @@ Node. Run the command:
 
     grep -i audit-log-maxage *
 
-    If the setting \"audit-log-path\" is not set in the Kubernetes API Server
+    If the setting \"audit-log-maxage\" is not set in the Kubernetes API Server
 manifest file or it is set less than \"30\", this is a finding.
   "
   desc 'fix', "Edit the Kubernetes API Server manifest file in the

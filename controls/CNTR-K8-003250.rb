@@ -18,10 +18,9 @@ settings within the document are implemented through these manifests."
 is a finding.
   "
   desc 'fix', "
-    Change the permissions of the manifest files to \"root: root\" by executing
-the command:
+    Change the permissions of the manifest files by executing the command:
 
-    chown root:root /etc/kubernetes/manifests/*
+    chmod 644 /etc/kubernetes/manifests/*
   "
   impact 0.5
   tag severity: 'medium'
