@@ -41,7 +41,8 @@ value of \"--etcd-certfile\" to the Approved Organizational Certificate."
   tag nist: ['SC-23']
 
   # The check/fix text is likely a wrong guidance.
-  # This control matches `cert-file`; `etcd-certfile` is configured at Kubelet-apiserver level and addressed in CNTR-K8-001520
+  # This control should check `cert-file`;
+  # `etcd-certfile` is configured at Kubelet-apiserver and addressed in CNTR-K8-001520
   # Automation code created matches the expect correct guidance.
 
   unless etcd.exist?

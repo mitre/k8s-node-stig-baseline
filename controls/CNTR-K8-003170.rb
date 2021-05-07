@@ -39,10 +39,6 @@ chown root:root <location from --client-ca-file argument>/ *
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  # The check/fix text is likely a wrong guidance. Its title does not match the rest of the metadata.
-  # It is likely a follow up to CNTR-K8-003160 which checks for file mode for `Kubelet` `client-ca-file`.
-  # Automation code created matches the expect correct guidance.
-
   describe.one do
     describe kubelet do
       its('client_ca_file') { should_not be_nil }
