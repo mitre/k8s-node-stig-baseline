@@ -30,8 +30,16 @@ finding.
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  describe  file(input('kubeadm_path')) do
-    it { should be_owned_by('root') }
-    it { should be_grouped_into('root') }
+  kubeadm_path = input('kubeadm_path')
+
+  if file(kubeadm_path).exist?
+    describe file(kubeadm_path) do
+      it { should be_owned_by('root') }
+      it { should be_grouped_into('root') }
+    end
+  else
+    describe "Kubeadm file #{kubeadm_path} not found on target" do
+      skip
+    end
   end
 end

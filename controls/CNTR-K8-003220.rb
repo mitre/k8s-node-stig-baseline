@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
 control 'CNTR-K8-003220' do
-  title "The Kubernetes kubelet service must have file permissions set to 644
+  title "The Kubernetes  kubeadm.conf must have file permissions set to 644
 or more restrictive."
   desc  "The Kubernetes kubeadm.conf contains sensitive information regarding
 the cluster nodes configuration. If this file can be modified, the Kubernetes
@@ -31,7 +31,15 @@ a finding.
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  describe file(input('kubeadm_path')) do
-    it { should_not be_more_permissive_than('0644') }
+  kubeadm_path = input('kubeadm_path')
+
+  if file(kubeadm_path).exist?
+    describe file(kubeadm_path) do
+      it { should_not be_more_permissive_than('0644') }
+    end
+  else
+    describe "Kubeadm file #{kubeadm_path} not found on target" do
+      skip
+    end
   end
 end

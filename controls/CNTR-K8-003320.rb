@@ -40,7 +40,7 @@ value of \"--audit-log-path\" to valid location."
     its('audit-log-path') { should_not be_nil }
   end
 
-  if kube_apiserver.exist?
+  if kube_apiserver.params['audit-log-path']
     describe directory(kube_apiserver.params['audit-log-path'].join) do
       it { should exist }
     end
