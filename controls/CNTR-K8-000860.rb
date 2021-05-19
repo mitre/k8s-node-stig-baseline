@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000860' do
+control 'V-242405' do
   title 'The Kubernetes manifests must be owned by root.'
   desc  "The manifest files contain the runtime configuration of the API
 server, proxy, scheduler, controller, and etcd. If an attacker can gain access
@@ -32,10 +32,10 @@ the command:
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000133-CTR-000295'
-  tag gid: 'CNTR-K8-000860'
-  tag rid: 'CNTR-K8-000860_rule'
+  tag gid: 'V-242405'
+  tag rid: 'SV-242405r712571_rule'
   tag stig_id: 'CNTR-K8-000860'
-  tag fix_id: 'F-CNTR-K8-000860_fix'
+  tag fix_id: 'F-45638r712570_fix'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
 

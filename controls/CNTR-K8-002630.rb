@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-002630' do
+control 'V-242440' do
   title "Kubernetes API Server must disable token authentication to protect
 information in transit."
   desc  "Kubernetes token authentication uses password known as secrets in a
@@ -25,11 +25,11 @@ this is a finding.
 parameter \"--token-auth-file\"."
   impact 0.5
   tag severity: 'medium'
-  tag gtitle: 'SRG-APP-000439-CTR-001080'
-  tag gid: 'CNTR-K8-002630'
-  tag rid: 'CNTR-K8-002630_rule'
+  tag gtitle: 'SRG-APP-000516-CTR-001325'
+  tag gid: 'V-242440'
+  tag rid: 'SV-242440r712676_rule'
   tag stig_id: 'CNTR-K8-002630'
-  tag fix_id: 'F-CNTR-K8-002630_fix'
+  tag fix_id: 'F-45673r712675_fix'
   tag cci: ['CCI-002418']
   tag nist: ['SC-8']
 

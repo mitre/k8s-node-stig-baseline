@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000270' do
+control 'V-242382' do
   title "The Kubernetes API Server must enable Node,RBAC as the authorization
 mode."
   desc  "To mitigate the risk of unauthorized access to sensitive information
@@ -37,10 +37,10 @@ value of \"--authorization-mode\" to \"Node,RBAC\"."
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000033-CTR-000090'
   tag satisfies: ['SRG-APP-000033-CTR-000090', 'SRG-APP-000033-CTR-000095']
-  tag gid: 'CNTR-K8-000270'
-  tag rid: 'CNTR-K8-000270_rule'
+  tag gid: 'V-242382'
+  tag rid: 'SV-242382r712502_rule'
   tag stig_id: 'CNTR-K8-000270'
-  tag fix_id: 'F-CNTR-K8-000270_fix'
+  tag fix_id: 'F-45615r712501_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 

@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000700' do
+control 'V-242403' do
   title "Kubernetes API Server must generate audit records that identify what
 type of event has occurred, identify the source of the event, contain the event
 results, identify any users, and identify any containers associated with the
@@ -67,10 +67,10 @@ following:
                   'SRG-APP-000497-CTR-001245', 'SRG-APP-000496-CTR-001240',
                   'SRG-APP-000493-CTR-001225', 'SRG-APP-000492-CTR-001220',
                   'SRG-APP-000343-CTR-000780', 'SRG-APP-000381-CTR-000905']
-  tag gid: 'CNTR-K8-000700'
-  tag rid: 'CNTR-K8-000700_rule'
+  tag gid: 'V-242403'
+  tag rid: 'SV-242403r712565_rule'
   tag stig_id: 'CNTR-K8-000700'
-  tag fix_id: 'F-CNTR-K8-000700_fix'
+  tag fix_id: 'F-45636r712564_fix'
   tag cci: ['CCI-000018', 'CCI-000130', 'CCI-000131', 'CCI-000132',
             'CCI-000133', 'CCI-000134', 'CCI-000135', 'CCI-000172', 'CCI-001403',
             'CCI-001404', 'CCI-001487', 'CCI-001814', 'CCI-002234']

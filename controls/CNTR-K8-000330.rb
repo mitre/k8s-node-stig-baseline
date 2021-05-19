@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000330' do
+control 'V-242387' do
   title 'The Kubernetes Kubelet must have the read-only port flag disabled.'
   desc  "Kubelet serves a small REST API with read access to port 10255. The
 read-only port for Kubernetes provides no authentication or authorization
@@ -52,10 +52,10 @@ set the parameter in KUBELET_SYSTEM_PODS_ARGS variable to
   impact 0.7
   tag severity: 'high'
   tag gtitle: 'SRG-APP-000033-CTR-000095'
-  tag gid: 'CNTR-K8-000330'
-  tag rid: 'CNTR-K8-000330_rule'
+  tag gid: 'V-242387'
+  tag rid: 'SV-242387r717013_rule'
   tag stig_id: 'CNTR-K8-000330'
-  tag fix_id: 'F-CNTR-K8-000330_fix'
+  tag fix_id: 'F-45620r717012_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 

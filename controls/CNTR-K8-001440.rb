@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-001440' do
+control 'V-242422' do
   title 'Kubernetes API Server must have a certificate for communication.'
   desc  "Kubernetes control plane and external communication is managed by API
 Server. The main implementation of the API Server is to manage hardware
@@ -36,10 +36,10 @@ Organizational Certificate."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000219-CTR-000550'
-  tag gid: 'CNTR-K8-001440'
-  tag rid: 'CNTR-K8-001440_rule'
+  tag gid: 'V-242422'
+  tag rid: 'SV-242422r712622_rule'
   tag stig_id: 'CNTR-K8-001440'
-  tag fix_id: 'F-CNTR-K8-001440_fix'
+  tag fix_id: 'F-45655r712621_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 

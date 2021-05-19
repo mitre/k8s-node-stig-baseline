@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-003350' do
+control 'V-242468' do
   title "The Kubernetes API Server must prohibit communication using TLS
 version 1.0 and 1.1, and SSL 2.0 and 3.0."
   desc  "The Kubernetes API Server will prohibit the use of SSL and
@@ -31,10 +31,10 @@ value of \"--tls-min-version\" to either \"VersionTLS12\" or higher."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000560-CTR-001340'
-  tag gid: 'CNTR-K8-003350'
-  tag rid: 'CNTR-K8-003350_rule'
+  tag gid: 'V-242468'
+  tag rid: 'SV-242468r712760_rule'
   tag stig_id: 'CNTR-K8-003350'
-  tag fix_id: 'F-CNTR-K8-003350_fix'
+  tag fix_id: 'F-45701r712759_fix'
   tag cci: ['CCI-001453']
   tag nist: ['AC-17 (2)']
 

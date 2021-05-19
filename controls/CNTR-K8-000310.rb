@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000310' do
+control 'V-242385' do
   title 'The Kubernetes Controller Manager must have secure binding.'
   desc  "Limiting the number of attack vectors and implementing authentication
 and encryption on the endpoints available to external sources is paramount when
@@ -27,10 +27,10 @@ argument \"--bind-address\" to \"127.0.0.1\"."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000033-CTR-000090'
-  tag gid: 'CNTR-K8-000310'
-  tag rid: 'CNTR-K8-000310_rule'
+  tag gid: 'V-242385'
+  tag rid: 'SV-242385r712511_rule'
   tag stig_id: 'CNTR-K8-000310'
-  tag fix_id: 'F-CNTR-K8-000310_fix'
+  tag fix_id: 'F-45618r712510_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 

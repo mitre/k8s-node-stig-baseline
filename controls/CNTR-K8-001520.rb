@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-001520' do
+control 'V-242430' do
   title 'Kubernetes etcd must have a certificate for communication.'
   desc  "Kubernetes stores configuration and state information in a distributed
 key-value store called etcd. Anyone who can write to etcd can effectively
@@ -34,10 +34,10 @@ with etcd."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000219-CTR-000550'
-  tag gid: 'CNTR-K8-001520'
-  tag rid: 'CNTR-K8-001520_rule'
+  tag gid: 'V-242430'
+  tag rid: 'SV-242430r712646_rule'
   tag stig_id: 'CNTR-K8-001520'
-  tag fix_id: 'F-CNTR-K8-001520_fix'
+  tag fix_id: 'F-45663r712645_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 

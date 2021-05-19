@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-003140' do
+control 'V-242447' do
   title "The Kubernetes Kube Proxy must have file permissions set to 644 or
 more restrictive."
   desc  "The Kubernetes kube proxy kubeconfig contain the argument and setting
@@ -30,10 +30,10 @@ command:
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001325'
-  tag gid: 'CNTR-K8-003140'
-  tag rid: 'CNTR-K8-003140_rule'
+  tag gid: 'V-242447'
+  tag rid: 'SV-242447r712697_rule'
   tag stig_id: 'CNTR-K8-003140'
-  tag fix_id: 'F-CNTR-K8-003140_fix'
+  tag fix_id: 'F-45680r712696_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 

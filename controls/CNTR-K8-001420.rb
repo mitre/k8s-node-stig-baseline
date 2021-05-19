@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-001420' do
+control 'V-242420' do
   title 'Kubernetes Kubelet must have the SSL Certificate Authority set.'
   desc  "Kubernetes container and pod configuration are maintained by Kubelet.
 Kubelet agents register nodes with the API Server, mount volume storage, and
@@ -39,10 +39,10 @@ Approved Organizational Certificate.
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000219-CTR-000550'
-  tag gid: 'CNTR-K8-001420'
-  tag rid: 'CNTR-K8-001420_rule'
+  tag gid: 'V-242420'
+  tag rid: 'SV-242420r712616_rule'
   tag stig_id: 'CNTR-K8-001420'
-  tag fix_id: 'F-CNTR-K8-001420_fix'
+  tag fix_id: 'F-45653r717026_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 

@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000220' do
+control 'V-242381' do
   title "The Kubernetes Controller Manager must create unique service accounts
 for each work payload."
   desc  "The Kubernetes Controller Manager is a background process that embeds
@@ -27,10 +27,10 @@ value of \"use-service-account-credential\" to \"true\"."
   impact 0.7
   tag severity: 'high'
   tag gtitle: 'SRG-APP-000023-CTR-000055'
-  tag gid: 'CNTR-K8-000220'
-  tag rid: 'CNTR-K8-000220_rule'
+  tag gid: 'V-242381'
+  tag rid: 'SV-242381r712499_rule'
   tag stig_id: 'CNTR-K8-000220'
-  tag fix_id: 'F-CNTR-K8-000220_fix'
+  tag fix_id: 'F-45614r712498_fix'
   tag cci: ['CCI-000015']
   tag nist: ['AC-2 (1)']
 

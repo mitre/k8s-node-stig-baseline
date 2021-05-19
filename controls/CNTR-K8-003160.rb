@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-003160' do
+control 'V-242449' do
   title "The Kubernetes Kubelet certificate authority file must have file
 permissions set to 644 or more restrictive."
   desc  "The Kubernetes kubelet certificate authority file contains settings
@@ -31,10 +31,10 @@ command:
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001325'
-  tag gid: 'CNTR-K8-003160'
-  tag rid: 'CNTR-K8-003160_rule'
+  tag gid: 'V-242449'
+  tag rid: 'SV-242449r712703_rule'
   tag stig_id: 'CNTR-K8-003160'
-  tag fix_id: 'F-CNTR-K8-003160_fix'
+  tag fix_id: 'F-45682r712702_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 

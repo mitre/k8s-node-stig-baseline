@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000340' do
+control 'V-242388' do
   title 'The Kubernetes API server must have the insecure bind address not set.'
   desc  "By default, the API server will listen on two ports and addresses. One
 address is the secure address and the other address is called the \"insecure
@@ -30,10 +30,10 @@ value for the --insecure-bind-address setting."
   impact 0.7
   tag severity: 'high'
   tag gtitle: 'SRG-APP-000033-CTR-000095'
-  tag gid: 'CNTR-K8-000340'
-  tag rid: 'CNTR-K8-000340_rule'
+  tag gid: 'V-242388'
+  tag rid: 'SV-242388r712520_rule'
   tag stig_id: 'CNTR-K8-000340'
-  tag fix_id: 'F-CNTR-K8-000340_fix'
+  tag fix_id: 'F-45621r712519_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 

@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-001410' do
+control 'V-242419' do
   title 'Kubernetes API Server must have the SSL Certificate Authority set.'
   desc  "Kubernetes control plane and external communication is managed by API
 Server. The main implementation of the API Server is to manage hardware
@@ -34,10 +34,10 @@ value of client-ca-file to path containing Approved Organizational Certificate."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000219-CTR-000550'
-  tag gid: 'CNTR-K8-001410'
-  tag rid: 'CNTR-K8-001410_rule'
+  tag gid: 'V-242419'
+  tag rid: 'SV-242419r712613_rule'
   tag stig_id: 'CNTR-K8-001410'
-  tag fix_id: 'F-CNTR-K8-001410_fix'
+  tag fix_id: 'F-45652r712612_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 

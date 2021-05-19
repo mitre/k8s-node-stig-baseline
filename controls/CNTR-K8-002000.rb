@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-002000' do
+control 'V-242436' do
   title "The Kubernetes API server must have the ValidatingAdmissionWebhook
 enabled."
   desc  "Enabling the admissions webhook allows for Kubernetes to apply
@@ -33,10 +33,10 @@ otherwise a denial of service may occur.
   impact 0.7
   tag severity: 'high'
   tag gtitle: 'SRG-APP-000342-CTR-000775'
-  tag gid: 'CNTR-K8-002000'
-  tag rid: 'CNTR-K8-002000_rule'
+  tag gid: 'V-242436'
+  tag rid: 'SV-242436r712664_rule'
   tag stig_id: 'CNTR-K8-002000'
-  tag fix_id: 'F-CNTR-K8-002000_fix'
+  tag fix_id: 'F-45669r717027_fix'
   tag cci: ['CCI-002233']
   tag nist: ['AC-6 (8)']
 

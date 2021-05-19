@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-003210' do
+control 'V-242454' do
   title 'The Kubernetes kubeadm must be owned by root.'
   desc  "The Kubernetes kubeadm.conf contains sensitive information regarding
 the cluster nodes configuration. If this file can be modified, the Kubernetes
@@ -31,10 +31,10 @@ command:
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001325'
-  tag gid: 'CNTR-K8-003210'
-  tag rid: 'CNTR-K8-003210_rule'
+  tag gid: 'V-242454'
+  tag rid: 'SV-242454r712718_rule'
   tag stig_id: 'CNTR-K8-003210'
-  tag fix_id: 'F-CNTR-K8-003210_fix'
+  tag fix_id: 'F-45687r712717_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 

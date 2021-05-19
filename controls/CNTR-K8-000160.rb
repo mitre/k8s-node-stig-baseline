@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000160' do
+control 'V-242377' do
   title "The Kubernetes Scheduler must use TLS 1.2, at a minimum, to protect
 the confidentiality of sensitive data during electronic dissemination."
   desc  "The Kubernetes Scheduler will prohibit the use of SSL and unauthorized
@@ -29,10 +29,10 @@ value of \"--tls-min-version\" to \"VersionTLS12\" or higher."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000014-CTR-000035'
-  tag gid: 'CNTR-K8-000160'
-  tag rid: 'CNTR-K8-000160_rule'
+  tag gid: 'V-242377'
+  tag rid: 'SV-242377r712487_rule'
   tag stig_id: 'CNTR-K8-000160'
-  tag fix_id: 'F-CNTR-K8-000160_fix'
+  tag fix_id: 'F-45610r712486_fix'
   tag cci: ['CCI-000068']
   tag nist: ['AC-17 (2)']
 

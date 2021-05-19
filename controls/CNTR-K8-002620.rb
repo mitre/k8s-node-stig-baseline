@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-002620' do
+control 'V-242439' do
   title "Kubernetes API Server must disable basic authentication to protect
 information in transit."
   desc  "Kubernetes basic authentication sends and receives request containing
@@ -24,11 +24,11 @@ this is a finding.
 setting \"--basic-auth-file\"."
   impact 0.7
   tag severity: 'high'
-  tag gtitle: 'SRG-APP-000439-CTR-001080'
-  tag gid: 'CNTR-K8-002620'
-  tag rid: 'CNTR-K8-002620_rule'
+  tag gtitle: 'SRG-APP-000516-CTR-001325'
+  tag gid: 'V-242439'
+  tag rid: 'SV-242439r712673_rule'
   tag stig_id: 'CNTR-K8-002620'
-  tag fix_id: 'F-CNTR-K8-002620_fix'
+  tag fix_id: 'F-45672r712672_fix'
   tag cci: ['CCI-002418']
   tag nist: ['SC-8']
 

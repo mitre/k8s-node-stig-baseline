@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000170' do
+control 'V-242378' do
   title "The Kubernetes API Server must use TLS 1.2, at a minimum, to protect
 the confidentiality of sensitive data during electronic dissemination."
   desc  "The Kubernetes API Server will prohibit the use of SSL and
@@ -29,10 +29,10 @@ value of \"--tls-min-version\" to \"VersionTLS12\" or higher."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000014-CTR-000040'
-  tag gid: 'CNTR-K8-000170'
-  tag rid: 'CNTR-K8-000170_rule'
+  tag gid: 'V-242378'
+  tag rid: 'SV-242378r712490_rule'
   tag stig_id: 'CNTR-K8-000170'
-  tag fix_id: 'F-CNTR-K8-000170_fix'
+  tag fix_id: 'F-45611r712489_fix'
   tag cci: ['CCI-000068']
   tag nist: ['AC-17 (2)']
 

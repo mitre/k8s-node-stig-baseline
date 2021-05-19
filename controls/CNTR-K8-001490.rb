@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-001490' do
+control 'V-242427' do
   title 'Kubernetes etcd must have a key file for secure communication.'
   desc  "Kubernetes stores configuration and state information in a distributed
 key-value store called etcd. Anyone who can write to etcd can effectively
@@ -33,10 +33,10 @@ value of \"--key-file\" to the Approved Organizational Certificate."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000219-CTR-000550'
-  tag gid: 'CNTR-K8-001490'
-  tag rid: 'CNTR-K8-001490_rule'
+  tag gid: 'V-242427'
+  tag rid: 'SV-242427r712637_rule'
   tag stig_id: 'CNTR-K8-001490'
-  tag fix_id: 'F-CNTR-K8-001490_fix'
+  tag fix_id: 'F-45660r712636_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 

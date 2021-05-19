@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000610' do
+control 'V-242402' do
   title 'The Kubernetes API Server must have an audit log path set.'
   desc  "When Kubernetes is started, components and user services are started
 for auditing startup events, and events for components and services, it is
@@ -30,10 +30,10 @@ is to be written.
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000092-CTR-000165'
-  tag gid: 'CNTR-K8-000610'
-  tag rid: 'CNTR-K8-000610_rule'
+  tag gid: 'V-242402'
+  tag rid: 'SV-242402r712562_rule'
   tag stig_id: 'CNTR-K8-000610'
-  tag fix_id: 'F-CNTR-K8-000610_fix'
+  tag fix_id: 'F-45635r717024_fix'
   tag cci: ['CCI-001464']
   tag nist: ['AU-14 (1)']
 

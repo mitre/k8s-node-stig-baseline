@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-003200' do
+control 'V-242453' do
   title 'The Kubernetes kubelet config must be owned by root.'
   desc  "The Kubernetes kubelet agent registers nodes with the API server and
 performs health checks to containers within pods. If these files can be
@@ -25,10 +25,10 @@ command:
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001325'
-  tag gid: 'CNTR-K8-003200'
-  tag rid: 'CNTR-K8-003200_rule'
+  tag gid: 'V-242453'
+  tag rid: 'SV-242453r712715_rule'
   tag stig_id: 'CNTR-K8-003200'
-  tag fix_id: 'F-CNTR-K8-003200_fix'
+  tag fix_id: 'F-45686r712714_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 

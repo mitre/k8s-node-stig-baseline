@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000370' do
+control 'V-242391' do
   title 'The Kubernetes Kubelet must have anonymous authentication disabled.'
   desc  "A user who has access to the Kubelet essentially has root access to
 the nodes contained within the Kubernetes Control Plane. To control access,
@@ -36,10 +36,10 @@ Kubernetes Master Node.
   impact 0.7
   tag severity: 'high'
   tag gtitle: 'SRG-APP-000033-CTR-000090'
-  tag gid: 'CNTR-K8-000370'
-  tag rid: 'CNTR-K8-000370_rule'
+  tag gid: 'V-242391'
+  tag rid: 'SV-242391r712529_rule'
   tag stig_id: 'CNTR-K8-000370'
-  tag fix_id: 'F-CNTR-K8-000370_fix'
+  tag fix_id: 'F-45624r712528_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 

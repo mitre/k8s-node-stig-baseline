@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-001450' do
+control 'V-242423' do
   title 'Kubernetes etcd must enable client authentication to secure service.'
   desc  "Kubernetes container and pod configuration are maintained by Kubelet.
 Kubelet agents register nodes with the API Server, mount volume storage, and
@@ -34,10 +34,10 @@ value of \"--client-cert-auth\" to \"true\" for the etcd."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000219-CTR-000550'
-  tag gid: 'CNTR-K8-001450'
-  tag rid: 'CNTR-K8-001450_rule'
+  tag gid: 'V-242423'
+  tag rid: 'SV-242423r712625_rule'
   tag stig_id: 'CNTR-K8-001450'
-  tag fix_id: 'F-CNTR-K8-001450_fix'
+  tag fix_id: 'F-45656r712624_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 

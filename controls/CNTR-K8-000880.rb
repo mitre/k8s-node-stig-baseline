@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000880' do
+control 'V-242406' do
   title 'The Kubernetes kubelet configuration file must be owned by root.'
   desc  "The kubelet configuration file contains the runtime configuration of
 the kubelet service. If an attacker can gain access to this file, changes can
@@ -32,10 +32,10 @@ the command:
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000133-CTR-000300'
-  tag gid: 'CNTR-K8-000880'
-  tag rid: 'CNTR-K8-000880_rule'
+  tag gid: 'V-242406'
+  tag rid: 'SV-242406r712574_rule'
   tag stig_id: 'CNTR-K8-000880'
-  tag fix_id: 'F-CNTR-K8-000880_fix'
+  tag fix_id: 'F-45639r712573_fix'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
 

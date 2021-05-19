@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-003260' do
+control 'V-242459' do
   title "The Kubernetes etcd must have file permissions set to 644 or more
 restrictive."
   desc  "The Kubernetes etcd key-value store provides a way to store data to
@@ -24,10 +24,10 @@ command:
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001335'
-  tag gid: 'CNTR-K8-003260'
-  tag rid: 'CNTR-K8-003260_rule'
+  tag gid: 'V-242459'
+  tag rid: 'SV-242459r712733_rule'
   tag stig_id: 'CNTR-K8-003260'
-  tag fix_id: 'F-CNTR-K8-003260_fix'
+  tag fix_id: 'F-45692r712732_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 

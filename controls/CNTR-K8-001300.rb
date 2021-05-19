@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-001300' do
+control 'V-242416' do
   title 'Kubernetes Kubelet must not disable timeouts.'
   desc  "Idle connections from the Kubelet can be use by unauthorized users to
 perform malicious activity to the nodes, pods, containers, and cluster within
@@ -28,11 +28,11 @@ Kubelet service using the following command:
   "
   impact 0.5
   tag severity: 'medium'
-  tag gtitle: 'SRG-APP-000190-CTR-000500'
-  tag gid: 'CNTR-K8-001300'
-  tag rid: 'CNTR-K8-001300_rule'
+  tag gtitle: 'SRG-APP-000516-CTR-001325'
+  tag gid: 'V-242416'
+  tag rid: 'SV-242416r712604_rule'
   tag stig_id: 'CNTR-K8-001300'
-  tag fix_id: 'F-CNTR-K8-001300_fix'
+  tag fix_id: 'F-45649r712603_fix'
   tag cci: ['CCI-001133']
   tag nist: ['SC-10']
 

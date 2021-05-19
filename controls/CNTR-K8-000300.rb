@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000300' do
+control 'V-242384' do
   title 'The Kubernetes Scheduler must have secure binding.'
   desc  "Limiting the number of attack vectors and implementing authentication
 and encryption on the endpoints available to external sources is paramount when
@@ -26,10 +26,10 @@ argument \"--bind-address\" to \"127.0.0.1\"."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000033-CTR-000090'
-  tag gid: 'CNTR-K8-000300'
-  tag rid: 'CNTR-K8-000300_rule'
+  tag gid: 'V-242384'
+  tag rid: 'SV-242384r712508_rule'
   tag stig_id: 'CNTR-K8-000300'
-  tag fix_id: 'F-CNTR-K8-000300_fix'
+  tag fix_id: 'F-45617r712507_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 

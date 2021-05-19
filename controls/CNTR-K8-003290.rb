@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-003290' do
+control 'V-242462' do
   title 'The Kubernetes API Server must be set to audit log max size.'
   desc  "The Kubernetes API Server must be set for enough storage to retain log
 information over the period required. When audit logs are large in size, the
@@ -22,10 +22,10 @@ value of –\"--audit-log-maxsize\" to a minimum of \"100\"."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001335'
-  tag gid: 'CNTR-K8-003290'
-  tag rid: 'CNTR-K8-003290_rule'
+  tag gid: 'V-242462'
+  tag rid: 'SV-242462r712742_rule'
   tag stig_id: 'CNTR-K8-003290'
-  tag fix_id: 'F-CNTR-K8-003290_fix'
+  tag fix_id: 'F-45695r712741_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 

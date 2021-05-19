@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000850' do
+control 'V-242404' do
   title 'Kubernetes Kubelet must deny hostname override.'
   desc  "Kubernetes allows for the overriding of hostnames. Allowing this
 feature to be implemented within the kubelets may break the TLS setup between
@@ -29,10 +29,10 @@ the service after the change is made by running:
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000133-CTR-000290'
-  tag gid: 'CNTR-K8-000850'
-  tag rid: 'CNTR-K8-000850_rule'
+  tag gid: 'V-242404'
+  tag rid: 'SV-242404r712568_rule'
   tag stig_id: 'CNTR-K8-000850'
-  tag fix_id: 'F-CNTR-K8-000850_fix'
+  tag fix_id: 'F-45637r712567_fix'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
 

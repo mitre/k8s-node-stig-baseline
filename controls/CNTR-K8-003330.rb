@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-003330' do
+control 'V-242466' do
   title "The Kubernetes PKI CRT must have file permissions set to 644 or more
 restrictive."
   desc  "The Kubernetes PKI directory contains all certificates (.crt files)
@@ -25,10 +25,10 @@ is a finding.
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001335'
-  tag gid: 'CNTR-K8-003330'
-  tag rid: 'CNTR-K8-003330_rule'
+  tag gid: 'V-242466'
+  tag rid: 'SV-242466r712754_rule'
   tag stig_id: 'CNTR-K8-003330'
-  tag fix_id: 'F-CNTR-K8-003330_fix'
+  tag fix_id: 'F-45699r712753_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 

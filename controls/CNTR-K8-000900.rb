@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000900' do
+control 'V-242408' do
   title 'The Kubernetes manifests must have least privileges.'
   desc  "The manifest files contain the runtime configuration of the API
 server, scheduler, controller, and etcd. If an attacker can gain access to
@@ -36,10 +36,10 @@ the command:
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000133-CTR-000310'
   tag satisfies: ['SRG-APP-000133-CTR-000310', 'SRG-APP-000133-CTR-000295']
-  tag gid: 'CNTR-K8-000900'
-  tag rid: 'CNTR-K8-000900_rule'
+  tag gid: 'V-242408'
+  tag rid: 'SV-242408r712580_rule'
   tag stig_id: 'CNTR-K8-000900'
-  tag fix_id: 'F-CNTR-K8-000900_fix'
+  tag fix_id: 'F-45641r712579_fix'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
 

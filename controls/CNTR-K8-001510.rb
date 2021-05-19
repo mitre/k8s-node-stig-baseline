@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-001510' do
+control 'V-242429' do
   title 'Kubernetes etcd must have the SSL Certificate Authority set.'
   desc  "Kubernetes stores configuration and state information in a distributed
 key-value store called etcd. Anyone who can write to etcd can effectively
@@ -33,10 +33,10 @@ value of \"--etcd-cafile\" to the Certificate Authority for etcd."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000219-CTR-000550'
-  tag gid: 'CNTR-K8-001510'
-  tag rid: 'CNTR-K8-001510_rule'
+  tag gid: 'V-242429'
+  tag rid: 'SV-242429r712643_rule'
   tag stig_id: 'CNTR-K8-001510'
-  tag fix_id: 'F-CNTR-K8-001510_fix'
+  tag fix_id: 'F-45662r712642_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 

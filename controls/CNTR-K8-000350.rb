@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000350' do
+control 'V-242389' do
   title 'The Kubernetes API server must have the secure port set.'
   desc  "By default, the API server will listen on what is rightfully called
 the secure port, port 6443. Any requests to this port will perform
@@ -27,10 +27,10 @@ argument --secure-port to a value greater than \"0\"."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000033-CTR-000100'
-  tag gid: 'CNTR-K8-000350'
-  tag rid: 'CNTR-K8-000350_rule'
+  tag gid: 'V-242389'
+  tag rid: 'SV-242389r712523_rule'
   tag stig_id: 'CNTR-K8-000350'
-  tag fix_id: 'F-CNTR-K8-000350_fix'
+  tag fix_id: 'F-45622r712522_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 

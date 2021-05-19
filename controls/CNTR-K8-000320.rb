@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000320' do
+control 'V-242386' do
   title 'The Kubernetes API server must have the insecure port flag disabled.'
   desc  "By default, the API server will listen on two ports. One port is the
 secure port and the other port is called the \"localhost port\". This port is
@@ -29,10 +29,10 @@ argument --insecure-port to \"0\"."
   impact 0.7
   tag severity: 'high'
   tag gtitle: 'SRG-APP-000033-CTR-000095'
-  tag gid: 'CNTR-K8-000320'
-  tag rid: 'CNTR-K8-000320_rule'
+  tag gid: 'V-242386'
+  tag rid: 'SV-242386r712514_rule'
   tag stig_id: 'CNTR-K8-000320'
-  tag fix_id: 'F-CNTR-K8-000320_fix'
+  tag fix_id: 'F-45619r712513_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 

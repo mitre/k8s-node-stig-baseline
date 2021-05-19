@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-001550' do
+control 'V-242433' do
   title "Kubernetes etcd must have a peer-key-file set for secure
 communication."
   desc  "Kubernetes stores configuration and state information in a distributed
@@ -35,10 +35,10 @@ with etcd."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000219-CTR-000550'
-  tag gid: 'CNTR-K8-001550'
-  tag rid: 'CNTR-K8-001550_rule'
+  tag gid: 'V-242433'
+  tag rid: 'SV-242433r712655_rule'
   tag stig_id: 'CNTR-K8-001550'
-  tag fix_id: 'F-CNTR-K8-001550_fix'
+  tag fix_id: 'F-45666r712654_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 

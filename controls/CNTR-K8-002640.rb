@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-002640' do
+control 'V-242441' do
   title "Kubernetes endpoints must use approved organizational certificate and
 key pair to protect information in transit."
   desc  "Kubernetes control plane and external communication is managed by API
@@ -41,11 +41,11 @@ value of \"--kubelet-client-certificate\" and \"--kubelet-client-key\" to an
 Approved Organizational Certificate and key pair."
   impact 0.5
   tag severity: 'medium'
-  tag gtitle: 'SRG-APP-000439-CTR-001080'
-  tag gid: 'CNTR-K8-002640'
-  tag rid: 'CNTR-K8-002640_rule'
+  tag gtitle: 'SRG-APP-000516-CTR-001325'
+  tag gid: 'V-242441'
+  tag rid: 'SV-242441r712679_rule'
   tag stig_id: 'CNTR-K8-002640'
-  tag fix_id: 'F-CNTR-K8-002640_fix'
+  tag fix_id: 'F-45674r712678_fix'
   tag cci: ['CCI-002418']
   tag nist: ['SC-8']
 

@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-003310' do
+control 'V-242464' do
   title 'The Kubernetes API Server audit log retention must be set.'
   desc  "The Kubernetes API Server must set enough storage to retain logs for
 monitoring suspicious activity and system misconfiguration, and provide
@@ -21,10 +21,10 @@ value of \"--audit-log-maxage\" to a minimum of \"30\"."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001335'
-  tag gid: 'CNTR-K8-003310'
-  tag rid: 'CNTR-K8-003310_rule'
+  tag gid: 'V-242464'
+  tag rid: 'SV-242464r712748_rule'
   tag stig_id: 'CNTR-K8-003310'
-  tag fix_id: 'F-CNTR-K8-003310_fix'
+  tag fix_id: 'F-45697r712747_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 

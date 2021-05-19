@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000430' do
+control 'V-242396' do
   title 'Kubernetes Kubectl cp command must give expected access and results.'
   desc  "One of the tools heavily used to interact with containers in the
 Kubernetes cluster is kubectl. The command is the tool System Administrators
@@ -27,10 +27,10 @@ kubectl."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000033-CTR-000090'
-  tag gid: 'CNTR-K8-000430'
-  tag rid: 'CNTR-K8-000430_rule'
+  tag gid: 'V-242396'
+  tag rid: 'SV-242396r712544_rule'
   tag stig_id: 'CNTR-K8-000430'
-  tag fix_id: 'F-CNTR-K8-000430_fix'
+  tag fix_id: 'F-45629r712543_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 

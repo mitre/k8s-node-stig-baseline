@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-003180' do
+control 'V-242451' do
   title 'The Kubernetes component PKI must be owned by root.'
   desc  "The Kubernetes PKI directory contains all certificates (.crt files)
 supporting secure network communications in the Kubernetes Control Plane. If
@@ -24,10 +24,10 @@ finding.
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001325'
-  tag gid: 'CNTR-K8-003180'
-  tag rid: 'CNTR-K8-003180_rule'
+  tag gid: 'V-242451'
+  tag rid: 'SV-242451r712709_rule'
   tag stig_id: 'CNTR-K8-003180'
-  tag fix_id: 'F-CNTR-K8-003180_fix'
+  tag fix_id: 'F-45684r712708_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 

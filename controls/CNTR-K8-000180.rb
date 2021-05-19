@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000180' do
+control 'V-242379' do
   title "The Kubernetes etcd must use TLS to protect the confidentiality of
 sensitive data during electronic dissemination."
   desc  "Kubernetes etcd will prohibit the use of SSL and unauthorized versions
@@ -28,10 +28,10 @@ value of \"-auto-tls\" to \"false\"."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000014-CTR-000035'
-  tag gid: 'CNTR-K8-000180'
-  tag rid: 'CNTR-K8-000180_rule'
+  tag gid: 'V-242379'
+  tag rid: 'SV-242379r712493_rule'
   tag stig_id: 'CNTR-K8-000180'
-  tag fix_id: 'F-CNTR-K8-000180_fix'
+  tag fix_id: 'F-45612r712492_fix'
   tag cci: ['CCI-000068']
   tag nist: ['AC-17 (2)']
 

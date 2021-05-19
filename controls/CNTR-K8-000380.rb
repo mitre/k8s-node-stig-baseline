@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000380' do
+control 'V-242392' do
   title 'The Kubernetes kubelet must enable explicit authorization.'
   desc  "Kubelet is the primary agent on each node. The API server communicates
 with each kubelet to perform tasks such as starting/stopping pods. By default,
@@ -36,10 +36,10 @@ Kubernetes Master and Worker nodes.
   impact 0.7
   tag severity: 'high'
   tag gtitle: 'SRG-APP-000033-CTR-000095'
-  tag gid: 'CNTR-K8-000380'
-  tag rid: 'CNTR-K8-000380_rule'
+  tag gid: 'V-242392'
+  tag rid: 'SV-242392r712532_rule'
   tag stig_id: 'CNTR-K8-000380'
-  tag fix_id: 'F-CNTR-K8-000380_fix'
+  tag fix_id: 'F-45625r717029_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 

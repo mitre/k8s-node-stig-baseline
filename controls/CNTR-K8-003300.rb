@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-003300' do
+control 'V-242463' do
   title 'The Kubernetes API Server must be set to audit log maximum backup.'
   desc  "The Kubernetes API Server must set enough storage to retain logs for
 monitoring suspicious activity and system misconfiguration, and provide
@@ -21,10 +21,10 @@ value of \"--audit-log-maxbackup\" to a minimum of \"10\"."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001335'
-  tag gid: 'CNTR-K8-003300'
-  tag rid: 'CNTR-K8-003300_rule'
+  tag gid: 'V-242463'
+  tag rid: 'SV-242463r712745_rule'
   tag stig_id: 'CNTR-K8-003300'
-  tag fix_id: 'F-CNTR-K8-003300_fix'
+  tag fix_id: 'F-45696r712744_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 

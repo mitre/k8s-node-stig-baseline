@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-003170' do
+control 'V-242450' do
   title 'The Kubernetes Kubelet certificate authority must be owned by root.'
   desc  "The Kubernetes kubelet certificate authority file contains settings
 for the Kubernetes Node TLS certificate authority. Any request presenting a
@@ -32,10 +32,10 @@ chown root:root <location from --client-ca-file argument>/ *
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001325'
-  tag gid: 'CNTR-K8-003170'
-  tag rid: 'CNTR-K8-003170_rule'
+  tag gid: 'V-242450'
+  tag rid: 'SV-242450r712706_rule'
   tag stig_id: 'CNTR-K8-003170'
-  tag fix_id: 'F-CNTR-K8-003170_fix'
+  tag fix_id: 'F-45683r712705_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 

@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000470' do
+control 'V-242400' do
   title 'The Kubernetes API server must have Alpha APIs disabled.'
   desc  "Kubernetes allows alpha API calls within the API server. The alpha
 features are disabled by default since they are not ready for production and
@@ -28,10 +28,10 @@ setting completely.
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000033-CTR-000090'
-  tag gid: 'CNTR-K8-000470'
-  tag rid: 'CNTR-K8-000470_rule'
+  tag gid: 'V-242400'
+  tag rid: 'SV-242400r712556_rule'
   tag stig_id: 'CNTR-K8-000470'
-  tag fix_id: 'F-CNTR-K8-000470_fix'
+  tag fix_id: 'F-45633r712555_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 

@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-002600' do
+control 'V-242438' do
   title 'Kubernetes API Server must configure timeouts to limit attack surface.'
   desc  "Kubernetes API Server request timeouts sets the duration a request
 stays open before timing out. Since the API Server is the central component in
@@ -29,10 +29,10 @@ value of request-timeout greater than \"0\"."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000435-CTR-001070'
-  tag gid: 'CNTR-K8-002600'
-  tag rid: 'CNTR-K8-002600_rule'
+  tag gid: 'V-242438'
+  tag rid: 'SV-242438r712670_rule'
   tag stig_id: 'CNTR-K8-002600'
-  tag fix_id: 'F-CNTR-K8-002600_fix'
+  tag fix_id: 'F-45671r712669_fix'
   tag cci: ['CCI-002385']
   tag nist: ['SC-5']
 

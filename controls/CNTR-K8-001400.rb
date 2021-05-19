@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-001400' do
+control 'V-242418' do
   title 'The Kubernetes API server must use approved cipher suites.'
   desc  "The Kubernetes API server communicates to the kubelet service on the
 nodes to deploy, update, and delete resources. If an attacker were able to get
@@ -34,10 +34,10 @@ _SHA384
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000219-CTR-000550'
-  tag gid: 'CNTR-K8-001400'
-  tag rid: 'CNTR-K8-001400_rule'
+  tag gid: 'V-242418'
+  tag rid: 'SV-242418r712610_rule'
   tag stig_id: 'CNTR-K8-001400'
-  tag fix_id: 'F-CNTR-K8-001400_fix'
+  tag fix_id: 'F-45651r717025_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 

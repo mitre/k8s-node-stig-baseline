@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-003280' do
+control 'V-242461' do
   title 'Kubernetes API Server audit logs must be enabled.'
   desc  "Kubernetes API Server validates and configures pods and services for
 the API object. The REST operation provides frontend functionality to the
@@ -24,10 +24,10 @@ argument \"--audit-policy-file\" to \"log file directory\"."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001335'
-  tag gid: 'CNTR-K8-003280'
-  tag rid: 'CNTR-K8-003280_rule'
+  tag gid: 'V-242461'
+  tag rid: 'SV-242461r712739_rule'
   tag stig_id: 'CNTR-K8-003280'
-  tag fix_id: 'F-CNTR-K8-003280_fix'
+  tag fix_id: 'F-45694r712738_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 

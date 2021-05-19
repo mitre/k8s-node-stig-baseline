@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-003320' do
+control 'V-242465' do
   title 'The Kubernetes API Server audit log path must be set.'
   desc  "Kubernetes API Server validates and configures pods and services for
 the API object. The REST operation provides frontend functionality to the
@@ -24,10 +24,10 @@ value of \"--audit-log-path\" to valid location."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001335'
-  tag gid: 'CNTR-K8-003320'
-  tag rid: 'CNTR-K8-003320_rule'
+  tag gid: 'V-242465'
+  tag rid: 'SV-242465r712751_rule'
   tag stig_id: 'CNTR-K8-003320'
-  tag fix_id: 'F-CNTR-K8-003320_fix'
+  tag fix_id: 'F-45698r712750_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 

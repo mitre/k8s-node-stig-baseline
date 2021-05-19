@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000450' do
+control 'V-242398' do
   title 'Kubernetes DynamicAuditing must not be enabled.'
   desc  "Protecting the audit data from change or deletion is important when an
 attack occurs. One way an attacker can cover their tracks is to change or
@@ -43,10 +43,10 @@ kubelet service if the kubelet config file is changed."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000033-CTR-000100'
-  tag gid: 'CNTR-K8-000450'
-  tag rid: 'CNTR-K8-000450_rule'
+  tag gid: 'V-242398'
+  tag rid: 'SV-242398r717019_rule'
   tag stig_id: 'CNTR-K8-000450'
-  tag fix_id: 'F-CNTR-K8-000450_fix'
+  tag fix_id: 'F-45631r717018_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 

@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000190' do
+control 'V-242380' do
   title "The Kubernetes etcd must use TLS to protect the confidentiality of
 sensitive data during electronic dissemination."
   desc  "The Kubernetes API Server will prohibit the use of SSL and
@@ -28,10 +28,10 @@ value of \"peer-auto-tls\" to \"false\"."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000014-CTR-000035'
-  tag gid: 'CNTR-K8-000190'
-  tag rid: 'CNTR-K8-000190_rule'
+  tag gid: 'V-242380'
+  tag rid: 'SV-242380r712496_rule'
   tag stig_id: 'CNTR-K8-000190'
-  tag fix_id: 'F-CNTR-K8-000190_fix'
+  tag fix_id: 'F-45613r712495_fix'
   tag cci: ['CCI-000068']
   tag nist: ['AC-17 (2)']
 

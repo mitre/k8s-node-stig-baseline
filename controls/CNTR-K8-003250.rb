@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-003250' do
+control 'V-242458' do
   title "The Kubernetes API Server must have file permissions set to 644 or
 more restrictive."
   desc  "The Kubernetes manifests are those files that contain the arguments
@@ -25,10 +25,10 @@ is a finding.
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001335'
-  tag gid: 'CNTR-K8-003250'
-  tag rid: 'CNTR-K8-003250_rule'
+  tag gid: 'V-242458'
+  tag rid: 'SV-242458r712730_rule'
   tag stig_id: 'CNTR-K8-003250'
-  tag fix_id: 'F-CNTR-K8-003250_fix'
+  tag fix_id: 'F-45691r712729_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 

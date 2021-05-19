@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-001470' do
+control 'V-242425' do
   title "Kubernetes Kubelet must enable tls-cert-file for client authentication
 to secure service."
   desc  "Kubernetes container and pod configuration are maintained by Kubelet.
@@ -39,10 +39,10 @@ Organization Certificate. Reset Kubelet service using the following command:
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000219-CTR-000550'
-  tag gid: 'CNTR-K8-001470'
-  tag rid: 'CNTR-K8-001470_rule'
+  tag gid: 'V-242425'
+  tag rid: 'SV-242425r712631_rule'
   tag stig_id: 'CNTR-K8-001470'
-  tag fix_id: 'F-CNTR-K8-001470_fix'
+  tag fix_id: 'F-45658r712630_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 

@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-003150' do
+control 'V-242448' do
   title 'The Kubernetes Kube Proxy must be owned by root.'
   desc  "The Kubernetes kube proxy kubeconfig contain the argument and setting
 for the Master Nodes. These settings contain network rules for restricting
@@ -29,10 +29,10 @@ command:
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001325'
-  tag gid: 'CNTR-K8-003150'
-  tag rid: 'CNTR-K8-003150_rule'
+  tag gid: 'V-242448'
+  tag rid: 'SV-242448r712700_rule'
   tag stig_id: 'CNTR-K8-003150'
-  tag fix_id: 'F-CNTR-K8-003150_fix'
+  tag fix_id: 'F-45681r712699_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 

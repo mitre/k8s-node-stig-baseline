@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000600' do
+control 'V-242401' do
   title 'The Kubernetes API Server must have an audit policy set.'
   desc  "When Kubernetes is started, components and user services are started.
 For auditing startup events, and events for components and services, it is
@@ -30,10 +30,10 @@ file resides.
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000092-CTR-000165'
-  tag gid: 'CNTR-K8-000600'
-  tag rid: 'CNTR-K8-000600_rule'
+  tag gid: 'V-242401'
+  tag rid: 'SV-242401r712559_rule'
   tag stig_id: 'CNTR-K8-000600'
-  tag fix_id: 'F-CNTR-K8-000600_fix'
+  tag fix_id: 'F-45634r717023_fix'
   tag cci: ['CCI-001464']
   tag nist: ['AU-14 (1)']
 

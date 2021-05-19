@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-003340' do
+control 'V-242467' do
   title "The Kubernetes PKI keys must have file permissions set to 600 or more
 restrictive."
   desc  "The Kubernetes PKI directory contains all certificate key files
@@ -24,10 +24,10 @@ is a finding.
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001335'
-  tag gid: 'CNTR-K8-003340'
-  tag rid: 'CNTR-K8-003340_rule'
+  tag gid: 'V-242467'
+  tag rid: 'SV-242467r712757_rule'
   tag stig_id: 'CNTR-K8-003340'
-  tag fix_id: 'F-CNTR-K8-003340_fix'
+  tag fix_id: 'F-45700r712756_fix'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 

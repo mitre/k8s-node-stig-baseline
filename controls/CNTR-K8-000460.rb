@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000460' do
+control 'V-242399' do
   title 'Kubernetes DynamicKubeletConfig must not be enabled.'
   desc  "Kubernetes allows a user to configure kubelets with dynamic
 configurations. When dynamic configuration is used, the kubelet will watch for
@@ -44,10 +44,10 @@ kubelet config file is changed.
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000033-CTR-000095'
-  tag gid: 'CNTR-K8-000460'
-  tag rid: 'CNTR-K8-000460_rule'
+  tag gid: 'V-242399'
+  tag rid: 'SV-242399r717021_rule'
   tag stig_id: 'CNTR-K8-000460'
-  tag fix_id: 'F-CNTR-K8-000460_fix'
+  tag fix_id: 'F-45632r717020_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 

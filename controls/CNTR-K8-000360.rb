@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000360' do
+control 'V-242390' do
   title 'The Kubernetes API server must have anonymous authentication disabled.'
   desc  "The Kubernetes API Server controls Kubernetes via an API interface. A
 user who has access to the API essentially has root access to the entire
@@ -32,10 +32,10 @@ argument --anonymous-auth to \"false\"."
   impact 0.7
   tag severity: 'high'
   tag gtitle: 'SRG-APP-000033-CTR-000100'
-  tag gid: 'CNTR-K8-000360'
-  tag rid: 'CNTR-K8-000360_rule'
+  tag gid: 'V-242390'
+  tag rid: 'SV-242390r712526_rule'
   tag stig_id: 'CNTR-K8-000360'
-  tag fix_id: 'F-CNTR-K8-000360_fix'
+  tag fix_id: 'F-45623r712525_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 

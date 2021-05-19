@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000400' do
+control 'V-242393' do
   title 'Kubernetes Worker Nodes must not have sshd service running.'
   desc  "Worker Nodes are maintained and monitored by the Master Node. Direct
 access and manipulation of the nodes should not take place by administrators.
@@ -32,10 +32,10 @@ settings can be made if the session is interrupted.
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000033-CTR-000095'
-  tag gid: 'CNTR-K8-000400'
-  tag rid: 'CNTR-K8-000400_rule'
+  tag gid: 'V-242393'
+  tag rid: 'SV-242393r717015_rule'
   tag stig_id: 'CNTR-K8-000400'
-  tag fix_id: 'F-CNTR-K8-000400_fix'
+  tag fix_id: 'F-45626r717014_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 

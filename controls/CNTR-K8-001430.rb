@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-001430' do
+control 'V-242421' do
   title "Kubernetes Controller Manager must have the SSL Certificate Authority
 set."
   desc  "The Kubernetes Controller Manager is responsible for creating service
@@ -9,7 +9,7 @@ for every replication controller and provides notifications when nodes are
 offline.
 
     Anyone who gains access to the Controller Manager can generate backdoor
-accounts, take possession of or diminish system performance without detection
+accounts, take possession of, or diminish system performance without detection
 by disabling system notification. Using authenticity protection, the
 communication can be protected against man-in-the-middle attacks/session
 hijacking and the insertion of false information into sessions.
@@ -34,10 +34,10 @@ value of root-ca-file to path containing Approved Organizational Certificate."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000219-CTR-000550'
-  tag gid: 'CNTR-K8-001430'
-  tag rid: 'CNTR-K8-001430_rule'
+  tag gid: 'V-242421'
+  tag rid: 'SV-242421r717033_rule'
   tag stig_id: 'CNTR-K8-001430'
-  tag fix_id: 'F-CNTR-K8-001430_fix'
+  tag fix_id: 'F-45654r712618_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 

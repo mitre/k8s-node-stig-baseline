@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-001990' do
+control 'V-242435' do
   title "Kubernetes must prevent non-privileged users from executing privileged
 functions to include disabling, circumventing, or altering implemented security
 safeguards/countermeasures or the installation of patches and updates."
@@ -48,10 +48,10 @@ AlwaysAllow."
   tag gtitle: 'SRG-APP-000340-CTR-000770'
   tag satisfies: ['SRG-APP-000340-CTR-000770', 'SRG-APP-000033-CTR-000095',
                   'SRG-APP-000378-CTR-000880']
-  tag gid: 'CNTR-K8-001990'
-  tag rid: 'CNTR-K8-001990_rule'
+  tag gid: 'V-242435'
+  tag rid: 'SV-242435r712661_rule'
   tag stig_id: 'CNTR-K8-001990'
-  tag fix_id: 'F-CNTR-K8-001990_fix'
+  tag fix_id: 'F-45668r712660_fix'
   tag cci: ['CCI-000213', 'CCI-001812', 'CCI-002235']
   tag nist: ['AC-3', 'CM-11 (2)', 'AC-6 (10)']
 

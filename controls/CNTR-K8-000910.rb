@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000910' do
+control 'V-242409' do
   title 'Kubernetes Controller Manager must disable profiling.'
   desc  "Kubernetes profiling provides the ability to analyze and troubleshoot
 Controller Manager events over a web interface on a host port. Enabling this
@@ -22,10 +22,10 @@ argument \"--profiling value\" to \"false\"."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000141-CTR-000315'
-  tag gid: 'CNTR-K8-000910'
-  tag rid: 'CNTR-K8-000910_rule'
+  tag gid: 'V-242409'
+  tag rid: 'SV-242409r712583_rule'
   tag stig_id: 'CNTR-K8-000910'
-  tag fix_id: 'F-CNTR-K8-000910_fix'
+  tag fix_id: 'F-45642r712582_fix'
   tag cci: ['CCI-000381']
   tag nist: ['CM-7 a']
 

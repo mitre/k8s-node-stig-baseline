@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-control 'CNTR-K8-000440' do
+control 'V-242397' do
   title 'The Kubernetes kubelet static PodPath must not enable static pods.'
   desc  "Allowing kubelet to set a staticPodPath gives containers with root
 access permissions to traverse the hosting filesystem. The danger comes when
@@ -30,10 +30,10 @@ the command:
   impact 0.7
   tag severity: 'high'
   tag gtitle: 'SRG-APP-000033-CTR-000090'
-  tag gid: 'CNTR-K8-000440'
-  tag rid: 'CNTR-K8-000440_rule'
+  tag gid: 'V-242397'
+  tag rid: 'SV-242397r712547_rule'
   tag stig_id: 'CNTR-K8-000440'
-  tag fix_id: 'F-CNTR-K8-000440_fix'
+  tag fix_id: 'F-45630r712546_fix'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 
