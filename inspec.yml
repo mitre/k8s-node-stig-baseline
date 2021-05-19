@@ -8,9 +8,13 @@ description: An InSpec profile verifying compliance with Kubernetes STIG version
 version: 1.0.0
 inspec_version: ">= 4.0"
 
+supports:
+  - platform-family: linux
+
 depends:
   - name: inspec-k8s-node
     git: https://gitlab.dsolab.io/scv-content/inspec/kubernetes/baselines/inspec-k8s-node.git
+    branch: SD_812_adding_test_code
 
 inputs:
   - name: manifests_path
@@ -25,16 +29,22 @@ inputs:
     value: '/etc/kubernetes/pki/'
     required: true
 
-  - name: kubeadm_path
-    description: 'Path to kubeadm file on the target node'
+  - name: kubeadm_conf_path
+    description: 'Path to kubeadm conf file on the target node'
     type: string
-    value: '/usr/local/bin/kubeadm'
+    value: '/etc/systemd/system/kubelet.service.d/10-kubeadm.conf'
     required: true
 
   - name: kubectl_path
     description: 'Path to kubectl on the target node'
     type: string
     value: '/usr/local/bin/kubectl'
+    required: true
+
+  - name: kubectl_minversion
+    description: 'Minimum version of the kubectl binary on the target node'
+    type: string
+    value: '1.12.9'
     required: true
 
   - name: kubernetes_conf_files

@@ -22,14 +22,14 @@ communication.
     Change to the /etc/kubernetes/manifests directory on the Kubernetes Master
 Node. Run the command:
 
-    grep -i etcd-keyfile *
+    grep -i key-file *
 
-    If the setting \"etcd-keyfile\" is not configured in the Kubernetes etcd
+    If the setting \"key-file\" is not configured in the Kubernetes etcd
 manifest file, this is a finding.
   "
-  desc 'fix', "Edit the Kubernetes API Server manifest file in the
+  desc 'fix', "Edit the etcd manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
-value of \"--etcd-keyfile\" to the Approved Organizational Certificate."
+value of \"--key-file\" to the Approved Organizational Certificate."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000219-CTR-000550'
@@ -40,12 +40,18 @@ value of \"--etcd-keyfile\" to the Approved Organizational Certificate."
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 
-  unless kube_apiserver.exist?
+  unless etcd.exist?
     impact 0.0
-    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+    desc 'caveat', 'ETCD process is not running on the target.'
   end
 
-  describe kube_apiserver do
-    its('etcd-keyfile') { should_not be_nil }
+  describe.one do
+    describe etcd do
+      its('key-file') { should_not be_nil }
+    end
+
+    describe process_env_var('etcd') do
+      its(:ETCD_KEY_FILE) { should_not be_nil }
+    end
   end
 end

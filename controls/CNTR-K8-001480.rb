@@ -23,14 +23,14 @@ file used to secure Kubelet communication.
     Change to the /etc/kubernetes/manifests directory on the Kubernetes Master
 Node. Run the command:
 
-    grep -i client-cert-auth *
+    grep -i peer-client-cert-auth *
 
-    If the setting \"client-cert-auth\" is not configured in the Kubernetes
+    If the setting \"peer-client-cert-auth\" is not configured in the Kubernetes
 etcd manifest file or set to \"false\", this is a finding.
   "
   desc 'fix', "Edit the Kubernetes etcd manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
-value of \"--client-cert-auth\" to \"true\" for the etcd."
+value of \"--peer-client-cert-auth\" to \"true\" for the etcd."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000219-CTR-000550'
@@ -40,11 +40,6 @@ value of \"--client-cert-auth\" to \"true\" for the etcd."
   tag fix_id: 'F-CNTR-K8-001480_fix'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
-
-  # The check/fix text is likely a wrong guidance.
-  # This control likely will refer to peer-client-cert-auth config.
-  # `client-cert-auth` config is already addressed in `CNTR-K8-001450`.
-  # Automation code created matches the expect correct guidance.
 
   unless etcd.exist?
     impact 0.0

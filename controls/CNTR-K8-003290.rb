@@ -35,6 +35,6 @@ value of –\"--audit-log-maxsize\" to a minimum of \"100\"."
   end
 
   describe kube_apiserver do
-    its('audit-log-maxsize') { should cmp > 100 }
+    its('audit-log-maxsize') { should cmp >= 100 }
   end
 end

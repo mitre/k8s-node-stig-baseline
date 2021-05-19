@@ -36,6 +36,8 @@ kubectl."
 
   kubectl = command(input('kubectl_path'))
 
+  kubectl_minversion = input('kubectl_minversion')
+
   unless kubectl.exist?
     impact 0.0
     desc 'caveat', 'kubectl command available on target on the target.'
@@ -47,7 +49,7 @@ kubectl."
 
   if kubectl.exist?
     describe json(command: "#{input('kubectl_path')} version --client --output=json") do
-      its(%w(clientVersion gitVersion)) { should cmp > '1.12.9' }
+      its(%w(clientVersion gitVersion)) { should cmp >= kubectl_minversion }
     end
   end
 end

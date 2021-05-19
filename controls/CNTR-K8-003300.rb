@@ -34,6 +34,6 @@ value of \"--audit-log-maxbackup\" to a minimum of \"10\"."
   end
 
   describe kube_apiserver do
-    its('audit-log-maxbackup') { should cmp > 10 }
+    its('audit-log-maxbackup') { should cmp >= 10 }
   end
 end

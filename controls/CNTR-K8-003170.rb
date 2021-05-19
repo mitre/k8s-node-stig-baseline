@@ -24,7 +24,7 @@ stat -c   %U:%G <location from --client-ca-file argument>| grep -v root:root
 If the command returns any non root:root file permissions, this is a finding.
 "
   desc 'fix', "
-    Change the permissions of the --client-ca-file to \"root\" by executing 
+    Change the permissions of the --client-ca-file to \"root\" by executing
 the command:
 
 chown root:root <location from --client-ca-file argument>/ *

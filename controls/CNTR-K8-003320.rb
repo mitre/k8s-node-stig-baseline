@@ -41,7 +41,7 @@ value of \"--audit-log-path\" to valid location."
   end
 
   if kube_apiserver.params['audit-log-path']
-    describe directory(kube_apiserver.params['audit-log-path'].join) do
+    describe file(kube_apiserver.params['audit-log-path'].join) do
       it { should exist }
     end
   end
