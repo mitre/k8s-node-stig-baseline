@@ -15,7 +15,7 @@ generating unique service accounts settings for each controller instance."
     Change to the /etc/kubernetes/manifests directory on the Kubernetes Master
 Node. Run the command:
 
-    grep -i use-service-account-credential *
+    grep -i use-service-account-credentials *
 
     If the setting use-service-account-credential is not configured in the
 Kubernetes Controller Manager manifest file or it is set to \"false\", this is
@@ -40,6 +40,6 @@ value of \"use-service-account-credential\" to \"true\"."
   end
 
   describe kube_controller_manager do
-    its('use-service-account-credential') { should cmp 'true' }
+    its('use-service-account-credentials') { should cmp 'true' }
   end
 end

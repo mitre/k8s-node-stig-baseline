@@ -39,6 +39,6 @@ argument \"--bind-address\" to \"127.0.0.1\"."
   end
 
   describe kube_scheduler do
-    its('bind-address.to_s') { should cmp '127.0.0.1' }
+    its('bind-address') { should cmp '127.0.0.1' }
   end
 end
