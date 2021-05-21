@@ -21,7 +21,7 @@ the security settings within the document are implemented through this file."
 
     stat -c %a  <Kubeadm.conf path>
 
-If the command returns any non root:root file permissions, this is a finding.
+If the file has permissions more permissive than \"644\", this is a finding.
   "
   desc 'fix', "
     Change the permissions of kubeadm.conf to \"644\" by executing the command:

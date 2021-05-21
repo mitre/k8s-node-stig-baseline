@@ -8,7 +8,7 @@ core control loops regulating cluster system state through the API Server.
 Every process executed in a pod has an associated service account. By default,
 service accounts use the same credentials for authentication. Implementing the
 default settings poses a High risk to the Kubernetes Controller Manager.
-Setting the use-service-account-credential value lowers the attack surface by
+Setting the use-service-account-credentials value lowers the attack surface by
 generating unique service accounts settings for each controller instance."
   desc  'rationale', ''
   desc  'check', "
@@ -23,7 +23,7 @@ a finding.
   "
   desc 'fix', "Edit the Kubernetes Controller Manager manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
-value of \"use-service-account-credential\" to \"true\"."
+value of \"use-service-account-credentials\" to \"true\"."
   impact 0.7
   tag severity: 'high'
   tag gtitle: 'SRG-APP-000023-CTR-000055'
