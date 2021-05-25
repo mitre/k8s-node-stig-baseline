@@ -1,0 +1,51 @@
+include:
+- project: stig/inspec-scanning-integration
+  ref: "1.3.3"
+  file: templates/templates.yml
+
+before_script:
+  - echo "SCV Pipeline for k8s node."
+
+stages:
+  - setup
+  - verify
+  - publish
+  - report
+
+setup:
+  extends: .ci:stage:setup:inspec
+
+check:
+  extends: .ci:stage:check:inspec
+  dependencies:
+  - setup
+  variables:
+    INSPEC_VENDOR: 'true'
+    GIT_CREDS: 'true'
+
+lint:
+  extends: .ci:stage:lint:inspec
+  dependencies:
+  - setup
+
+.exec:
+  extends: .ci:stage:exec:inspec
+  dependencies:
+  - setup
+  variables:
+    TARGET: ''
+    INSPEC_INPUTS: ''
+    DOCKER_INPUTS: ''
+
+.publish:
+  extends: .ci:stage:publish:inspec:artifacts
+  dependencies:
+  - check
+  - lint
+  - exec
+
+.sync:
+  extends: .ci:stage:publish:inspec:sync
+  variables:
+    SYNC_REPO: ""
+    SYNC_TOKEN: ""
