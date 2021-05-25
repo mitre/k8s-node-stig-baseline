@@ -1,6 +1,6 @@
 include:
 - project: stig/inspec-scanning-integration
-  ref: "1.3.2"
+  ref: "1.3.3"
   file: templates/templates.yml
 
 before_script:
@@ -19,6 +19,9 @@ check:
   extends: .ci:stage:check:inspec
   dependencies:
   - setup
+  variables:
+    INSPEC_VENDOR: 'true'
+    GIT_CREDS: 'true'
 
 lint:
   extends: .ci:stage:lint:inspec
