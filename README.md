@@ -90,7 +90,7 @@ Update the following `Inputs` in `inspec.yml` if the default values differ in yo
 ### How to execute this instance  
 (See: https://www.inspec.io/docs/reference/cli/
 
-**Execute the Kubernates Node profile on each node in the cluster. The profile will adapt its checks based on the Kubernetes components located on the node.**
+**Execute the Kubernetes Node profile on each node in the cluster. The profile will adapt its checks based on the Kubernetes components located on the node.**
 
 #### Execute a single Control in the Profile 
 **Note**: Replace the profile's directory name - e.g. - `<Profile>` with `.` if currently in the profile's root directory.
