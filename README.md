@@ -122,87 +122,87 @@ These checks will follow the normal automation process and will report accurate 
 
 | Check Number | Description                                                                                                                                                                                                               |
 |--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|CNTR-K8-000150| The Kubernetes Controller Manager must use TLS 1.2, at a minimum, to protect the confidentiality of sensitive data during electronic dissemination.|
-|CNTR-K8-000160| The Kubernetes Scheduler must use TLS 1.2, at a minimum, to protect the confidentiality of sensitive data during electronic dissemination.|
-|CNTR-K8-000170| The Kubernetes API Server must use TLS 1.2, at a minimum, to protect the confidentiality of sensitive data during electronic dissemination.|
-|CNTR-K8-000180| The Kubernetes etcd must use TLS to protect the confidentiality of sensitive data during electronic dissemination.|
-|CNTR-K8-000190| The Kubernetes etcd must use TLS to protect the confidentiality of sensitive data during electronic dissemination.|
-|CNTR-K8-000220| The Kubernetes Controller Manager must create unique service accounts for each work payload.|
-|CNTR-K8-000270| The Kubernetes API Server must enable Node,RBAC as the authorization mode.|
-|CNTR-K8-000300| The Kubernetes Scheduler must have secure binding.|
-|CNTR-K8-000310| The Kubernetes Controller Manager must have secure binding.|
-|CNTR-K8-000320| The Kubernetes API server must have the insecure port flag disabled.|
-|CNTR-K8-000330| The Kubernetes Kubelet must have the read-only port flag disabled.|
-|CNTR-K8-000340| The Kubernetes API server must have the insecure bind address not set.|
-|CNTR-K8-000350| The Kubernetes API server must have the secure port set.|
-|CNTR-K8-000360| The Kubernetes API server must have anonymous authentication disabled.|
-|CNTR-K8-000370| The Kubernetes Kubelet must have anonymous authentication disabled.|
-|CNTR-K8-000380| The Kubernetes kubelet must enable explicit authorization.|
-|CNTR-K8-000400| Kubernetes Worker Nodes must not have sshd service running.|
-|CNTR-K8-000410| Kubernetes Worker Nodes must not have the sshd service enabled.|
-|CNTR-K8-000430| Kubernetes Kubectl cp command must give expected access and results.|
-|CNTR-K8-000440| The Kubernetes kubelet static PodPath must not enable static pods.|
-|CNTR-K8-000450| Kubernetes DynamicAuditing must not be enabled.|
-|CNTR-K8-000460| Kubernetes DynamicKubeletConfig must not be enabled.|
-|CNTR-K8-000470| The Kubernetes API server must have Alpha APIs disabled.|
-|CNTR-K8-000600| The Kubernetes API Server must have an audit policy set.|
-|CNTR-K8-000610| The Kubernetes API Server must have an audit log path set.|
-|CNTR-K8-000700| Kubernetes API Server must generate audit records that identify what type of event has occurred, identify the source of the event, contain the event results, identify any users, and identify any containers associated with the event.|
-|CNTR-K8-000850| Kubernetes Kubelet must deny hostname override.|
-|CNTR-K8-000860| The Kubernetes manifests must be owned by root.|
-|CNTR-K8-000880| The Kubernetes kubelet configuration file must be owned by root.|
-|CNTR-K8-000890| The Kubernetes kubelet configuration file must be owned by root.|
-|CNTR-K8-000900| The Kubernetes manifests must have least privileges.|
-|CNTR-K8-000910| Kubernetes Controller Manager must disable profiling.|
-|CNTR-K8-001300| Kubernetes Kubelet must not disable timeouts.|
-|CNTR-K8-001400| The Kubernetes API server must use approved cipher suites.|
-|CNTR-K8-001410| Kubernetes API Server must have the SSL Certificate Authority set.|
-|CNTR-K8-001420| Kubernetes Kubelet must have the SSL Certificate Authority set.|
-|CNTR-K8-001430| Kubernetes Controller Manager must have the SSL Certificate Authority set.|
-|CNTR-K8-001440| Kubernetes API Server must have a certificate for communication.|
-|CNTR-K8-001450| Kubernetes etcd must enable client authentication to secure service.|
-|CNTR-K8-001460| Kubernetes Kubelet must enable tls-private-key-file for client authentication to secure service.|
-|CNTR-K8-001470| Kubernetes Kubelet must enable tls-cert-file for client authentication to secure service.|
-|CNTR-K8-001480| Kubernetes etcd must enable client authentication to secure service.|
-|CNTR-K8-001490| Kubernetes etcd must have a key file for secure communication.|
-|CNTR-K8-001500| Kubernetes etcd must have a certificate for communication.|
-|CNTR-K8-001510| Kubernetes etcd must have the SSL Certificate Authority set.|
-|CNTR-K8-001520| Kubernetes etcd must have a certificate for communication.|
-|CNTR-K8-001530| Kubernetes etcd must have a key file for secure communication.|
-|CNTR-K8-001540| Kubernetes etcd must have peer-cert-file set for secure communication.|
-|CNTR-K8-001550| Kubernetes etcd must have a peer-key-file set for secure communication.|
-|CNTR-K8-001620| Kubernetes Kubelet must enable kernel protection.|
-|CNTR-K8-001990| Kubernetes must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures or the installation of patches and updates.|
-|CNTR-K8-002000| The Kubernetes API server must have the ValidatingAdmissionWebhook enabled.|
-|CNTR-K8-002600| Kubernetes API Server must configure timeouts to limit attack surface.|
-|CNTR-K8-002620| Kubernetes API Server must disable basic authentication to protect information in transit.|
-|CNTR-K8-002630| Kubernetes API Server must disable token authentication to protect information in transit.|
-|CNTR-K8-002640| Kubernetes endpoints must use approved organizational certificate and key pair to protect information in transit.|
-|CNTR-K8-003110| The Kubernetes component manifests must be owned by root.|
-|CNTR-K8-003120| The Kubernetes component etcd must be owned by etcd.|
-|CNTR-K8-003130| The Kubernetes conf files must be owned by root.|
-|CNTR-K8-003140| The Kubernetes Kube Proxy must have file permissions set to 644 or more restrictive.|
-|CNTR-K8-003150| The Kubernetes Kube Proxy must be owned by root.|
-|CNTR-K8-003160| The Kubernetes Kubelet certificate authority file must have file permissions set to 644 or more restrictive.|
-|CNTR-K8-003170| The Kubernetes Kubelet certificate authority must be owned by root.|
-|CNTR-K8-003180| The Kubernetes component PKI must be owned by root.|
-|CNTR-K8-003190| The Kubernetes kubelet config must have file permissions set to 644 or more restrictive.|
-|CNTR-K8-003200| The Kubernetes kubelet config must be owned by root.|
-|CNTR-K8-003210| The Kubernetes kubeadm must be owned by root.|
-|CNTR-K8-003220| The Kubernetes kubelet service must have file permissions set to 644 or more restrictive.|
-|CNTR-K8-003230| The Kubernetes kubelet config must have file permissions set to 644 or more restrictive.|
-|CNTR-K8-003240| The Kubernetes kubelet config must be owned by root.|
-|CNTR-K8-003250| The Kubernetes API Server must have file permissions set to 644 or more restrictive.|
-|CNTR-K8-003260| The Kubernetes etcd must have file permissions set to 644 or more restrictive.|
-|CNTR-K8-003270| The Kubernetes admin.conf must have file permissions set to 644 or more restrictive.|
-|CNTR-K8-003280| Kubernetes API Server audit logs must be enabled.|
-|CNTR-K8-003290| The Kubernetes API Server must be set to audit log max size.|
-|CNTR-K8-003300| The Kubernetes API Server must be set to audit log maximum backup.|
-|CNTR-K8-003310| The Kubernetes API Server audit log retention must be set.|
-|CNTR-K8-003320| The Kubernetes API Server audit log path must be set.|
-|CNTR-K8-003330| The Kubernetes PKI CRT must have file permissions set to 644 or more restrictive.|
-|CNTR-K8-003340| The Kubernetes PKI keys must have file permissions set to 600 or more restrictive.|
-|CNTR-K8-003350| The Kubernetes API Server must prohibit communication using TLS version 1.0 and 1.1, and SSL 2.0 and 3.0.|
+|V-242376| The Kubernetes Controller Manager must use TLS 1.2, at a minimum, to protect the confidentiality of sensitive data during electronic dissemination.|
+|V-242377| The Kubernetes Scheduler must use TLS 1.2, at a minimum, to protect the confidentiality of sensitive data during electronic dissemination.|
+|V-242378| The Kubernetes API Server must use TLS 1.2, at a minimum, to protect the confidentiality of sensitive data during electronic dissemination.|
+|V-242379| The Kubernetes etcd must use TLS to protect the confidentiality of sensitive data during electronic dissemination.|
+|V-242380| The Kubernetes etcd must use TLS to protect the confidentiality of sensitive data during electronic dissemination.|
+|V-242381| The Kubernetes Controller Manager must create unique service accounts for each work payload.|
+|V-242382| The Kubernetes API Server must enable Node,RBAC as the authorization mode.|
+|V-242384| The Kubernetes Scheduler must have secure binding.|
+|V-242385| The Kubernetes Controller Manager must have secure binding.|
+|V-242386| The Kubernetes API server must have the insecure port flag disabled.|
+|V-242387| The Kubernetes Kubelet must have the read-only port flag disabled.|
+|V-242388| The Kubernetes API server must have the insecure bind address not set.|
+|V-242389| The Kubernetes API server must have the secure port set.|
+|V-242390| The Kubernetes API server must have anonymous authentication disabled.|
+|V-242391| The Kubernetes Kubelet must have anonymous authentication disabled.|
+|V-242392| The Kubernetes kubelet must enable explicit authorization.|
+|V-242393| Kubernetes Worker Nodes must not have sshd service running.|
+|V-242394| Kubernetes Worker Nodes must not have the sshd service enabled.|
+|V-242396| Kubernetes Kubectl cp command must give expected access and results.|
+|V-242397| The Kubernetes kubelet static PodPath must not enable static pods.|
+|V-242398| Kubernetes DynamicAuditing must not be enabled.|
+|V-242399| Kubernetes DynamicKubeletConfig must not be enabled.|
+|V-242400| The Kubernetes API server must have Alpha APIs disabled.|
+|V-242401| The Kubernetes API Server must have an audit policy set.|
+|V-242402| The Kubernetes API Server must have an audit log path set.|
+|V-242403| Kubernetes API Server must generate audit records that identify what type of event has occurred, identify the source of the event, contain the event results, identify any users, and identify any containers associated iththe event.|"
+|V-242404| Kubernetes Kubelet must deny hostname override.|
+|V-242405| The Kubernetes manifests must be owned by root.|
+|V-242406| The Kubernetes kubelet configuration file must be owned by root.|
+|V-242407| The Kubernetes kubelet configuration file permissions set to 644 or  more restrictive.|
+|V-242408| The Kubernetes manifests must have least privileges.|
+|V-242409| Kubernetes Controller Manager must disable profiling.|
+|V-242416| Kubernetes Kubelet must not disable timeouts.|
+|V-242418| The Kubernetes API server must use approved cipher suites.|
+|V-242419| Kubernetes API Server must have the SSL Certificate Authority set.|
+|V-242420| Kubernetes Kubelet must have the SSL Certificate Authority set.|
+|V-242421| Kubernetes Controller Manager must have the SSL Certificate Authority set.|
+|V-242422| Kubernetes API Server must have a certificate for communication.|
+|V-242423| Kubernetes etcd must enable client authentication to secure service.|
+|V-242424| Kubernetes Kubelet must enable tls-private-key-file for client authentication to secure service.|
+|V-242425| Kubernetes Kubelet must enable tls-cert-file for client authentication to secure service.|
+|V-242426| Kubernetes etcd must enable client authentication to secure service.|
+|V-242427| Kubernetes etcd must have a key file for secure communication.|
+|V-242428| Kubernetes etcd must have a certificate for communication.|
+|V-242429| Kubernetes etcd must have the SSL Certificate Authority set.|
+|V-242430| Kubernetes etcd must have a certificate for communication.|
+|V-242431| Kubernetes etcd must have a key file for secure communication.|
+|V-242432| Kubernetes etcd must have peer-cert-file set for secure communication.|
+|V-242433| Kubernetes etcd must have a peer-key-file set for secure communication.|
+|V-242434| Kubernetes Kubelet must enable kernel protection.|
+|V-242435| Kubernetes must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures or the installation of patches andpdates.|
+|V-242436| The Kubernetes API server must have the ValidatingAdmissionWebhook enabled.|
+|V-242438| Kubernetes API Server must configure timeouts to limit attack surface.|
+|V-242439| Kubernetes API Server must disable basic authentication to protect information in transit.|
+|V-242440| Kubernetes API Server must disable token authentication to protect information in transit.|
+|V-242441| Kubernetes endpoints must use approved organizational certificate and key pair to protect information in transit.|
+|V-242444| The Kubernetes component manifests must be owned by root.|
+|V-242445| The Kubernetes component etcd must be owned by etcd.|
+|V-242446| The Kubernetes conf files must be owned by root.|
+|V-242447| The Kubernetes Kube Proxy must have file permissions set to 644 or more restrictive.|
+|V-242448| The Kubernetes Kube Proxy must be owned by root.|
+|V-242449| The Kubernetes Kubelet certificate authority file must have file permissions set to 644 or more restrictive.|
+|V-242450| The Kubernetes Kubelet certificate authority must be owned by root.|
+|V-242451| The Kubernetes component PKI must be owned by root.|
+|V-242452| The Kubernetes kubelet config must have file permissions set to 644 or more restrictive.|
+|V-242453| The Kubernetes kubelet config must be owned by root.|
+|V-242454| The Kubernetes kubeadm must be owned by root.|
+|V-242455| The Kubernetes  kubeadm.conf must have file permissions set to 644 or more restrictive.|
+|V-242456| The Kubernetes kubelet config must have file permissions set to 644 or more restrictive.|
+|V-242457| The Kubernetes kubelet config must be owned by root.|
+|V-242458| The Kubernetes API Server must have file permissions set to 644 or more restrictive.|
+|V-242459| The Kubernetes etcd must have file permissions set to 644 or more restrictive.|
+|V-242460| The Kubernetes admin.conf must have file permissions set to 644 or more restrictive.|
+|V-242461| Kubernetes API Server audit logs must be enabled.|
+|V-242462| The Kubernetes API Server must be set to audit log max size.|
+|V-242463| The Kubernetes API Server must be set to audit log maximum backup.|
+|V-242464| The Kubernetes API Server audit log retention must be set.|
+|V-242465| The Kubernetes API Server audit log path must be set.|
+|V-242466| The Kubernetes PKI CRT must have file permissions set to 644 or more restrictive.|
+|V-242467| The Kubernetes PKI keys must have file permissions set to 600 or more restrictive.|
+|V-242468| The Kubernetes API Server must prohibit communication using TLS version 1.0 and 1.1, and SSL 2.0 and 3.0.|
 
 ## Authors
 
