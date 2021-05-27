@@ -14,7 +14,6 @@ supports:
 depends:
   - name: inspec-k8s-node
     git: https://gitlab.dsolab.io/scv-content/inspec/kubernetes/baselines/inspec-k8s-node.git
-    branch: SD_812_adding_test_code
 
 inputs:
   - name: manifests_path
