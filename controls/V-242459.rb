@@ -31,20 +31,21 @@ command:
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  unless etcd.exist?
-    impact 0.0
-    desc 'caveat', 'ETCD process is not running on the target.'
-  end
+  if etcd.exist?
+    describe.one do
+      if etcd.params['data-dir']
+        describe file(etcd.params['data-dir'].join) do
+          it { should_not be_more_permissive_than('0644') }
+        end
+      end
 
-  describe.one do
-    if etcd.params['data-dir']
-      describe file(etcd.params['data-dir'].join) do
+      describe file(process_env_var('etcd').params['ETCD_DATA_DIR']) do
         it { should_not be_more_permissive_than('0644') }
       end
     end
-
-    describe file(process_env_var('etcd').params['ETCD_DATA_DIR']) do
-      it { should_not be_more_permissive_than('0644') }
+  else
+    describe 'ETCD process is not running on the target.' do
+      skip
     end
   end
 end
