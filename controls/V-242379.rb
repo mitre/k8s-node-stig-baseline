@@ -35,18 +35,19 @@ value of \"-auto-tls\" to \"false\"."
   tag cci: ['CCI-000068']
   tag nist: ['AC-17 (2)']
 
-  unless etcd.exist?
-    impact 0.0
-    desc 'caveat', 'ETCD process is not running on the target.'
-  end
+  if etcd.exist?
+    describe.one do
+      describe etcd do
+        its('auto-tls') { should cmp 'false' }
+      end
 
-  describe.one do
-    describe etcd do
-      its('auto-tls') { should cmp 'false' }
+      describe process_env_var('etcd') do
+        its(:ETCD_AUTO_TLS) { should cmp 'false' }
+      end
     end
-
-    describe process_env_var('etcd') do
-      its(:ETCD_AUTO_TLS) { should cmp 'false' }
+  else
+    describe 'ETCD process is not running on the target.' do
+      skip
     end
   end
 end

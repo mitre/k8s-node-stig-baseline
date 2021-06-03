@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
 control 'V-242407' do
-  title 'The Kubernetes kubelet configuration file permissions set to 644 or 
+  title 'The Kubernetes kubelet configuration file permissions set to 644 or
 more restrictive.'
   desc  "The kubelet configuration file contains the runtime configuration of
 the kubelet service. If an attacker can gain access to this file, changes can

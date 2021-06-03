@@ -42,18 +42,19 @@ with etcd."
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 
-  unless etcd.exist?
-    impact 0.0
-    desc 'caveat', 'ETCD process is not running on the target.'
-  end
+  if etcd.exist?
+    describe.one do
+      describe etcd do
+        its('peer-key-file') { should_not be_nil }
+      end
 
-  describe.one do
-    describe etcd do
-      its('peer-key-file') { should_not be_nil }
+      describe process_env_var('etcd') do
+        its(:ETCD_PEER_KEY_FILE) { should_not be_nil }
+      end
     end
-
-    describe process_env_var('etcd') do
-      its(:ETCD_PEER_KEY_FILE) { should_not be_nil }
+  else
+    describe 'ETCD process is not running on the target.' do
+      skip
     end
   end
 end
