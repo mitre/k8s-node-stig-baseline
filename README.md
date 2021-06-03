@@ -116,6 +116,19 @@ inspec exec <Profile> -t ssh://TARGET_USERNAME@TARGET_IP:TARGET_PORT --sudo -i <
 
 ## Check Overview
 
+**Kubernetes Components**
+
+This profile evaluates the STIG compliance of the following Kubernetes Components by evaluating their process configuration:
+
+1) kube-apiserver
+1) kube_controller_manager
+1) kube_scheduler
+1) kubelet
+1) kube_proxy
+1) etcd
+
+If these components are not in use in the target cluster or named differently, the profile has to be adapted for the target K8S distribution using an [InSpec Profile Overlay](https://blog.chef.io/understanding-inspec-profile-inheritance)
+
 **Normal Checks**
 
 These checks will follow the normal automation process and will report accurate STIG compliance PASS/FAIL.
