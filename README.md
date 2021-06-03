@@ -120,12 +120,12 @@ inspec exec <Profile> -t ssh://TARGET_USERNAME@TARGET_IP:TARGET_PORT --sudo -i <
 
 This profile evaluates the STIG compliance of the following Kubernetes Components by evaluating their process configuration:
 
-1) kube-apiserver
-1) kube_controller_manager
-1) kube_scheduler
-1) kubelet
-1) kube_proxy
-1) etcd
+- kube-apiserver
+- kube-controller-manager
+- kube-scheduler
+- kubelet
+- kube-proxy
+- etcd
 
 If these components are not in use in the target cluster or named differently, the profile has to be adapted for the target K8S distribution using an [InSpec Profile Overlay](https://blog.chef.io/understanding-inspec-profile-inheritance)
 
