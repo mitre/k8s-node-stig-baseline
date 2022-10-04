@@ -14,7 +14,7 @@ supports:
 
 depends:
   - name: inspec-k8s-node
-    git: https://gitlab.dsolab.io/scv-content/inspec/kubernetes/baselines/inspec-k8s-node.git
+    git: https://github.com/mitre/inspec-k8s-node.git
 
 inputs:
   - name: manifests_path
