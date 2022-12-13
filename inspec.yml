@@ -61,4 +61,4 @@ inputs:
     description: 'Number of days to retain audit logs locally'
     type: Numeric
     value: 30
-    required: true
+    # required: true
