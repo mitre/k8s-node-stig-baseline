@@ -15,6 +15,7 @@ supports:
 depends:
   - name: inspec-k8s-node
     git: https://github.com/mitre/inspec-k8s-node.git
+    branch: main
 
 inputs:
   - name: manifests_path
@@ -54,4 +55,10 @@ inputs:
         - /etc/kubernetes/admin.conf
         - /etc/kubernetes/scheduler.conf
         - /etc/kubernetes/controller-manager.conf
+    required: true
+
+  - name: audit_log_retention_days
+    description: 'Number of days to retain audit logs locally'
+    type: Numeric
+    value: 30
     required: true

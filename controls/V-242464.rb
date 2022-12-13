@@ -13,11 +13,11 @@ Node. Run the command:
     grep -i audit-log-maxage *
 
     If the setting \"audit-log-maxage\" is not set in the Kubernetes API Server
-manifest file or it is set less than \"30\", this is a finding.
+manifest file or it is set less than \"#{input('audit_log_retention_days')}\", this is a finding.
   "
   desc 'fix', "Edit the Kubernetes API Server manifest file in the
 /etc/kubernetes/manifests directory on the Kubernetes Master Node. Set the
-value of \"--audit-log-maxage\" to a minimum of \"30\"."
+value of \"--audit-log-maxage\" to a minimum of \"#{input('audit_log_retention_days')}\"."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001335'
@@ -34,6 +34,6 @@ value of \"--audit-log-maxage\" to a minimum of \"30\"."
   end
 
   describe kube_apiserver do
-    its('audit-log-maxage') { should cmp >= 30 }
+    its('audit-log-maxage') { should cmp >= input('audit_log_retention_days') }
   end
 end
