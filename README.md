@@ -1,6 +1,6 @@
 ## Kubernetes Node STIG Automated Compliance Validation Profile
 
-InSpec profile to validate the secure configuration of a Kubernetes node against [DISA's](https://iase.disa.mil/stigs/Pages/index.aspx) Kubernetes Secure Technical Implementation Guide (STIG) Version 1 Release 1.
+InSpec profile to validate the secure configuration of a Kubernetes node against [DISA's](https://public.cyber.mil/stigs/downloads/) Kubernetes Secure Technical Implementation Guide (STIG) Version 1 Release 1.
 
 ## Getting Started  
 It is intended and recommended that InSpec and this profile be run from a __"runner"__ host (such as a DevOps orchestration server, an administrative management system, or a developer's workstation/laptop) against the target remotely using the SSH transport.
