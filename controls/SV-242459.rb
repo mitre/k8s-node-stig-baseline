@@ -21,12 +21,13 @@ chmod -R 644 /var/lib/etcd/*'
   tag nist: ['CM-6 b']
 
   if etcd.exist?
+    expected_mode = input('kubernetes_file_modes')['etcd_data_files']
     data_dir = Array(etcd.params['data-dir']).join
     data_dir = process_env_var('etcd').params['ETCD_DATA_DIR'].to_s if data_dir.empty?
     data_dir = '/var/lib/etcd' if data_dir.empty?
     etcd_search = command("find #{data_dir} -type f -print")
     etcd_files = etcd_search.stdout.lines.map(&:strip).reject(&:empty?)
-    overly_permissive_files = etcd_files.select { |file_name| file(file_name).more_permissive_than?('0644') }
+    overly_permissive_files = etcd_files.select { |file_name| file(file_name).more_permissive_than?(expected_mode) }
 
     describe directory(data_dir) do
       it { should exist }
@@ -39,8 +40,8 @@ chmod -R 644 /var/lib/etcd/*'
     end
 
     describe 'Kubernetes etcd data files' do
-      it 'should have mode 0644 or more restrictive' do
-        expect(overly_permissive_files).to be_empty, "etcd files with permissions more permissive than 0644:\n\t- #{overly_permissive_files.join("\n\t- ")}"
+      it "should have mode #{expected_mode} or more restrictive" do
+        expect(overly_permissive_files).to be_empty, "etcd files with permissions more permissive than #{expected_mode} from input('kubernetes_file_modes')['etcd_data_files']:\n\t- #{overly_permissive_files.join("\n\t- ")}"
       end
     end
   else

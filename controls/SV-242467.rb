@@ -25,9 +25,10 @@ find /etc/kubernetes/pki -name "*.key" | xargs chmod 600'
   tag nist: ['CM-6 b']
 
   pki_path = input('pki_path')
+  expected_mode = input('kubernetes_file_modes')['pki_private_key_files']
   pki_search = command("find #{pki_path} -type f -name '*.key' -print")
   pki_files = pki_search.stdout.lines.map(&:strip).reject(&:empty?)
-  overly_permissive_files = pki_files.select { |file_name| file(file_name).more_permissive_than?('0600') }
+  overly_permissive_files = pki_files.select { |file_name| file(file_name).more_permissive_than?(expected_mode) }
 
   describe 'Kubernetes PKI key discovery' do
     it "should successfully search #{pki_path}" do
@@ -36,8 +37,8 @@ find /etc/kubernetes/pki -name "*.key" | xargs chmod 600'
   end
 
   describe 'Kubernetes PKI key files' do
-    it 'should have mode 0600 or more restrictive' do
-      expect(overly_permissive_files).to be_empty, "PKI key files with permissions more permissive than 0600:\n\t- #{overly_permissive_files.join("\n\t- ")}"
+    it "should have mode #{expected_mode} or more restrictive" do
+      expect(overly_permissive_files).to be_empty, "PKI key files with permissions more permissive than #{expected_mode} from input('kubernetes_file_modes')['pki_private_key_files']:\n\t- #{overly_permissive_files.join("\n\t- ")}"
     end
   end
 end

@@ -29,8 +29,10 @@ chmod 644 <location from kubeconfig>.'
     desc 'caveat', 'Kube-Proxy process is not running on the target.'
   end
 
+  expected_mode = input('kubernetes_file_modes')['kube_proxy_kubeconfig_file']
+
   describe kube_proxy do
     its('kubeconfig_file') { should_not be_nil }
-    its('kubeconfig_file') { should_not be_more_permissive_than('0644') }
+    its('kubeconfig_file') { should_not be_more_permissive_than(expected_mode) }
   end
 end

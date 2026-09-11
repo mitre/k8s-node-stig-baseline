@@ -25,9 +25,10 @@ find /etc/kubernetes/pki -name "*.crt" | xargs chmod 644'
   tag nist: ['CM-6 b']
 
   pki_path = input('pki_path')
+  expected_mode = input('kubernetes_file_modes')['pki_certificate_files']
   pki_search = command("find #{pki_path} -type f -name '*.crt' -print")
   pki_files = pki_search.stdout.lines.map(&:strip).reject(&:empty?)
-  overly_permissive_files = pki_files.select { |file_name| file(file_name).more_permissive_than?('0644') }
+  overly_permissive_files = pki_files.select { |file_name| file(file_name).more_permissive_than?(expected_mode) }
 
   describe 'Kubernetes PKI certificate discovery' do
     it "should successfully search #{pki_path}" do
@@ -36,8 +37,8 @@ find /etc/kubernetes/pki -name "*.crt" | xargs chmod 644'
   end
 
   describe 'Kubernetes PKI certificate files' do
-    it 'should have mode 0644 or more restrictive' do
-      expect(overly_permissive_files).to be_empty, "PKI certificate files with permissions more permissive than 0644:\n\t- #{overly_permissive_files.join("\n\t- ")}"
+    it "should have mode #{expected_mode} or more restrictive" do
+      expect(overly_permissive_files).to be_empty, "PKI certificate files with permissions more permissive than #{expected_mode} from input('kubernetes_file_modes')['pki_certificate_files']:\n\t- #{overly_permissive_files.join("\n\t- ")}"
     end
   end
 end

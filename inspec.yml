@@ -57,6 +57,24 @@ inputs:
         - /etc/kubernetes/controller-manager.conf
     required: true
 
+  # SV-242407, SV-242408, SV-242447, SV-242449, SV-242452, SV-242455,
+  # SV-242456, SV-242459, SV-242460, SV-242466, SV-242467
+  - name: kubernetes_file_modes
+    description: 'Maximum allowable file modes for Kubernetes artifacts. Defaults enforce the unmodified STIG requirements; overrides represent organizational tailoring.'
+    type: Hash
+    value:
+      manifest_files: '0644'
+      kubelet_config_file: '0644'
+      kube_proxy_kubeconfig_file: '0644'
+      kubelet_client_ca_file: '0644'
+      kubelet_kubeconfig_file: '0644'
+      kubeadm_conf_file: '0644'
+      etcd_data_files: '0644'
+      kubernetes_conf_files: '0644'
+      pki_certificate_files: '0644'
+      pki_private_key_files: '0600'
+    required: true
+
   - name: audit_log_retention_days
     description: 'Number of days to retain audit logs locally'
     type: Numeric

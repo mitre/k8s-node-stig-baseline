@@ -36,7 +36,9 @@ The kubelet file should now have the permissions of "644".'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
 
+  expected_mode = input('kubernetes_file_modes')['kubelet_config_file']
+
   describe kubelet do
-    its('config_file') { should_not be_more_permissive_than('0644') }
+    its('config_file') { should_not be_more_permissive_than(expected_mode) }
   end
 end

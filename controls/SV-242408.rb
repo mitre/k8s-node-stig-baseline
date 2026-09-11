@@ -30,9 +30,10 @@ All the manifest files should now have privileges of "644".'
   tag nist: ['CM-5 (6)', 'CM-6 b']
 
   manifests_path = input('manifests_path')
+  expected_mode = input('kubernetes_file_modes')['manifest_files']
   manifest_search = command("find #{manifests_path} -type f -print")
   manifests_files = manifest_search.stdout.lines.map(&:strip).reject(&:empty?)
-  overly_permissive_files = manifests_files.select { |file_name| file(file_name).more_permissive_than?('0644') }
+  overly_permissive_files = manifests_files.select { |file_name| file(file_name).more_permissive_than?(expected_mode) }
 
   describe 'Kubernetes manifest file discovery' do
     it "should successfully search #{manifests_path}" do
@@ -41,8 +42,8 @@ All the manifest files should now have privileges of "644".'
   end
 
   describe 'Kubernetes manifest files' do
-    it 'should have mode 0644 or more restrictive' do
-      expect(overly_permissive_files).to be_empty, "Manifest files with permissions more permissive than 0644:\n\t- #{overly_permissive_files.join("\n\t- ")}"
+    it "should have mode #{expected_mode} or more restrictive" do
+      expect(overly_permissive_files).to be_empty, "Manifest files with permissions more permissive than #{expected_mode} from input('kubernetes_file_modes')['manifest_files']:\n\t- #{overly_permissive_files.join("\n\t- ")}"
     end
   end
 end

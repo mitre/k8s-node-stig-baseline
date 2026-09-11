@@ -20,8 +20,10 @@ chmod 644 /var/lib/kubelet/config.yaml'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
+  expected_mode = input('kubernetes_file_modes')['kubelet_config_file']
+
   describe kubelet do
     its('config_file') { should_not be_nil }
-    its('config_file') { should_not be_more_permissive_than('0644') }
+    its('config_file') { should_not be_more_permissive_than(expected_mode) }
   end
 end

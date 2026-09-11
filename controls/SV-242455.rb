@@ -29,9 +29,10 @@ chmod 644 <kubeadm.conf path>'
   tag nist: ['CM-6 b']
 
   kubeadm_conf_path = input('kubeadm_conf_path')
+  expected_mode = input('kubernetes_file_modes')['kubeadm_conf_file']
 
   describe file(kubeadm_conf_path) do
     it { should exist }
-    it { should_not be_more_permissive_than('0644') }
+    it { should_not be_more_permissive_than(expected_mode) }
   end
 end

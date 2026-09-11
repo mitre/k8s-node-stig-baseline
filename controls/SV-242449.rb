@@ -53,6 +53,7 @@ chmod 644 <path_to_client_ca_file>'
   end
 
   client_ca_file = kubelet_config_file.params.dig('authentication', 'x509', 'clientCAFile').to_s
+  expected_mode = input('kubernetes_file_modes')['kubelet_client_ca_file']
 
   describe 'Kubelet client certificate authority file path' do
     subject { client_ca_file }
@@ -62,7 +63,7 @@ chmod 644 <path_to_client_ca_file>'
   unless client_ca_file.empty?
     describe file(client_ca_file) do
       it { should exist }
-      it { should_not be_more_permissive_than('0644') }
+      it { should_not be_more_permissive_than(expected_mode) }
     end
   end
 end
