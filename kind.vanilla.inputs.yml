@@ -1,0 +1,14 @@
+---
+# Inputs for the unmodified Kind v1.32.2 control-plane node.
+manifests_path: /etc/kubernetes/manifests
+pki_path: /etc/kubernetes/pki/
+kubeadm_conf_path: /var/lib/kubelet/kubeadm-flags.env
+kubectl_path: /usr/bin/kubectl
+kubectl_minversion: 1.12.9
+kubernetes_conf_files:
+  - /etc/kubernetes/admin.conf
+  - /etc/kubernetes/scheduler.conf
+  - /etc/kubernetes/controller-manager.conf
+kubernetes_minor_version: 32
+audit_log_retention_days: 30
+streaming_connection_idle_timeout_seconds: 300
