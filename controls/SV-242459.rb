@@ -1,3 +1,5 @@
+require 'shellwords'
+
 control 'SV-242459' do
   title 'The Kubernetes etcd must have file permissions set to 644 or more
 restrictive.'
@@ -20,18 +22,25 @@ chmod -R 644 /var/lib/etcd/*'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  if etcd.exist?
-    expected_mode = input('kubernetes_file_modes')['etcd_data_files']
-    data_dir = Array(etcd.params['data-dir']).join
-    data_dir = process_env_var('etcd').params['ETCD_DATA_DIR'].to_s if data_dir.empty?
-    data_dir = '/var/lib/etcd' if data_dir.empty?
-    etcd_search = command("find #{data_dir} -type f -print")
+  only_if("This control applies only to control-plane nodes; input('node_roles') does not include 'control-plane'.", impact: 0.0) do
+    input('node_roles').map(&:to_s).include?('control-plane')
+  end
+  only_if("This control is not applicable because input('etcd_managed_on_node') is false for an external etcd topology.", impact: 0.0) do
+    input('etcd_managed_on_node')
+  end
+
+  expected_mode = input('kubernetes_file_modes')['etcd_data_files']
+  data_dir = input('etcd_data_dir')
+  etcd_data_directory = directory(data_dir)
+
+  describe etcd_data_directory do
+    it { should exist }
+  end
+
+  if etcd_data_directory.exist?
+    etcd_search = command("find #{Shellwords.escape(data_dir)} -type f -print")
     etcd_files = etcd_search.stdout.lines.map(&:strip).reject(&:empty?)
     overly_permissive_files = etcd_files.select { |file_name| file(file_name).more_permissive_than?(expected_mode) }
-
-    describe directory(data_dir) do
-      it { should exist }
-    end
 
     describe 'Kubernetes etcd data file discovery' do
       it "should successfully search #{data_dir}" do
@@ -43,11 +52,6 @@ chmod -R 644 /var/lib/etcd/*'
       it "should have mode #{expected_mode} or more restrictive" do
         expect(overly_permissive_files).to be_empty, "etcd files with permissions more permissive than #{expected_mode} from input('kubernetes_file_modes')['etcd_data_files']:\n\t- #{overly_permissive_files.join("\n\t- ")}"
       end
-    end
-  else
-    impact 0.0
-    describe 'ETCD process is not running on the target.' do
-      skip 'This control is not applicable because etcd is not running on the target node.'
     end
   end
 end

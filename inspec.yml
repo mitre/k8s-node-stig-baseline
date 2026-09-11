@@ -18,10 +18,27 @@ depends:
     branch: main
 
 inputs:
+  - name: node_roles
+    description: "Roles assigned to the target Kubernetes node. Supported values are 'control-plane' and 'worker'; include both for a dual-role node."
+    type: Array
+    required: true
+
   - name: manifests_path
     description: 'Path to Kubernetes manifest files on the target node'
     type: String
     value: '/etc/kubernetes/manifests'
+    required: true
+
+  - name: etcd_managed_on_node
+    description: 'Whether this control-plane node hosts etcd and is responsible for the etcd manifest and data checks; set to false only when etcd is external to the node'
+    type: Boolean
+    value: true
+    required: true
+
+  - name: etcd_data_dir
+    description: 'Path to the local etcd data directory on control-plane nodes that host etcd'
+    type: String
+    value: '/var/lib/etcd'
     required: true
 
   - name: pki_path

@@ -38,6 +38,10 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 
+  only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
+    input('node_roles').include?('control-plane')
+  end
+
   describe kubelet do
     its('tls-cert-file') { should be_nil }
   end

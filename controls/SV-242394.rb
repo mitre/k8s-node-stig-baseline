@@ -29,6 +29,10 @@ settings can be made if the session is interrupted.'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 
+  only_if("This control applies only to worker nodes; input('node_roles') must include 'worker'.", impact: 0.0) do
+    input('node_roles').include?('worker')
+  end
+
   describe service('sshd') do
     it { should_not be_enabled }
   end

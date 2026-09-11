@@ -23,17 +23,23 @@ Set the value of "--client-cert-auth" to "true" for the etcd.'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 
-  only_if('This control is not applicable when etcd is not running on the target node.', impact: 0.0) do
-    etcd.exist?
+  etcd_manifest_path = ::File.join(input('manifests_path'), 'etcd.yaml')
+  etcd_configuration = etcd_manifest(etcd_manifest_path)
+
+  only_if("This control applies only to control-plane nodes; input('node_roles') does not include 'control-plane'.", impact: 0.0) do
+    input('node_roles').map(&:to_s).include?('control-plane')
+  end
+  only_if("This control is not applicable because input('etcd_managed_on_node') is false for an external etcd topology.", impact: 0.0) do
+    input('etcd_managed_on_node')
   end
 
-  describe.one do
-    describe etcd do
+  if etcd_configuration.exist?
+    describe etcd_configuration do
       its('client-cert-auth') { should cmp 'true' }
     end
-
-    describe process_env_var('etcd') do
-      its(:ETCD_CLIENT_CERT_AUTH) { should cmp 'true' }
+  else
+    describe file(etcd_manifest_path) do
+      it { should exist }
     end
   end
 end

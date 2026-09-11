@@ -64,6 +64,10 @@ d. Restart the kubelet service using the following command:
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 
+  only_if("This control applies only to worker nodes; input('node_roles') must include 'worker'.", impact: 0.0) do
+    input('node_roles').include?('worker')
+  end
+
   describe kubelet do
     its('pod-manifest-path') { should be_nil }
   end

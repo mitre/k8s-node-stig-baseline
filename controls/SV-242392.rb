@@ -29,6 +29,10 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 
+  only_if("This control applies only to worker nodes; input('node_roles') must include 'worker'.", impact: 0.0) do
+    input('node_roles').include?('worker')
+  end
+
   describe kubelet do
     its('authorization-mode') { should cmp 'Webhook' }
   end

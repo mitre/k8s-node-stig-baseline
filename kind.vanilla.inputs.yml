@@ -1,6 +1,10 @@
 ---
 # Inputs for the unmodified Kind v1.32.2 control-plane node.
+node_roles:
+  - control-plane
 manifests_path: /etc/kubernetes/manifests
+etcd_managed_on_node: true
+etcd_data_dir: /var/lib/etcd
 pki_path: /etc/kubernetes/pki/
 kubeadm_conf_path: /var/lib/kubelet/kubeadm-flags.env
 kubectl_path: /usr/bin/kubectl

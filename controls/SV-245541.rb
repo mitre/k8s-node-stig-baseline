@@ -37,6 +37,10 @@ Set the argument "streamingConnectionIdleTimeout" to a value of "5m".'
   tag cci: ['CCI-001133']
   tag nist: ['SC-10']
 
+  only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
+    input('node_roles').include?('control-plane')
+  end
+
   describe kubelet do
     its('streaming-connection-idle-timeout') { should be_nil }
   end

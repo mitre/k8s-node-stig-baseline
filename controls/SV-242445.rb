@@ -1,3 +1,5 @@
+require 'shellwords'
+
 control 'SV-242445' do
   title 'The Kubernetes component etcd must be owned by etcd.'
   desc 'The Kubernetes etcd key-value store provides a way to store data to the Control Plane. If these files can be changed, data to API object and the Control Plane would be compromised. The scheduler will implement the changes immediately. Many of the security settings within the document are implemented through this file.'
@@ -21,19 +23,26 @@ command:
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  if etcd.exist?
-    data_dir = Array(etcd.params['data-dir']).join
-    data_dir = process_env_var('etcd').params['ETCD_DATA_DIR'].to_s if data_dir.empty?
-    data_dir = '/var/lib/etcd' if data_dir.empty?
-    etcd_search = command("find #{data_dir} -mindepth 1 -maxdepth 1 -print")
+  only_if("This control applies only to control-plane nodes; input('node_roles') does not include 'control-plane'.", impact: 0.0) do
+    input('node_roles').map(&:to_s).include?('control-plane')
+  end
+  only_if("This control is not applicable because input('etcd_managed_on_node') is false for an external etcd topology.", impact: 0.0) do
+    input('etcd_managed_on_node')
+  end
+
+  data_dir = input('etcd_data_dir')
+  etcd_data_directory = directory(data_dir)
+
+  describe etcd_data_directory do
+    it { should exist }
+  end
+
+  if etcd_data_directory.exist?
+    etcd_search = command("find #{Shellwords.escape(data_dir)} -mindepth 1 -maxdepth 1 -print")
     etcd_entries = etcd_search.stdout.lines.map(&:strip).reject(&:empty?)
     incorrectly_owned_entries = etcd_entries.reject do |entry|
       etcd_entry = file(entry)
       etcd_entry.owned_by?('etcd') && etcd_entry.grouped_into?('etcd')
-    end
-
-    describe directory(data_dir) do
-      it { should exist }
     end
 
     describe 'Kubernetes etcd data discovery' do
@@ -46,11 +55,6 @@ command:
       it 'should be owned by etcd:etcd' do
         expect(incorrectly_owned_entries).to be_empty, "etcd data entries not owned by etcd:etcd:\n\t- #{incorrectly_owned_entries.join("\n\t- ")}"
       end
-    end
-  else
-    impact 0.0
-    describe 'ETCD process is not running on the target.' do
-      skip 'This control is not applicable because etcd is not running on the target node.'
     end
   end
 end
