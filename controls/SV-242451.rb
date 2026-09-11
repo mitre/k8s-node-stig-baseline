@@ -26,16 +26,26 @@ finding.'
   tag nist: ['CM-6 b']
 
   pki_path = input('pki_path')
-  pki_entries = command("find #{pki_path} -print").stdout.lines.map(&:strip).reject(&:empty?)
+  pki_search = command("find #{pki_path} -print")
+  pki_entries = pki_search.stdout.lines.map(&:strip).reject(&:empty?)
+  incorrectly_owned_entries = pki_entries.reject do |entry|
+    pki_entry = file(entry)
+    pki_entry.owned_by?('root') && pki_entry.grouped_into?('root')
+  end
 
   describe directory(pki_path) do
     it { should exist }
   end
 
-  pki_entries.each do |entry|
-    describe file(entry) do
-      it { should be_owned_by('root') }
-      it { should be_grouped_into('root') }
+  describe 'Kubernetes PKI file discovery' do
+    it "should successfully search #{pki_path}" do
+      expect(pki_search.exit_status).to eq(0), "Unable to search the Kubernetes PKI directory: #{pki_search.stderr.strip}"
+    end
+  end
+
+  describe 'Kubernetes PKI entries' do
+    it 'should be owned by root:root' do
+      expect(incorrectly_owned_entries).to be_empty, "PKI entries not owned by root:root:\n\t- #{incorrectly_owned_entries.join("\n\t- ")}"
     end
   end
 end

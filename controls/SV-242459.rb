@@ -24,20 +24,29 @@ chmod -R 644 /var/lib/etcd/*'
     data_dir = Array(etcd.params['data-dir']).join
     data_dir = process_env_var('etcd').params['ETCD_DATA_DIR'].to_s if data_dir.empty?
     data_dir = '/var/lib/etcd' if data_dir.empty?
-    etcd_files = command("find #{data_dir} -type f -print").stdout.lines.map(&:strip).reject(&:empty?)
+    etcd_search = command("find #{data_dir} -type f -print")
+    etcd_files = etcd_search.stdout.lines.map(&:strip).reject(&:empty?)
+    overly_permissive_files = etcd_files.select { |file_name| file(file_name).more_permissive_than?('0644') }
 
     describe directory(data_dir) do
       it { should exist }
     end
 
-    etcd_files.each do |file_name|
-      describe file(file_name) do
-        it { should_not be_more_permissive_than('0644') }
+    describe 'Kubernetes etcd data file discovery' do
+      it "should successfully search #{data_dir}" do
+        expect(etcd_search.exit_status).to eq(0), "Unable to search the etcd data directory: #{etcd_search.stderr.strip}"
+      end
+    end
+
+    describe 'Kubernetes etcd data files' do
+      it 'should have mode 0644 or more restrictive' do
+        expect(overly_permissive_files).to be_empty, "etcd files with permissions more permissive than 0644:\n\t- #{overly_permissive_files.join("\n\t- ")}"
       end
     end
   else
+    impact 0.0
     describe 'ETCD process is not running on the target.' do
-      skip
+      skip 'This control is not applicable because etcd is not running on the target node.'
     end
   end
 end

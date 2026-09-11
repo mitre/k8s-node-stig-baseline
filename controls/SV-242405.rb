@@ -29,20 +29,22 @@ All the manifest files should be owned by root:root.'
   tag nist: ['CM-5 (6)']
 
   manifests_path = input('manifests_path')
-  manifests_files = command("find #{manifests_path} -type f").stdout.split
+  manifest_search = command("find #{manifests_path} -type f -print")
+  manifests_files = manifest_search.stdout.lines.map(&:strip).reject(&:empty?)
+  incorrectly_owned_files = manifests_files.reject do |file_name|
+    manifest_file = file(file_name)
+    manifest_file.owned_by?('root') && manifest_file.grouped_into?('root')
+  end
 
-  if manifests_files.empty?
-    desc 'caveat', "Kubernetes Manifest files not present of the target at specified path #{manifests_path}."
-
-    describe "Kubernetes Manifest files not present of the target at specified path #{manifests_path}." do
-      skip
+  describe 'Kubernetes manifest file discovery' do
+    it "should successfully search #{manifests_path}" do
+      expect(manifest_search.exit_status).to eq(0), "Unable to search for Kubernetes manifest files: #{manifest_search.stderr.strip}"
     end
   end
 
-  manifests_files.each do |file_name|
-    describe file(file_name) do
-      it { should be_owned_by('root') }
-      it { should be_grouped_into('root') }
+  describe 'Kubernetes manifest files' do
+    it 'should be owned by root:root' do
+      expect(incorrectly_owned_files).to be_empty, "Manifest files not owned by root:root:\n\t- #{incorrectly_owned_files.join("\n\t- ")}"
     end
   end
 end

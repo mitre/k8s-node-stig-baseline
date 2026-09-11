@@ -25,19 +25,19 @@ find /etc/kubernetes/pki -name "*.key" | xargs chmod 600'
   tag nist: ['CM-6 b']
 
   pki_path = input('pki_path')
-  pki_files = command("find #{pki_path}/ -name \"*.key\"").stdout.split
+  pki_search = command("find #{pki_path} -type f -name '*.key' -print")
+  pki_files = pki_search.stdout.lines.map(&:strip).reject(&:empty?)
+  overly_permissive_files = pki_files.select { |file_name| file(file_name).more_permissive_than?('0600') }
 
-  if pki_files.empty?
-    desc 'caveat', "Kubernetes PKI files not present of the target at specified path #{pki_path}."
-
-    describe "Kubernetes PKI files not present of the target at specified path #{pki_path}." do
-      skip
+  describe 'Kubernetes PKI key discovery' do
+    it "should successfully search #{pki_path}" do
+      expect(pki_search.exit_status).to eq(0), "Unable to search for Kubernetes PKI keys: #{pki_search.stderr.strip}"
     end
   end
 
-  pki_files.each do |file_name|
-    describe file(file_name) do
-      it { should_not be_more_permissive_than('0600') }
+  describe 'Kubernetes PKI key files' do
+    it 'should have mode 0600 or more restrictive' do
+      expect(overly_permissive_files).to be_empty, "PKI key files with permissions more permissive than 0600:\n\t- #{overly_permissive_files.join("\n\t- ")}"
     end
   end
 end

@@ -24,19 +24,17 @@ Set the value of "--peer-client-cert-auth" to "true" for the etcd.'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 
-  if etcd.exist?
-    describe.one do
-      describe etcd do
-        its('peer-client-cert-auth') { should cmp 'true' }
-      end
+  only_if('This control is not applicable when etcd is not running on the target node.', impact: 0.0) do
+    etcd.exist?
+  end
 
-      describe process_env_var('etcd') do
-        its(:ETCD_PEER_CLIENT_CERT_AUTH) { should cmp 'true' }
-      end
+  describe.one do
+    describe etcd do
+      its('peer-client-cert-auth') { should cmp 'true' }
     end
-  else
-    describe 'ETCD process is not running on the target.' do
-      skip
+
+    describe process_env_var('etcd') do
+      its(:ETCD_PEER_CLIENT_CERT_AUTH) { should cmp 'true' }
     end
   end
 end

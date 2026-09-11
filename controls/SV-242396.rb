@@ -36,7 +36,7 @@ If the Control Plane or any Worker nodes are not using kubectl version 1.12.9 or
   end
 
   if kubectl_version.exit_status.zero?
-    describe json(command: "#{input('kubectl_path')} version --client --output=json") do
+    describe json(content: kubectl_version.stdout) do
       its(%w(clientVersion gitVersion)) { should cmp >= kubectl_minversion }
     end
   end

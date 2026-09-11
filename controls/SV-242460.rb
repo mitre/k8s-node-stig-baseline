@@ -26,16 +26,17 @@ command:
   tag nist: ['CM-6 b']
 
   kubernetes_conf_files = Array(input('kubernetes_conf_files'))
-
-  describe 'Configured Kubernetes conf files' do
-    subject { kubernetes_conf_files }
-    it { should_not be_empty }
+  overly_permissive_files = kubernetes_conf_files.reject do |file_name|
+    conf_file = file(file_name)
+    conf_file.exist? && !conf_file.more_permissive_than?('0644')
   end
 
-  kubernetes_conf_files.each do |file_name|
-    describe file(file_name) do
-      it { should exist }
-      it { should_not be_more_permissive_than('0644') }
+  describe 'Configured Kubernetes conf files' do
+    it 'should include at least one path' do
+      expect(kubernetes_conf_files).not_to be_empty, "input('kubernetes_conf_files') must include at least one path"
+    end
+    it 'should exist and have mode 0644 or more restrictive' do
+      expect(overly_permissive_files).to be_empty, "Missing files or files with permissions more permissive than 0644:\n\t- #{overly_permissive_files.join("\n\t- ")}"
     end
   end
 end

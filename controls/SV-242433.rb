@@ -23,21 +23,19 @@ Set the value of "--peer-key-file" to the certificate to be used for communicati
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 
-  if etcd.exist?
-    describe.one do
-      describe etcd do
-        its('peer-key-file') { should_not be_nil }
-        its('peer-key-file') { should_not be_empty }
-      end
+  only_if('This control is not applicable when etcd is not running on the target node.', impact: 0.0) do
+    etcd.exist?
+  end
 
-      describe process_env_var('etcd') do
-        its(:ETCD_PEER_KEY_FILE) { should_not be_nil }
-        its(:ETCD_PEER_KEY_FILE) { should_not be_empty }
-      end
+  describe.one do
+    describe etcd do
+      its('peer-key-file') { should_not be_nil }
+      its('peer-key-file') { should_not be_empty }
     end
-  else
-    describe 'ETCD process is not running on the target.' do
-      skip
+
+    describe process_env_var('etcd') do
+      its(:ETCD_PEER_KEY_FILE) { should_not be_nil }
+      its(:ETCD_PEER_KEY_FILE) { should_not be_empty }
     end
   end
 end

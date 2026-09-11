@@ -25,21 +25,32 @@ command:
     data_dir = Array(etcd.params['data-dir']).join
     data_dir = process_env_var('etcd').params['ETCD_DATA_DIR'].to_s if data_dir.empty?
     data_dir = '/var/lib/etcd' if data_dir.empty?
-    etcd_entries = command("find #{data_dir} -mindepth 1 -maxdepth 1 -print").stdout.lines.map(&:strip).reject(&:empty?)
+    etcd_search = command("find #{data_dir} -mindepth 1 -maxdepth 1 -print")
+    etcd_entries = etcd_search.stdout.lines.map(&:strip).reject(&:empty?)
+    incorrectly_owned_entries = etcd_entries.reject do |entry|
+      etcd_entry = file(entry)
+      etcd_entry.owned_by?('etcd') && etcd_entry.grouped_into?('etcd')
+    end
 
     describe directory(data_dir) do
       it { should exist }
     end
 
-    etcd_entries.each do |entry|
-      describe file(entry) do
-        it { should be_owned_by('etcd') }
-        it { should be_grouped_into('etcd') }
+    describe 'Kubernetes etcd data discovery' do
+      it "should successfully search #{data_dir}" do
+        expect(etcd_search.exit_status).to eq(0), "Unable to search the etcd data directory: #{etcd_search.stderr.strip}"
+      end
+    end
+
+    describe 'Kubernetes etcd data entries' do
+      it 'should be owned by etcd:etcd' do
+        expect(incorrectly_owned_entries).to be_empty, "etcd data entries not owned by etcd:etcd:\n\t- #{incorrectly_owned_entries.join("\n\t- ")}"
       end
     end
   else
+    impact 0.0
     describe 'ETCD process is not running on the target.' do
-      skip
+      skip 'This control is not applicable because etcd is not running on the target node.'
     end
   end
 end

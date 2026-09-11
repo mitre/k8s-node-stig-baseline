@@ -20,37 +20,37 @@ depends:
 inputs:
   - name: manifests_path
     description: 'Path to Kubernetes manifest files on the target node'
-    type: string
+    type: String
     value: '/etc/kubernetes/manifests'
     required: true
 
   - name: pki_path
     description: 'Path to Kubernetes PKI files on the target node'
-    type: string
+    type: String
     value: '/etc/kubernetes/pki/'
     required: true
 
   - name: kubeadm_conf_path
     description: 'Path to kubeadm conf file on the target node'
-    type: string
+    type: String
     value: '/etc/systemd/system/kubelet.service.d/10-kubeadm.conf'
     required: true
 
   - name: kubectl_path
     description: 'Path to kubectl on the target node'
-    type: string
+    type: String
     value: '/usr/local/bin/kubectl'
     required: true
 
   - name: kubectl_minversion
     description: 'Minimum version of the kubectl binary on the target node'
-    type: string
+    type: String
     value: '1.12.9'
     required: true
 
   - name: kubernetes_conf_files
     description: 'Path to Kubernetes conf files on the target node'
-    type: array
+    type: Array
     value:
         - /etc/kubernetes/admin.conf
         - /etc/kubernetes/scheduler.conf
