@@ -30,5 +30,6 @@ Set the value of "--client-ca-file" to path containing Approved Organizational C
 
   describe kube_apiserver do
     its('client-ca-file') { should_not be_nil }
+    its('client-ca-file') { should_not be_empty }
   end
 end

@@ -42,13 +42,11 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 
-  describe.one do
-    describe kubelet do
-      its('anonymous-auth') { should cmp 'false' }
-    end
+  describe kubelet do
+    its('anonymous-auth') { should be_nil }
+  end
 
-    describe kubelet_config_file do
-      its(%w(authentication anonymous enabled)) { should cmp 'false' }
-    end
+  describe kubelet_config_file do
+    its(%w(authentication anonymous enabled)) { should cmp 'false' }
   end
 end

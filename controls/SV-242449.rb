@@ -48,17 +48,21 @@ chmod 644 <path_to_client_ca_file>'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  describe.one do
-    describe kubelet do
-      its('client_ca_file') { should_not be_nil }
-      its('client_ca_file') { should_not be_more_permissive_than('0644') }
-    end
+  describe kubelet do
+    its('client-ca-file') { should be_nil }
+  end
 
-    client_ca_file = kubelet_config_file.params.dig('authentication', 'x509', 'clientCAFile')
-    if client_ca_file
-      describe file(client_ca_file) do
-        it { should_not be_more_permissive_than('0644') }
-      end
+  client_ca_file = kubelet_config_file.params.dig('authentication', 'x509', 'clientCAFile').to_s
+
+  describe 'Kubelet client certificate authority file path' do
+    subject { client_ca_file }
+    it { should_not be_empty }
+  end
+
+  unless client_ca_file.empty?
+    describe file(client_ca_file) do
+      it { should exist }
+      it { should_not be_more_permissive_than('0644') }
     end
   end
 end

@@ -44,6 +44,8 @@ If the setting "--kubelet-client-key" is not configured in the Kubernetes API se
 
   describe kube_apiserver do
     its('kubelet-client-certificate') { should_not be_nil }
+    its('kubelet-client-certificate') { should_not be_empty }
     its('kubelet-client-key') { should_not be_nil }
+    its('kubelet-client-key') { should_not be_empty }
   end
 end

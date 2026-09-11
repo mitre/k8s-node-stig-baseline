@@ -65,7 +65,7 @@ d. Restart the kubelet service using the following command:
   tag nist: ['AC-3']
 
   describe kubelet do
-    its('staticPodPath') { should be_nil }
+    its('pod-manifest-path') { should be_nil }
   end
 
   describe kubelet_config_file do

@@ -30,13 +30,8 @@ chmod 644 <kubeadm.conf path>'
 
   kubeadm_conf_path = input('kubeadm_conf_path')
 
-  if file(kubeadm_conf_path).exist?
-    describe file(kubeadm_conf_path) do
-      it { should_not be_more_permissive_than('0644') }
-    end
-  else
-    describe "Kubeadm file #{kubeadm_conf_path} not found on target" do
-      skip
-    end
+  describe file(kubeadm_conf_path) do
+    it { should exist }
+    it { should_not be_more_permissive_than('0644') }
   end
 end

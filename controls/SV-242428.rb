@@ -35,10 +35,12 @@ Set the value of "--cert-file" to the Approved Organizational Certificate.'
     describe.one do
       describe etcd do
         its('cert-file') { should_not be_nil }
+        its('cert-file') { should_not be_empty }
       end
 
       describe process_env_var('etcd') do
         its(:ETCD_CERT_FILE) { should_not be_nil }
+        its(:ETCD_CERT_FILE) { should_not be_empty }
       end
     end
   else

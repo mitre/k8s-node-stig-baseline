@@ -33,7 +33,10 @@ Note: If the API server is running as a Pod, then the manifest will also need to
     desc 'caveat', 'Kubernetes API Server process is not running on the target.'
   end
 
-  describe kube_apiserver do
-    its('audit-log-path') { should_not be_nil }
+  audit_log_path = Array(kube_apiserver.params['audit-log-path']).join
+
+  describe 'Kubernetes API Server audit log path' do
+    subject { audit_log_path }
+    it { should_not be_empty }
   end
 end

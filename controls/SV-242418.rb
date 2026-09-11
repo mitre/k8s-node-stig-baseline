@@ -30,13 +30,15 @@ Set the value of "--tls-cipher-suites" to:
     desc 'caveat', 'Kubernetes API Server process is not running on the target.'
   end
 
-  describe kube_apiserver do
-    its('tls_cipher_suites') { should include 'TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256' }
-    its('tls_cipher_suites') { should include 'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256' }
-    its('tls_cipher_suites') { should include 'TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305' }
-    its('tls_cipher_suites') { should include 'TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384' }
-    its('tls_cipher_suites') { should include 'TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305' }
-    its('tls_cipher_suites') { should include 'TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384' }
-    its('tls_cipher_suites.count') { should cmp 6 }
+  approved_cipher_suites = %w(
+    TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+    TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+    TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+    TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+  )
+
+  describe 'Kubernetes API Server TLS cipher suites' do
+    subject { kube_apiserver.tls_cipher_suites.sort }
+    it { should cmp approved_cipher_suites.sort }
   end
 end

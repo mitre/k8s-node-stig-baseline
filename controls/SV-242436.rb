@@ -33,6 +33,10 @@ Note: It is best to implement policies first and then enable the webhook, otherw
   tag cci: ['CCI-002233', 'CCI-002263']
   tag nist: ['AC-6 (8)', 'AC-16 a']
 
+  only_if('This pre-1.25 control does not apply to Kubernetes 1.25 and newer.', impact: 0.0) do
+    input('kubernetes_minor_version') < 25
+  end
+
   unless kube_apiserver.exist?
     impact 0.0
     desc 'caveat', 'Kubernetes API Server process is not running on the target.'

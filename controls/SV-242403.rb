@@ -60,15 +60,25 @@ Note: If the API server is running as a Pod, then the manifest will also need to
     desc 'caveat', 'Kubernetes API Server process is not running on the target.'
   end
 
-  describe kube_apiserver do
-    its('audit-policy-file') { should_not be_nil }
+  audit_policy_path = Array(kube_apiserver.params['audit-policy-file']).join
+
+  describe 'Kubernetes API Server audit policy path' do
+    subject { audit_policy_path }
+    it { should_not be_empty }
   end
 
-  if !kube_apiserver.params['audit-policy-file'].nil? &&
-     file(kube_apiserver.params['audit-policy-file'].join).exist?
+  unless audit_policy_path.empty?
+    describe file(audit_policy_path) do
+      it { should exist }
+      its('size') { should be > 0 }
+    end
 
-    describe yaml(kube_apiserver.params['audit-policy-file'].join) do
-      its('rules') { should cmp [{ 'level' => 'RequestResponse' }] }
+    if file(audit_policy_path).exist?
+      describe yaml(audit_policy_path) do
+        its('apiVersion') { should match %r{\Aaudit\.k8s\.io/v\d+\z} }
+        its('kind') { should cmp 'Policy' }
+        its('rules') { should cmp [{ 'level' => 'RequestResponse' }] }
+      end
     end
   end
 end

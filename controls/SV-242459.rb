@@ -21,14 +21,17 @@ chmod -R 644 /var/lib/etcd/*'
   tag nist: ['CM-6 b']
 
   if etcd.exist?
-    describe.one do
-      if etcd.params['data-dir']
-        describe file(etcd.params['data-dir'].join) do
-          it { should_not be_more_permissive_than('0644') }
-        end
-      end
+    data_dir = Array(etcd.params['data-dir']).join
+    data_dir = process_env_var('etcd').params['ETCD_DATA_DIR'].to_s if data_dir.empty?
+    data_dir = '/var/lib/etcd' if data_dir.empty?
+    etcd_files = command("find #{data_dir} -type f -print").stdout.lines.map(&:strip).reject(&:empty?)
 
-      describe file(process_env_var('etcd').params['ETCD_DATA_DIR']) do
+    describe directory(data_dir) do
+      it { should exist }
+    end
+
+    etcd_files.each do |file_name|
+      describe file(file_name) do
         it { should_not be_more_permissive_than('0644') }
       end
     end

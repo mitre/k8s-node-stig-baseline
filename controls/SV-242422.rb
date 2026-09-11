@@ -39,6 +39,8 @@ If the setting tls-cert-file and private-key-file is not set in the Kubernetes A
 
   describe kube_apiserver do
     its('tls-cert-file') { should_not be_nil }
+    its('tls-cert-file') { should_not be_empty }
     its('tls-private-key-file') { should_not be_nil }
+    its('tls-private-key-file') { should_not be_empty }
   end
 end

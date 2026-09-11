@@ -38,13 +38,12 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 
-  describe.one do
-    describe kubelet do
-      its('tls-private-key-file') { should_not be_nil }
-    end
+  describe kubelet do
+    its('tls-private-key-file') { should be_nil }
+  end
 
-    describe kubelet_config_file do
-      its('tlsPrivateKeyFile') { should_not be_nil }
-    end
+  describe kubelet_config_file do
+    its('tlsPrivateKeyFile') { should_not be_nil }
+    its('tlsPrivateKeyFile') { should_not be_empty }
   end
 end

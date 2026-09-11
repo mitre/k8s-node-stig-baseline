@@ -27,7 +27,25 @@ If the setting "audit-policy-file" is not set or is found in the Kubernetes API 
     desc 'caveat', 'Kubernetes API Server process is not running on the target.'
   end
 
-  describe kube_apiserver do
-    its('audit-policy-file') { should_not be_nil }
+  audit_policy_path = Array(kube_apiserver.params['audit-policy-file']).join
+
+  describe 'Kubernetes API Server audit policy path' do
+    subject { audit_policy_path }
+    it { should_not be_empty }
+  end
+
+  unless audit_policy_path.empty?
+    describe file(audit_policy_path) do
+      it { should exist }
+      its('size') { should be > 0 }
+    end
+
+    if file(audit_policy_path).exist? && file(audit_policy_path).size.positive?
+      describe yaml(audit_policy_path) do
+        its('apiVersion') { should match %r{\Aaudit\.k8s\.io/v\d+\z} }
+        its('kind') { should cmp 'Policy' }
+        its('rules') { should_not be_empty }
+      end
+    end
   end
 end

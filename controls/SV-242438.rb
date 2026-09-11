@@ -28,6 +28,7 @@ Set the value of "--request-timeout" greater than "0".'
 
   describe kube_apiserver do
     its('request-timeout') { should_not be_nil }
+    its('request-timeout') { should_not be_empty }
     its('request-timeout') { should_not cmp '0' }
   end
 end

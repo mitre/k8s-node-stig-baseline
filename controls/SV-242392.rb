@@ -29,13 +29,7 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 
-  describe.one do
-    describe kubelet do
-      its('authorization-mode') { should cmp 'Webhook' }
-    end
-
-    describe kubelet_config_file do
-      its(%w(authorization mode)) { should cmp 'Webhook' }
-    end
+  describe kubelet do
+    its('authorization-mode') { should cmp 'Webhook' }
   end
 end

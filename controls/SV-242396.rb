@@ -27,20 +27,15 @@ If the Control Plane or any Worker nodes are not using kubectl version 1.12.9 or
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 
-  kubectl = command(input('kubectl_path'))
-
   kubectl_minversion = input('kubectl_minversion')
+  kubectl_version = command("#{input('kubectl_path')} version --client --output=json")
 
-  unless kubectl.exist?
-    impact 0.0
-    desc 'caveat', 'kubectl command available on target on the target.'
-
-    describe 'kubectl command not found on target' do
-      skip
-    end
+  describe 'kubectl client version command' do
+    subject { kubectl_version }
+    its('exit_status') { should cmp 0 }
   end
 
-  if kubectl.exist?
+  if kubectl_version.exit_status.zero?
     describe json(command: "#{input('kubectl_path')} version --client --output=json") do
       its(%w(clientVersion gitVersion)) { should cmp >= kubectl_minversion }
     end

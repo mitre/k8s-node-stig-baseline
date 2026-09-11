@@ -62,3 +62,15 @@ inputs:
     type: Numeric
     value: 30
     required: true
+
+  - name: kubernetes_minor_version
+    description: 'Kubernetes minor version used to evaluate version-specific controls'
+    type: Numeric
+    value: 16
+    required: true
+
+  - name: streaming_connection_idle_timeout_seconds
+    description: 'Minimum kubelet streaming connection idle timeout in seconds'
+    type: Numeric
+    value: 300
+    required: true

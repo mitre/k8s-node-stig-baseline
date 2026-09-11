@@ -52,24 +52,27 @@ systemctl daemon-reload && systemctl restart kubelet)
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 
+  only_if('This control applies only to Kubernetes 1.25 and older.', impact: 0.0) do
+    input('kubernetes_minor_version') <= 25
+  end
+
   describe kube_scheduler do
-    its('feature-gates.to_s') { should match /DynamicKubeletConfig=[F|f]alse/ }
+    its('feature-gates.to_s') { should match /DynamicKubeletConfig=false/i }
   end
 
   describe kube_controller_manager do
-    its('feature-gates.to_s') { should match /DynamicKubeletConfig=[F|f]alse/ }
+    its('feature-gates.to_s') { should match /DynamicKubeletConfig=false/i }
   end
 
   describe kube_apiserver do
-    its('feature-gates.to_s') { should match /DynamicKubeletConfig=[F|f]alse/ }
+    its('feature-gates.to_s') { should match /DynamicKubeletConfig=false/i }
   end
 
-  describe.one do
-    describe kubelet do
-      its('feature-gates.to_s') { should match /DynamicKubeletConfig=[F|f]alse/ }
-    end
-    describe kubelet_config_file do
-      its(%w(featureGates DynamicKubeletConfig)) { should_not cmp 'false' }
-    end
+  describe kubelet do
+    its('feature-gates') { should be_nil }
+  end
+
+  describe kubelet_config_file do
+    its(%w(featureGates DynamicKubeletConfig)) { should cmp 'false' }
   end
 end

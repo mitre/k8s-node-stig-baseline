@@ -26,18 +26,14 @@ finding.'
   tag nist: ['CM-6 b']
 
   pki_path = input('pki_path')
-  pki_files = command("find #{pki_path}/ -type f").stdout.split
+  pki_entries = command("find #{pki_path} -print").stdout.lines.map(&:strip).reject(&:empty?)
 
-  if pki_files.empty?
-    desc 'caveat', "Kubernetes PKI files not present of the target at specified path #{pki_path}."
-
-    describe "Kubernetes PKI files not present of the target at specified path #{pki_path}." do
-      skip
-    end
+  describe directory(pki_path) do
+    it { should exist }
   end
 
-  pki_files.each do |file_name|
-    describe file(file_name) do
+  pki_entries.each do |entry|
+    describe file(entry) do
       it { should be_owned_by('root') }
       it { should be_grouped_into('root') }
     end

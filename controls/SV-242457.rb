@@ -20,8 +20,8 @@ chown root:root /var/lib/kubelet/config.yaml'
   tag nist: ['CM-6 b']
 
   describe kubelet do
-    its('kubeconfig_file') { should_not be_nil }
-    its('kubeconfig_file') { should be_owned_by('root') }
-    its('kubeconfig_file') { should be_grouped_into('root') }
+    its('config_file') { should_not be_nil }
+    its('config_file') { should be_owned_by('root') }
+    its('config_file') { should be_grouped_into('root') }
   end
 end

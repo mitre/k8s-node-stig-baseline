@@ -31,5 +31,6 @@ Set the value of "--etcd-keyfile" to the certificate to be used for communicatio
 
   describe kube_apiserver do
     its('etcd-keyfile') { should_not be_nil }
+    its('etcd-keyfile') { should_not be_empty }
   end
 end

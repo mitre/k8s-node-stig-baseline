@@ -37,15 +37,20 @@ Set the argument "streamingConnectionIdleTimeout" to a value of "5m".'
   tag cci: ['CCI-001133']
   tag nist: ['SC-10']
 
-  describe.one do
-    describe kubelet do
-      its('streaming-connection-idle-timeout') { should_not be_nil }
-      its('streaming-connection-idle-timeout') { should_not cmp 0 }
-    end
+  describe kubelet do
+    its('streaming-connection-idle-timeout') { should be_nil }
+  end
 
-    describe kubelet_config_file do
-      its('streamingConnectionIdleTimeout') { should_not be_nil }
-      its('streamingConnectionIdleTimeout') { should_not cmp 0 }
-    end
+  timeout = kubelet_config_file.params['streamingConnectionIdleTimeout'].to_s
+  units = { 'h' => 3600, 'm' => 60, 's' => 1, 'ms' => 0.001, 'us' => 0.000001, 'µs' => 0.000001, 'ns' => 0.000000001 }
+  duration_parts = timeout.scan(/(\d+(?:\.\d+)?)(ns|us|µs|ms|s|m|h)/)
+  parsed_timeout = if !timeout.empty? && duration_parts.flatten.join == timeout
+                     duration_parts.sum { |value, unit| value.to_f * units.fetch(unit) }
+                   end
+
+  describe 'Kubelet streamingConnectionIdleTimeout in seconds' do
+    subject { parsed_timeout }
+    it { should_not be_nil }
+    it { should be >= input('streaming_connection_idle_timeout_seconds') }
   end
 end

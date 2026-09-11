@@ -39,13 +39,11 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag cci: ['CCI-001084']
   tag nist: ['SC-3']
 
-  describe.one do
-    describe kubelet do
-      its('protect-kernel-defaults') { should cmp 'true' }
-    end
+  describe kubelet do
+    its('protect-kernel-defaults') { should be_nil }
+  end
 
-    describe kubelet_config_file do
-      its('protectKernelDefaults') { should cmp 'true' }
-    end
+  describe kubelet_config_file do
+    its('protectKernelDefaults') { should cmp 'true' }
   end
 end

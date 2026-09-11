@@ -27,10 +27,12 @@ Set the value of "--peer-key-file" to the certificate to be used for communicati
     describe.one do
       describe etcd do
         its('peer-key-file') { should_not be_nil }
+        its('peer-key-file') { should_not be_empty }
       end
 
       describe process_env_var('etcd') do
         its(:ETCD_PEER_KEY_FILE) { should_not be_nil }
+        its(:ETCD_PEER_KEY_FILE) { should_not be_empty }
       end
     end
   else

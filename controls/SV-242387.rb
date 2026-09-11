@@ -34,13 +34,11 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 
-  describe.one do
-    describe kubelet do
-      its('read-only-port') { should cmp 0 }
-    end
+  describe kubelet do
+    its('read-only-port') { should be_nil }
+  end
 
-    describe kubelet_config_file do
-      its('readOnlyPort') { should cmp 0 }
-    end
+  describe kubelet_config_file do
+    its('readOnlyPort') { should be_in [nil, 0, '0'] }
   end
 end

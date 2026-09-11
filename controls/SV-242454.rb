@@ -26,14 +26,9 @@ chown root:root <kubeadm.conf path>'
 
   kubeadm_conf_path = input('kubeadm_conf_path')
 
-  if file(kubeadm_conf_path).exist?
-    describe file(kubeadm_conf_path) do
-      it { should be_owned_by('root') }
-      it { should be_grouped_into('root') }
-    end
-  else
-    describe "Kubeadm file #{kubeadm_conf_path} not found on target" do
-      skip
-    end
+  describe file(kubeadm_conf_path) do
+    it { should exist }
+    it { should be_owned_by('root') }
+    it { should be_grouped_into('root') }
   end
 end

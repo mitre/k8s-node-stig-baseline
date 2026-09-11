@@ -22,15 +22,17 @@ command:
   tag nist: ['CM-6 b']
 
   if etcd.exist?
-    describe.one do
-      if etcd.params['data-dir']
-        describe file(etcd.params['data-dir'].join) do
-          it { should be_owned_by('etcd') }
-          it { should be_grouped_into('etcd') }
-        end
-      end
+    data_dir = Array(etcd.params['data-dir']).join
+    data_dir = process_env_var('etcd').params['ETCD_DATA_DIR'].to_s if data_dir.empty?
+    data_dir = '/var/lib/etcd' if data_dir.empty?
+    etcd_entries = command("find #{data_dir} -mindepth 1 -maxdepth 1 -print").stdout.lines.map(&:strip).reject(&:empty?)
 
-      describe file(process_env_var('etcd').params['ETCD_DATA_DIR']) do
+    describe directory(data_dir) do
+      it { should exist }
+    end
+
+    etcd_entries.each do |entry|
+      describe file(entry) do
         it { should be_owned_by('etcd') }
         it { should be_grouped_into('etcd') }
       end
