@@ -6,7 +6,7 @@ The communication session is protected by utilizing transport encryption protoco
 
 Etcd is a highly-available key value store used by Kubernetes deployments for persistent storage of all of its REST API objects. These objects are sensitive and should be accessible only by authenticated etcd peers in the etcd cluster. The parameter "--peer-client-cert-auth" must be set for etcd to check all incoming peer requests from the cluster for valid client certificates.'
   desc 'check', 'Change to the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Run the command:
-grep -i peer-client-cert-auth * 
+grep -i peer-client-cert-auth *
 
 If the setting "--peer-client-cert-auth" is not configured in the Kubernetes etcd manifest file or set to "false", this is a finding.'
   desc 'fix', 'Edit the Kubernetes etcd manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane.

@@ -7,7 +7,7 @@ security risk events or misuse of information. Audit logs are necessary to
 provide evidence in the case the Kubernetes API Server is compromised requiring
 a Cyber Security Investigation.'
   desc 'check', 'Change to the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Run the command:
-grep -i audit-policy-file * 
+grep -i audit-policy-file *
 
 If the setting "audit-policy-file" is not set or is found in the Kubernetes API manifest file without valid content, this is a finding.'
   desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Set the argument "--audit-policy-file" to "log file directory".'

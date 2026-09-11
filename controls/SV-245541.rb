@@ -48,9 +48,7 @@ Set the argument "streamingConnectionIdleTimeout" to a value of "5m".'
   timeout = kubelet_config_file.params['streamingConnectionIdleTimeout'].to_s
   units = { 'h' => 3600, 'm' => 60, 's' => 1, 'ms' => 0.001, 'us' => 0.000001, 'µs' => 0.000001, 'ns' => 0.000000001 }
   duration_parts = timeout.scan(/(\d+(?:\.\d+)?)(ns|us|µs|ms|s|m|h)/)
-  parsed_timeout = if !timeout.empty? && duration_parts.flatten.join == timeout
-                     duration_parts.sum { |value, unit| value.to_f * units.fetch(unit) }
-                   end
+  parsed_timeout = (duration_parts.sum { |value, unit| value.to_f * units.fetch(unit) } if !timeout.empty? && duration_parts.flatten.join == timeout)
 
   describe 'Kubelet streamingConnectionIdleTimeout in seconds' do
     subject { parsed_timeout }

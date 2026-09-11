@@ -24,8 +24,8 @@ Remove the "--protect-kernel-defaults" option if present.
 
 Note the path to the Kubernetes Kubelet config file (identified by --config).
 
-Edit the Kubernetes Kubelet config file: 
-Set "protectKernelDefaults" to "true". 
+Edit the Kubernetes Kubelet config file:
+Set "protectKernelDefaults" to "true".
 
 Restart the kubelet service using the following command:
 systemctl daemon-reload && systemctl restart kubelet'

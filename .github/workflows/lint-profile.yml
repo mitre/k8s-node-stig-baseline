@@ -1,0 +1,46 @@
+name: Lint & Check the Profile
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    name: Lint
+    runs-on: ubuntu-latest
+    env:
+      CHEF_LICENSE: accept-silent
+      LC_ALL: "en_US.UTF-8"
+    steps:
+      - name: add needed packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.1"
+
+      - name: Disable ri and rdoc
+        run: 'echo "gem: --no-ri --no-rdoc" >> ~/.gemrc'
+
+      - name: Run Bundle Install
+        run: bundle install
+
+      - name: Installed Cinc Auditor
+        run: bundle exec cinc-auditor version
+
+      - name: Vendor the Profile
+        run: bundle exec cinc-auditor vendor . --overwrite
+
+      - name: Check the Cinc Auditor profile
+        run: bundle exec rake inspec:check
+
+      - name: Lint the Profile
+        run: bundle exec rake lint

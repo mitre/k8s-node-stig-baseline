@@ -8,7 +8,7 @@ standards. PKI certificate-based authentication must be set over a secure
 channel to ensure confidentiality and integrity. Basic authentication must not
 be set in the manifest file.'
   desc 'check', 'Change to the /etc/kubernetes/manifests/ directory on the Kubernetes Control Plane. Run the command:
-grep -i basic-auth-file * 
+grep -i basic-auth-file *
 
 If "basic-auth-file" is set in the Kubernetes API server manifest file this is a finding.'
   desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Remove the setting "--basic-auth-file".'

@@ -17,7 +17,7 @@ To verify the change took place, run the command:
 ls -l *
 
 All the manifest files should be owned by root:root.'
-  desc 'caveat', 'Kubernetes Manifest files not present of the target at specified path #{manifests_path}.'
+  desc 'caveat', "Kubernetes Manifest files not present of the target at specified path #{manifests_path}."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000133-CTR-000295'

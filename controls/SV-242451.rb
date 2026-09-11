@@ -14,7 +14,7 @@ finding.'
   desc 'fix', 'Change the ownership of the PKI to root: root by executing the command:
 
     chown -R root:root /etc/kubernetes/pki/'
-  desc 'caveat', 'Kubernetes PKI files not present of the target at specified path #{pki_path}.'
+  desc 'caveat', "Kubernetes PKI files not present of the target at specified path #{pki_path}."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001325'

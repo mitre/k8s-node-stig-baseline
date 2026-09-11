@@ -7,7 +7,7 @@ automatically restart. Allowing this capability bypasses access restrictions
 and authorizations. Using this capability, an attacker can lower the security
 posture of the kubelet, which includes allowing the ability to run arbitrary
 commands in any container running on that node.'
-  desc 'check', %q(This check is only applicable for Kubernetes versions 1.25 and older.  
+  desc 'check', %q(This check is only applicable for Kubernetes versions 1.25 and older.
 
 On the Control Plane, change to the manifests' directory at /etc/kubernetes/manifests and run the command:
 grep -i feature-gates *
@@ -37,7 +37,7 @@ Remove the "feature-gates" option if present.
 
 Note the path to the config file (identified by --config).
 
-Edit the config file: 
+Edit the config file:
 Add a "featureGates" setting if one does not yet exist. Add the feature gate "DynamicKubeletConfig=false".
 
 Restart the kubelet service using the following command:
@@ -57,15 +57,15 @@ systemctl daemon-reload && systemctl restart kubelet)
   end
 
   describe kube_scheduler do
-    its('feature-gates.to_s') { should match /DynamicKubeletConfig=false/i }
+    its('feature-gates.to_s') { should match(/DynamicKubeletConfig=false/i) }
   end
 
   describe kube_controller_manager do
-    its('feature-gates.to_s') { should match /DynamicKubeletConfig=false/i }
+    its('feature-gates.to_s') { should match(/DynamicKubeletConfig=false/i) }
   end
 
   describe kube_apiserver do
-    its('feature-gates.to_s') { should match /DynamicKubeletConfig=false/i }
+    its('feature-gates.to_s') { should match(/DynamicKubeletConfig=false/i) }
   end
 
   describe kubelet do
@@ -73,6 +73,6 @@ systemctl daemon-reload && systemctl restart kubelet)
   end
 
   describe kubelet_config_file do
-    its(%w(featureGates DynamicKubeletConfig)) { should cmp 'false' }
+    its(%w[featureGates DynamicKubeletConfig]) { should cmp 'false' }
   end
 end

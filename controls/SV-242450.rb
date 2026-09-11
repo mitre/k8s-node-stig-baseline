@@ -4,7 +4,7 @@ control 'SV-242450' do
   desc 'check', 'On the Control Plane, run the command:
 ps -ef | grep kubelet
 
-If the "client-ca-file" option exists, this is a finding. 
+If the "client-ca-file" option exists, this is a finding.
 
 Note the path to the config file (identified by --config).
 

@@ -9,10 +9,10 @@ attackers with malicious intent if the service account is privileged having
 access to the token. With this token a threat actor can impersonate the service
 account gaining access to the Rest API service.'
   desc 'check', 'Change to the /etc/kubernetes/manifests/ directory on the Kubernetes Control Plane. Run the command:
-grep -i token-auth-file * 
+grep -i token-auth-file *
 
 If "--token-auth-file" is set in the Kubernetes API server manifest file, this is a finding.'
-  desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. 
+  desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane.
 
 Remove the setting "--token-auth-file".'
   desc 'caveat', 'Kubernetes API Server process is not running on the target.'

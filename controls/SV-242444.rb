@@ -11,7 +11,7 @@ finding.'
 command:
 
     chown root:root /etc/kubernetes/manifests/*'
-  desc 'caveat', 'Kubernetes Manifest files not present of the target at specified path #{manifests_path}.'
+  desc 'caveat', "Kubernetes Manifest files not present of the target at specified path #{manifests_path}."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001325'

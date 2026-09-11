@@ -10,7 +10,7 @@ the bind address to localhost (i.e., 127.0.0.1), only those internal services
 that require health and metrics information can access the Scheduler API.'
   desc 'check', 'Change to the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Run the command:
 
-grep -i bind-address * 
+grep -i bind-address *
 
 If the setting "bind-address" is not set to "127.0.0.1" or is not found in the Kubernetes Scheduler manifest file, this is a finding.'
   desc 'fix', 'Edit the Kubernetes Scheduler manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Set the argument "--bind-address" to "127.0.0.1".'

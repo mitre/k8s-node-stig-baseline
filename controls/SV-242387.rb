@@ -4,7 +4,7 @@ control 'SV-242387' do
   desc 'check', 'On each Control Plane and Worker Node, run the command:
 ps -ef | grep kubelet
 
-If the "--read-only-port" option exists, this is a finding. 
+If the "--read-only-port" option exists, this is a finding.
 
 Note the path to the config file (identified by --config).
 
@@ -19,7 +19,7 @@ Remove the "--read-only-port" option if present.
 
 Note the path to the config file (identified by --config).
 
-Edit the config file: 
+Edit the config file:
 Set "readOnlyPort" to "0" or remove the setting.
 
 Restart the kubelet service using the following command:

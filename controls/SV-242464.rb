@@ -4,7 +4,7 @@ control 'SV-242464' do
 monitoring suspicious activity and system misconfiguration, and provide
 evidence for Cyber Security Investigations.'
   desc 'check', 'Change to the /etc/kubernetes/manifests/ directory on the Kubernetes Control Plane. Run the command:
-grep -i audit-log-maxage * 
+grep -i audit-log-maxage *
 
 If the setting "audit-log-maxage" is not set in the Kubernetes API Server manifest file or it is set less than "30", this is a finding.'
   desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Set the value of "--audit-log-maxage" to a minimum of "30".'

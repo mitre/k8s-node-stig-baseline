@@ -17,9 +17,9 @@ resource, verb, etc.) but not request or response body.
           Request - Log event metadata and request body but not response body.
           RequestResponse - Log event metadata, request, and response bodies.'
   desc 'check', 'Change to the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Run the command:
-grep -i audit-policy-file 
+grep -i audit-policy-file
 
-If the audit-policy-file is not set, this is a finding. 
+If the audit-policy-file is not set, this is a finding.
 
 The file given is the policy file and defines what is audited and what information is included with each event.
 
@@ -32,10 +32,10 @@ rules:
 - level: RequestResponse
 
 If the audit policy file does not look like above, this is a finding.'
-  desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. 
+  desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane.
 
 Set the value of  "--audit-policy-file" to the path of a file with the following content:
-    
+
     # Log all requests at the RequestResponse level.
     apiVersion: audit.k8s.io/vX (Where X is the latest apiVersion)
     kind: Policy

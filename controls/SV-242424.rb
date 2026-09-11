@@ -8,7 +8,7 @@ To enable encrypted communication for Kubelet, the tlsPrivateKeyFile must be set
   desc 'check', 'On the Control Plane, run the command:
 ps -ef | grep kubelet
 
-If the "--tls-private-key-file" option exists, this is a finding. 
+If the "--tls-private-key-file" option exists, this is a finding.
 
 Note the path to the config file (identified by --config).
 
@@ -23,8 +23,8 @@ Remove the "--tls-private-key-file" option if present.
 
 Note the path to the config file (identified by --config).
 
-Edit the Kubernetes Kubelet config file: 
-Set "tlsPrivateKeyFile" to  a path containing the appropriate private key. 
+Edit the Kubernetes Kubelet config file:
+Set "tlsPrivateKeyFile" to  a path containing the appropriate private key.
 
 Restart the kubelet service using the following command:
 systemctl daemon-reload && systemctl restart kubelet'

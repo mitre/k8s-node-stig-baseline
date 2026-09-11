@@ -5,7 +5,7 @@ Controller Manager events over a web interface on a host port. Enabling this
 service can expose details about the Kubernetes architecture. This service must
 not be enabled unless deemed necessary.'
   desc 'check', 'Change to the /etc/kubernetes/manifests/ directory on the Kubernetes Control Plane. Run the command:
-grep -i profiling * 
+grep -i profiling *
 
 If the setting "profiling" is not configured in the Kubernetes Controller Manager manifest file or it is set to "True", this is a finding.'
   desc 'fix', 'Edit the Kubernetes Controller Manager manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Set the argument "--profiling value" to "false".'

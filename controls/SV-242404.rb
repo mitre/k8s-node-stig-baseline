@@ -10,14 +10,14 @@ the hostnames.'
 ps -ef | grep kubelet
 
 If the option "--hostname-override" is present, this is a finding.'
-  desc 'fix', 'Run the command:  
-systemctl status kubelet.  
+  desc 'fix', 'Run the command:
+systemctl status kubelet.
 Note the path to the drop-in file.
 
-Determine the path to the environment file(s) with the command: 
+Determine the path to the environment file(s) with the command:
 grep -i EnvironmentFile <path_to_drop_in_file>.
 
-Remove the "--hostname-override" option from any environment file where it is present.  
+Remove the "--hostname-override" option from any environment file where it is present.
 
 Restart the kubelet service using the following command:
 systemctl daemon-reload && systemctl restart kubelet'

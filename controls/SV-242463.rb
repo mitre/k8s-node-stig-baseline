@@ -4,7 +4,7 @@ control 'SV-242463' do
 monitoring suspicious activity and system misconfiguration, and provide
 evidence for Cyber Security Investigations.'
   desc 'check', 'Change to the /etc/kubernetes/manifests/ directory on the Kubernetes Control Plane. Run the command:
-grep -i audit-log-maxbackup * 
+grep -i audit-log-maxbackup *
 
 If the setting "audit-log-maxbackup" is not set in the Kubernetes API Server manifest file or it is set less than "10", this is a finding.'
   desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Set the value of "--audit-log-maxbackup" to a minimum of "10".'

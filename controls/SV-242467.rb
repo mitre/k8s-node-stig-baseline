@@ -10,10 +10,10 @@ would become unsecure and compromised.'
 sudo find /etc/kubernetes/pki -name "*.key" | xargs stat -c '%n %a'
 
 If any of the files have permissions more permissive than "600", this is a finding.)
-  desc 'fix', 'Change the ownership of the key files to "600" by executing the command: 
+  desc 'fix', 'Change the ownership of the key files to "600" by executing the command:
 
 find /etc/kubernetes/pki -name "*.key" | xargs chmod 600'
-  desc 'caveat', 'Kubernetes PKI files not present of the target at specified path #{pki_path}.'
+  desc 'caveat', "Kubernetes PKI files not present of the target at specified path #{pki_path}."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001335'

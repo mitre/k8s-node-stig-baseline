@@ -3,10 +3,10 @@ control 'SV-242454' do
   desc 'The Kubernetes kubeeadm.conf contains sensitive information regarding the cluster nodes configuration. If this file can be modified, the Kubernetes Platform Plane would be degraded or compromised for malicious intent. Many of the security settings within the document are implemented through this file.'
   desc 'check', 'Review the Kubeadm.conf file :
 
-Get the path for Kubeadm.conf by running: 
+Get the path for Kubeadm.conf by running:
 sytstemctl status kubelet
 
-Note the configuration file installed by the kubeadm is written to 
+Note the configuration file installed by the kubeadm is written to
 (Default Location: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf)
 stat -c %U:%G <kubeadm.conf path> | grep -v root:root
 

@@ -19,7 +19,7 @@ means to be able to authenticate sessions and encrypt traffic.'
 grep -i root-ca-file *
 
 If the setting "--root-ca-file" is not set in the Kubernetes Controller Manager manifest file or contains no value, this is a finding.'
-  desc 'fix', 'Edit the Kubernetes Controller Manager manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. 
+  desc 'fix', 'Edit the Kubernetes Controller Manager manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane.
 
 Set the value of "--root-ca-file" to path containing Approved Organizational Certificate.'
   desc 'caveat', 'Kubernetes Controller Manager process is not running on the target.'

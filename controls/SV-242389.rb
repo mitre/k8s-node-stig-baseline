@@ -5,10 +5,10 @@ control 'SV-242389' do
 Open the secure port by setting the API server's "--secure-port" flag to a value other than "0".)
   desc 'check', 'Change to the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Run the command:
 
-grep -i secure-port * 
+grep -i secure-port *
 
 If the setting "--secure-port" is set to "0" or is not configured in the Kubernetes API manifest file, this is a finding.'
-  desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. 
+  desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane.
 
 Set the value of "--secure-port" to a value greater than "0".'
   desc 'caveat', 'Kubernetes API Server process is not running on the target.'

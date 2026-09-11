@@ -7,7 +7,7 @@ the Kubernetes API Server is compromised requiring Cyber Security
 Investigation. To record events in the audit log the log path value must be
 set.'
   desc 'check', 'Change to the /etc/kubernetes/manifests/ directory on the Kubernetes Control Plane. Run the command:
-grep -i audit-log-path * 
+grep -i audit-log-path *
 
 If the setting audit-log-path is not set in the Kubernetes API Server manifest file or it is not set to a valid path, this is a finding.'
   desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Set the value of "--audit-log-path" to valid location.'

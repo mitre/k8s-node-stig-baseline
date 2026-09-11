@@ -9,10 +9,10 @@ with each event. It is also necessary to give a secure location where the audit
 logs are to be stored. If an audit log path is not specified, all audit data is
 sent to studio.'
   desc 'check', 'Change to the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Run the command:
-grep -i audit-log-path * 
+grep -i audit-log-path *
 
 If the "--audit-log-path" is not set, this is a finding.'
-  desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. 
+  desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane.
 
 Set the value of "--audit-log-path" to a secure location for the audit logs to be written.
 

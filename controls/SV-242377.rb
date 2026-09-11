@@ -11,7 +11,7 @@ To enable the minimum version of TLS to be used by the Kubernetes API Server,
 the setting "tls-min-version" must be set.'
   desc 'check', 'Change to the /etc/kubernetes/manifests/ directory on the Kubernetes Control Plane. Run the command:
 
-grep -i tls-min-version * 
+grep -i tls-min-version *
 
 If the setting "tls-min-version" is not configured in the Kubernetes Scheduler manifest file or it is set to "VersionTLS10" or "VersionTLS11", this is a finding.'
   desc 'fix', 'Edit the Kubernetes Scheduler manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Set the value of "--tls-min-version" to "VersionTLS12" or higher.'

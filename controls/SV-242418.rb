@@ -10,7 +10,7 @@ that the attacker cannot read or alter this communication.'
 grep -i tls-cipher-suites *
 
 If the setting feature tls-cipher-suites is not set in the Kubernetes API server manifest file or contains no value or does not contain TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384, this is a finding.'
-  desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. 
+  desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane.
 
 Set the value of "--tls-cipher-suites" to:
 "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384"'
@@ -30,12 +30,12 @@ Set the value of "--tls-cipher-suites" to:
     desc 'caveat', 'Kubernetes API Server process is not running on the target.'
   end
 
-  approved_cipher_suites = %w(
+  approved_cipher_suites = %w[
     TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
     TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
     TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
     TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-  )
+  ]
 
   describe 'Kubernetes API Server TLS cipher suites' do
     subject { kube_apiserver.tls_cipher_suites.sort }

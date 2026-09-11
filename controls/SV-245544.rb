@@ -20,7 +20,7 @@ gives the location of the certificate and key pair used to secure API Server
 communication.'
   desc 'check', 'Change to the /etc/kubernetes/manifests/ directory on the Kubernetes Control Plane. Run the command:
 grep -i kubelet-client-certificate *
-grep -I kubelet-client-key * 
+grep -I kubelet-client-key *
 
 If the setting "--kubelet-client-certificate" is not configured in the Kubernetes API server manifest file or contains no value, this is a finding.
 

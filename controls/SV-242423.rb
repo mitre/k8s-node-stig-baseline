@@ -7,10 +7,10 @@ The communication session is protected by utilizing transport encryption protoco
 To enable encrypted communication for Kubelet, the parameter client-cert-auth must be set. This parameter gives the location of the SSL Certificate Authority file used to secure Kubelet communication.'
   desc 'check', 'Change to the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Run the command:
 
-grep -i client-cert-auth * 
+grep -i client-cert-auth *
 
 If the setting client-cert-auth is not configured in the Kubernetes etcd manifest file or set to "false", this is a finding.'
-  desc 'fix', 'Edit the Kubernetes etcd manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. 
+  desc 'fix', 'Edit the Kubernetes etcd manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane.
 
 Set the value of "--client-cert-auth" to "true" for the etcd.'
   impact 0.5

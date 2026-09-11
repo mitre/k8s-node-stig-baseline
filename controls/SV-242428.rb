@@ -15,10 +15,10 @@ means to be able to authenticate sessions and encrypt traffic.
 must be set. This parameter gives the location of the SSL certification file
 used to secure etcd communication.'
   desc 'check', 'Change to the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Run the command:
-grep -i cert-file * 
+grep -i cert-file *
 
 If the setting "cert-file" is not configured in the Kubernetes etcd manifest file, this is a finding.'
-  desc 'fix', 'Edit the Kubernetes etcd manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. 
+  desc 'fix', 'Edit the Kubernetes etcd manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane.
 
 Set the value of "--cert-file" to the Approved Organizational Certificate.'
   impact 0.5

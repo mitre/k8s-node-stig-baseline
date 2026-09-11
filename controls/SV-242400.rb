@@ -25,15 +25,14 @@ Set the value of "AllAlpha" to "false" or remove the setting completely. (AllAlp
   tag nist: ['AC-3']
 
   describe kube_scheduler do
-    its('feature-gates.to_s') { should_not match /AllAlpha=true/i }
+    its('feature-gates.to_s') { should_not match(/AllAlpha=true/i) }
   end
 
   describe kube_controller_manager do
-    its('feature-gates.to_s') { should_not match /AllAlpha=true/i }
+    its('feature-gates.to_s') { should_not match(/AllAlpha=true/i) }
   end
 
   describe kube_apiserver do
-    its('feature-gates.to_s') { should_not match /AllAlpha=true/i }
+    its('feature-gates.to_s') { should_not match(/AllAlpha=true/i) }
   end
-
 end

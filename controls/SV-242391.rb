@@ -14,7 +14,7 @@ anonymous access, this access must be disabled and only enabled when necessary.'
   desc 'check', 'On each Control Plane and Worker Node, run the command:
 ps -ef | grep kubelet
 
-If the "--anonymous-auth" option exists, this is a finding. 
+If the "--anonymous-auth" option exists, this is a finding.
 
 Note the path to the config file (identified by --config).
 
@@ -27,7 +27,7 @@ Remove the "anonymous-auth" option if present.
 
 Note the path to the config file (identified by --config).
 
-Edit the config file: 
+Edit the config file:
 Locate the "authentication" section and the "anonymous" subsection. Within the "anonymous" subsection, set "enabled" to "false".
 
 Restart the kubelet service using the following command:
@@ -47,6 +47,6 @@ systemctl daemon-reload && systemctl restart kubelet'
   end
 
   describe kubelet_config_file do
-    its(%w(authentication anonymous enabled)) { should cmp 'false' }
+    its(%w[authentication anonymous enabled]) { should cmp 'false' }
   end
 end

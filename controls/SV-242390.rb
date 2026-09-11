@@ -7,10 +7,10 @@ Setting "--anonymous-auth" to "false" also disables unauthenticated requests fro
 While there are instances where anonymous connections may be needed (e.g., health checks) and Role-Based Access Controls (RBACs) are in place to limit the anonymous access, this access should be disabled, and only enabled when necessary.'
   desc 'check', 'Change to the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Run the command:
 
-grep -i anonymous-auth * 
+grep -i anonymous-auth *
 
 If the setting "--anonymous-auth" is set to "true" in the Kubernetes API Server manifest file, this is a finding.'
-  desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. 
+  desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane.
 
 Set the value of  "--anonymous-auth" to "false".'
   desc 'caveat', 'Kubernetes API Server process is not running on the target.'

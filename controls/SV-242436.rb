@@ -12,11 +12,11 @@ in what the pod can do and access.'
   desc 'check', 'Prior to version 1.21, to enforce security policiesPod Security Policies (psp) were used. Those are now deprecated and will be removed from version 1.25.
 
 Migrate from PSP to PSA:
-https://kubernetes.io/docs/tasks/configure-pod-container/migrate-from-psp/ 
+https://kubernetes.io/docs/tasks/configure-pod-container/migrate-from-psp/
 
 Pre-version 1.25 Check:
 Change to the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Run the command:
-grep -i ValidatingAdmissionWebhook * 
+grep -i ValidatingAdmissionWebhook *
 
 If a line is not returned that includes enable-admission-plugins and ValidatingAdmissionWebhook, this is a finding.'
   desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Set the argument "--enable-admission-plugins" to include "ValidatingAdmissionWebhook".  Each enabled plugin is separated by commas.

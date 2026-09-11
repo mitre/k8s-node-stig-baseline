@@ -6,10 +6,10 @@ sensitive data during electronic dissemination.'
 The use of unsupported protocol exposes vulnerabilities to the Kubernetes by rogue traffic interceptions, man-in-the-middle attacks, and impersonation of users or services from the container platform runtime, registry, and keystore. To enable the minimum version of TLS to be used by the Kubernetes API Server, the setting "--auto-tls" must be set.'
   desc 'check', 'Change to the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Run the command:
 
-grep -i  auto-tls * 
+grep -i  auto-tls *
 
 If the setting "--auto-tls" is not configured in the Kubernetes etcd manifest file or it is set to true, this is a finding.'
-  desc 'fix', 'Edit the Kubernetes etcd manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. 
+  desc 'fix', 'Edit the Kubernetes etcd manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane.
 
 Set the value of "--auto-tls" to "false".'
   impact 0.5

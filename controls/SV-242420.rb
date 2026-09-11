@@ -23,8 +23,8 @@ Remove the "--client-ca-file" option if present.
 
 Note the path to the config file (identified by --config).
 
-Edit the Kubernetes Kubelet config file: 
-Set the value of "clientCAFile" to a path containing an Approved Organizational Certificate. 
+Edit the Kubernetes Kubelet config file:
+Set the value of "clientCAFile" to a path containing an Approved Organizational Certificate.
 
 Restart the kubelet service using the following command:
 systemctl daemon-reload && systemctl restart kubelet'
@@ -47,7 +47,7 @@ systemctl daemon-reload && systemctl restart kubelet'
   end
 
   describe kubelet_config_file do
-    its(%w(authentication x509 clientCAFile)) { should_not be_nil }
-    its(%w(authentication x509 clientCAFile)) { should_not be_empty }
+    its(%w[authentication x509 clientCAFile]) { should_not be_nil }
+    its(%w[authentication x509 clientCAFile]) { should_not be_empty }
   end
 end

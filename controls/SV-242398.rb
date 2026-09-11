@@ -21,7 +21,7 @@ If the feature-gates setting is available and contains the DynamicAuditing flag 
 On each Control Plane and Worker node, run the command:
 ps -ef | grep kubelet
 
-If the "--feature-gates" option exists, this is a finding. 
+If the "--feature-gates" option exists, this is a finding.
 
 Note the path to the config file (identified by: --config).
 
@@ -39,7 +39,7 @@ Remove the "--feature-gates option" if present.
 
 Note the path to the config file (identified by: --config).
 
-Edit the Kubernetes Kubelet config file: 
+Edit the Kubernetes Kubelet config file:
 If the "featureGates" setting is present, remove the "DynamicAuditing" flag or set the flag to false.
 
 Restart the kubelet service using the following command:
@@ -55,15 +55,15 @@ service kubelet restart)
   tag nist: ['AC-3']
 
   describe kube_scheduler do
-    its('feature-gates.to_s') { should_not match /DynamicAuditing=true/i }
+    its('feature-gates.to_s') { should_not match(/DynamicAuditing=true/i) }
   end
 
   describe kube_controller_manager do
-    its('feature-gates.to_s') { should_not match /DynamicAuditing=true/i }
+    its('feature-gates.to_s') { should_not match(/DynamicAuditing=true/i) }
   end
 
   describe kube_apiserver do
-    its('feature-gates.to_s') { should_not match /DynamicAuditing=true/i }
+    its('feature-gates.to_s') { should_not match(/DynamicAuditing=true/i) }
   end
 
   describe kubelet do
@@ -71,6 +71,6 @@ service kubelet restart)
   end
 
   describe kubelet_config_file do
-    its(%w(featureGates DynamicAuditing)) { should_not cmp 'true' }
+    its(%w[featureGates DynamicAuditing]) { should_not cmp 'true' }
   end
 end
