@@ -27,11 +27,8 @@ Set the value of "--peer-client-cert-auth" to "true" for the etcd.'
   etcd_manifest_path = ::File.join(input('manifests_path'), 'etcd.yaml')
   etcd_configuration = etcd_manifest(etcd_manifest_path)
 
-  only_if("This control applies only to control-plane nodes; input('node_roles') does not include 'control-plane'.", impact: 0.0) do
-    input('node_roles').map(&:to_s).include?('control-plane')
-  end
-  only_if("This control is not applicable because input('etcd_managed_on_node') is false for an external etcd topology.", impact: 0.0) do
-    input('etcd_managed_on_node')
+  only_if('This control applies only to control-plane nodes that manage etcd.', impact: 0.0) do
+    input('node_roles').map(&:to_s).include?('control-plane') && input('etcd_managed_on_node')
   end
 
   if etcd_configuration.exist?
