@@ -1,12 +1,18 @@
 AllCops:
   NewCops: enable
+  TargetRubyVersion: 3.1
   Exclude:
-  - "libraries/**/*"
+    - "vendor/**/*"
+    - ".kitchen/**/*"
 
 Layout/LineLength:
   Max: 1500
   AllowURI: true
   IgnoreCopDirectives: true
+
+# Keep explicit hash values compatible with older profile runners.
+Style/HashSyntax:
+  EnforcedShorthandSyntax: never
 
 Naming/FileName:
   Enabled: false

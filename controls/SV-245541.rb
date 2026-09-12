@@ -1,5 +1,3 @@
-require 'kubernetes_node_inputs'
-
 control 'SV-245541' do
   title 'Kubernetes Kubelet must not disable timeouts.'
   desc 'Idle connections from the Kubelet can be used by unauthorized users to perform malicious activity to the nodes, pods, containers, and cluster within the Kubernetes Control Plane. Setting the streamingConnectionIdleTimeout defines the maximum time an idle session is permitted prior to disconnect. Setting the value to "0" never disconnects any idle sessions. Idle timeouts must never be set to "0" and should be defined at "5m" (the default is 4hr).'
@@ -40,7 +38,7 @@ Set the argument "streamingConnectionIdleTimeout" to a value of "5m".'
   tag nist: ['SC-10']
 
   only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
-    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
+    input('node_roles').include?('control-plane')
   end
 
   describe kubelet do
@@ -55,6 +53,6 @@ Set the argument "streamingConnectionIdleTimeout" to a value of "5m".'
   describe 'Kubelet streamingConnectionIdleTimeout in seconds' do
     subject { parsed_timeout }
     it { should_not be_nil }
-    it { should be >= KubernetesNodeInputs.value('streaming_connection_idle_timeout_seconds', input('streaming_connection_idle_timeout_seconds')) }
+    it { should be >= input('streaming_connection_idle_timeout_seconds') }
   end
 end

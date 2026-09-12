@@ -1,5 +1,3 @@
-require 'kubernetes_node_inputs'
-
 control 'SV-242384' do
   title 'The Kubernetes Scheduler must have secure binding.'
   desc 'Limiting the number of attack vectors and implementing authentication
@@ -27,10 +25,10 @@ If the setting "bind-address" is not set to "127.0.0.1" or is not found in the K
   tag nist: ['AC-3']
 
   only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
-    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
+    input('node_roles').include?('control-plane')
   end
 
-  kube_scheduler_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-scheduler.yaml'), 'kube-scheduler')
+  kube_scheduler_manifest = kubernetes_manifest(::File.join(input('manifests_path'), 'kube-scheduler.yaml'), 'kube-scheduler')
   describe kube_scheduler_manifest do
     its('errors') { should be_empty }
   end

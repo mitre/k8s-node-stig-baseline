@@ -1,6 +1,3 @@
-require 'kubernetes_arguments'
-require 'kubernetes_node_inputs'
-
 control 'SV-242438' do
   title 'Kubernetes API Server must configure timeouts to limit attack surface.'
   desc 'Kubernetes API Server request timeouts sets the duration a request stays open before timing out. Since the API Server is the central component in the Kubernetes Control Plane, it is vital to protect this service. If request timeouts were not set, malicious attacks or unwanted activities might affect multiple deployments across different applications or environments. This might deplete all resources from the Kubernetes infrastructure causing the information system to go offline. The "--request-timeout" value must never be set to "0". This disables the request-timeout feature. (By default, the "--request-timeout" is set to "1 minute".)'
@@ -24,10 +21,10 @@ Set the value of "--request-timeout" greater than "0".'
   tag nist: ['SC-5', 'SC-7 (21)']
 
   only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
-    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
+    input('node_roles').include?('control-plane')
   end
 
-  kube_apiserver_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-apiserver.yaml'), 'kube-apiserver')
+  kube_apiserver_manifest = kubernetes_manifest(::File.join(input('manifests_path'), 'kube-apiserver.yaml'), 'kube-apiserver')
   describe kube_apiserver_manifest do
     its('errors') { should be_empty }
   end

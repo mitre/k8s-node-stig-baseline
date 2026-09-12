@@ -1,5 +1,3 @@
-require 'kubernetes_node_inputs'
-
 control 'SV-242379' do
   title 'The Kubernetes etcd must use TLS to protect the confidentiality of
 sensitive data during electronic dissemination.'
@@ -24,11 +22,11 @@ Set the value of "--auto-tls" to "false".'
   tag cci: ['CCI-000068']
   tag nist: ['AC-17 (2)']
 
-  etcd_manifest_path = ::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'etcd.yaml')
+  etcd_manifest_path = ::File.join(input('manifests_path'), 'etcd.yaml')
   etcd_configuration = etcd_manifest(etcd_manifest_path)
 
   only_if('This control applies only to control-plane nodes that manage etcd.', impact: 0.0) do
-    KubernetesNodeInputs.value('node_roles', input('node_roles')).map(&:to_s).include?('control-plane') && KubernetesNodeInputs.value('etcd_managed_on_node', input('etcd_managed_on_node'))
+    input('node_roles').map(&:to_s).include?('control-plane') && input('etcd_managed_on_node')
   end
 
   if etcd_configuration.exist?

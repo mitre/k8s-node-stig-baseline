@@ -1,5 +1,3 @@
-require 'kubernetes_node_inputs'
-
 control 'SV-242398' do
   title 'Kubernetes DynamicAuditing must not be enabled.'
   desc 'Protecting the audit data from change or deletion is important when an
@@ -56,18 +54,18 @@ service kubelet restart)
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 
-  if KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
-    kube_scheduler_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-scheduler.yaml'), 'kube-scheduler')
+  if input('node_roles').include?('control-plane')
+    kube_scheduler_manifest = kubernetes_manifest(::File.join(input('manifests_path'), 'kube-scheduler.yaml'), 'kube-scheduler')
     describe kube_scheduler_manifest do
       its('errors') { should be_empty }
     end
 
-    kube_controller_manager_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-controller-manager.yaml'), 'kube-controller-manager')
+    kube_controller_manager_manifest = kubernetes_manifest(::File.join(input('manifests_path'), 'kube-controller-manager.yaml'), 'kube-controller-manager')
     describe kube_controller_manager_manifest do
       its('errors') { should be_empty }
     end
 
-    kube_apiserver_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-apiserver.yaml'), 'kube-apiserver')
+    kube_apiserver_manifest = kubernetes_manifest(::File.join(input('manifests_path'), 'kube-apiserver.yaml'), 'kube-apiserver')
     describe kube_apiserver_manifest do
       its('errors') { should be_empty }
     end

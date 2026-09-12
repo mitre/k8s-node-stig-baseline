@@ -1,4 +1,3 @@
-require 'kubernetes_node_inputs'
 require 'shellwords'
 
 control 'SV-242408' do
@@ -31,8 +30,8 @@ All the manifest files should now have privileges of "644".'
   tag cci: ['CCI-001499', 'CCI-000366']
   tag nist: ['CM-5 (6)', 'CM-6 b']
 
-  manifests_path = KubernetesNodeInputs.value('manifests_path', input('manifests_path'))
-  expected_mode = KubernetesNodeInputs.value('kubernetes_file_modes', input('kubernetes_file_modes'))['manifest_files']
+  manifests_path = input('manifests_path')
+  expected_mode = input('kubernetes_file_modes')['manifest_files']
   manifest_search = command("find -L #{Shellwords.escape(manifests_path)} \\( -type f -o -type l \\) -print0")
   manifests_files = manifest_search.stdout.split("\0").reject(&:empty?)
   overly_permissive_files = manifests_files.select { |file_name| !file(file_name).file? || file(file_name).more_permissive_than?(expected_mode) }

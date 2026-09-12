@@ -1,5 +1,3 @@
-require 'kubernetes_node_inputs'
-
 control 'SV-242460' do
   title 'The Kubernetes admin kubeconfig must have file permissions set to 644 or more restrictive.'
   desc 'The Kubernetes admin kubeconfig files contain the arguments and settings for the Control Plane services. These services are controller and scheduler. If these files can be changed, the scheduler will be implementing the changes immediately.'
@@ -27,8 +25,8 @@ command:
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  kubernetes_conf_files = Array(KubernetesNodeInputs.value('kubernetes_conf_files', input('kubernetes_conf_files')))
-  expected_mode = KubernetesNodeInputs.value('kubernetes_file_modes', input('kubernetes_file_modes'))['kubernetes_conf_files']
+  kubernetes_conf_files = Array(input('kubernetes_conf_files'))
+  expected_mode = input('kubernetes_file_modes')['kubernetes_conf_files']
   overly_permissive_files = kubernetes_conf_files.reject do |file_name|
     conf_file = file(file_name)
     conf_file.exist? && !conf_file.more_permissive_than?(expected_mode)

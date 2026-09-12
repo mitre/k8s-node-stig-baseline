@@ -1,5 +1,3 @@
-require 'kubernetes_node_inputs'
-
 control 'SV-242424' do
   title 'Kubernetes Kubelet must enable tlsPrivateKeyFile for client authentication to secure service.'
   desc 'Kubernetes container and pod configuration are maintained by Kubelet. Kubelet agents register nodes with the API Server, mount volume storage, and perform health checks for containers and pods. Anyone who gains access to Kubelet agents can effectively control applications within the pods and containers. Using authenticity protection, the communication can be protected against man-in-the-middle attacks/session hijacking and the insertion of false information into sessions.
@@ -41,7 +39,7 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag nist: ['SC-23']
 
   only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
-    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
+    input('node_roles').include?('control-plane')
   end
 
   describe kubelet do

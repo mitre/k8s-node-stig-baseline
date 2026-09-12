@@ -1,5 +1,3 @@
-require 'kubernetes_node_inputs'
-
 control 'SV-242426' do
   title 'Kubernetes etcd must enable client authentication to secure service.'
   desc 'Kubernetes container and pod configuration are maintained by Kubelet. Kubelet agents register nodes with the API Server, mount volume storage, and perform health checks for containers and pods. Anyone who gains access to Kubelet agents can effectively control applications within the pods and containers. Using authenticity protection, the communication can be protected against man-in-the-middle attacks/session hijacking and the insertion of false information into sessions.
@@ -26,11 +24,11 @@ Set the value of "--peer-client-cert-auth" to "true" for the etcd.'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 
-  etcd_manifest_path = ::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'etcd.yaml')
+  etcd_manifest_path = ::File.join(input('manifests_path'), 'etcd.yaml')
   etcd_configuration = etcd_manifest(etcd_manifest_path)
 
   only_if('This control applies only to control-plane nodes that manage etcd.', impact: 0.0) do
-    KubernetesNodeInputs.value('node_roles', input('node_roles')).map(&:to_s).include?('control-plane') && KubernetesNodeInputs.value('etcd_managed_on_node', input('etcd_managed_on_node'))
+    input('node_roles').map(&:to_s).include?('control-plane') && input('etcd_managed_on_node')
   end
 
   if etcd_configuration.exist?

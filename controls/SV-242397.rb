@@ -1,5 +1,3 @@
-require 'kubernetes_node_inputs'
-
 control 'SV-242397' do
   title 'The Kubernetes kubelet static PodPath must not enable static pods.'
   desc 'Allowing kubelet to set a staticPodPath gives containers with root access permissions to traverse the hosting filesystem. The danger comes when the container can create a manifest file within the /etc/kubernetes/manifests directory. When a manifest is created within this directory, containers are entirely governed by the Kubelet not the API Server. The container is not susceptible to admission control at all. Any containers or pods instantiated in this manner are called "static pods" and are meant to be used for pods such as the API server, scheduler, controller, etc., not workload pods that need to be governed by the API Server.'
@@ -67,7 +65,7 @@ d. Restart the kubelet service using the following command:
   tag nist: ['AC-3']
 
   only_if("This control applies only to worker nodes; input('node_roles') must include 'worker'.", impact: 0.0) do
-    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('worker')
+    input('node_roles').include?('worker')
   end
 
   describe kubelet do

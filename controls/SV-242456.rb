@@ -1,5 +1,3 @@
-require 'kubernetes_node_inputs'
-
 control 'SV-242456' do
   title 'The Kubernetes kubelet config must have file permissions set to 644 or
 more restrictive.'
@@ -22,7 +20,7 @@ chmod 644 /var/lib/kubelet/config.yaml'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  expected_mode = KubernetesNodeInputs.value('kubernetes_file_modes', input('kubernetes_file_modes'))['kubelet_config_file']
+  expected_mode = input('kubernetes_file_modes')['kubelet_config_file']
 
   describe kubelet do
     its('config_file') { should_not be_nil }

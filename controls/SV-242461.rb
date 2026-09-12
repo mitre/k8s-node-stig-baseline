@@ -1,5 +1,3 @@
-require 'kubernetes_node_inputs'
-
 control 'SV-242461' do
   title 'Kubernetes API Server audit logs must be enabled.'
   desc 'Kubernetes API Server validates and configures pods and services for
@@ -24,10 +22,10 @@ If the setting "audit-policy-file" is not set or is found in the Kubernetes API 
   tag nist: ['CM-6 b']
 
   only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
-    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
+    input('node_roles').include?('control-plane')
   end
 
-  kube_apiserver_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-apiserver.yaml'), 'kube-apiserver')
+  kube_apiserver_manifest = kubernetes_manifest(::File.join(input('manifests_path'), 'kube-apiserver.yaml'), 'kube-apiserver')
   describe kube_apiserver_manifest do
     its('errors') { should be_empty }
   end

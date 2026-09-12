@@ -1,5 +1,3 @@
-require 'kubernetes_node_inputs'
-
 control 'SV-242419' do
   title 'Kubernetes API Server must have the SSL Certificate Authority set.'
   desc 'Kubernetes control plane and external communication are managed by API Server. The main implementation of the API Server is to manage hardware resources for pods and containers using horizontal or vertical scaling. Anyone who can access the API Server can effectively control the Kubernetes architecture. Using authenticity protection, the communication can be protected against man-in-the-middle attacks/session hijacking and the insertion of false information into sessions.
@@ -25,10 +23,10 @@ Set the value of "--client-ca-file" to path containing Approved Organizational C
   tag nist: ['SC-23']
 
   only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
-    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
+    input('node_roles').include?('control-plane')
   end
 
-  kube_apiserver_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-apiserver.yaml'), 'kube-apiserver')
+  kube_apiserver_manifest = kubernetes_manifest(::File.join(input('manifests_path'), 'kube-apiserver.yaml'), 'kube-apiserver')
   describe kube_apiserver_manifest do
     its('errors') { should be_empty }
   end

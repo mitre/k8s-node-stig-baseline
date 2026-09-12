@@ -1,5 +1,3 @@
-require 'kubernetes_node_inputs'
-
 control 'SV-242393' do
   title 'Kubernetes Worker Nodes must not have sshd service running.'
   desc 'Worker Nodes are maintained and monitored by the Control Plane. Direct access and manipulation of the nodes should not take place by administrators. Worker nodes should be treated as immutable and updated via replacement rather than in-place upgrades.'
@@ -32,7 +30,7 @@ settings can be made if the session is interrupted.'
   tag nist: ['AC-3']
 
   only_if("This control applies only to worker nodes; input('node_roles') must include 'worker'.", impact: 0.0) do
-    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('worker')
+    input('node_roles').include?('worker')
   end
 
   describe service('sshd') do

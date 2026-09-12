@@ -1,5 +1,3 @@
-require 'kubernetes_node_inputs'
-
 control 'SV-242403' do
   title 'Kubernetes API Server must generate audit records that identify what
 type of event has occurred, identify the source of the event, contain the event
@@ -57,10 +55,10 @@ Note: If the API server is running as a Pod, then the manifest will also need to
   tag nist: ['AC-2 (4)', 'AU-3', 'AU-3 (1)', 'AU-12 c', 'CM-5 (1)', 'AC-6 (9)', 'AU-3 a', 'AU-3 b', 'AU-3 c', 'AU-3 d', 'AU-3 e', 'AU-3 f', 'AC-16 a']
 
   only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
-    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
+    input('node_roles').include?('control-plane')
   end
 
-  kube_apiserver_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-apiserver.yaml'), 'kube-apiserver')
+  kube_apiserver_manifest = kubernetes_manifest(::File.join(input('manifests_path'), 'kube-apiserver.yaml'), 'kube-apiserver')
   describe kube_apiserver_manifest do
     its('errors') { should be_empty }
   end

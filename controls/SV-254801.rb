@@ -1,5 +1,3 @@
-require 'kubernetes_node_inputs'
-
 control 'SV-254801' do
   title 'Kubernetes must enable PodSecurity admission controller on static pods and Kubelets.'
   desc 'PodSecurity admission controller is a component that validates and enforces security policies for pods running within a Kubernetes cluster. It is responsible for evaluating the security context and configuration of pods against defined policies.
@@ -54,11 +52,11 @@ systemctl daemon-reload && systemctl restart kubelet)
 
   desc 'scope', 'Host-local portion of this STIG requirement; combine with the sibling cluster profile.'
 
-  minor_version = KubernetesNodeInputs.value('kubernetes_minor_version', input('kubernetes_minor_version'))
-  if KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
+  minor_version = input('kubernetes_minor_version')
+  if input('node_roles').include?('control-plane')
     components = minor_version < 25 ? %w[kube-apiserver kube-controller-manager kube-scheduler] : ['kube-apiserver']
     components.each do |component|
-      manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), "#{component}.yaml"), component)
+      manifest = kubernetes_manifest(::File.join(input('manifests_path'), "#{component}.yaml"), component)
       describe manifest do
         its('errors') { should be_empty }
       end
@@ -90,7 +88,7 @@ systemctl daemon-reload && systemctl restart kubelet)
     describe kubelet_config_file do
       its(%w[featureGates PodSecurity]) { should cmp true }
     end
-  elsif !KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
+  elsif !input('node_roles').include?('control-plane')
     impact 0.0
     describe 'Kubelet PodSecurity feature gate on Kubernetes 1.25 and newer' do
       skip "input('kubernetes_minor_version') is #{minor_version}; the graduated PodSecurity feature gate is no longer configured on this worker."

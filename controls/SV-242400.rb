@@ -1,5 +1,3 @@
-require 'kubernetes_node_inputs'
-
 control 'SV-242400' do
   title 'The Kubernetes API server must have Alpha APIs disabled.'
   desc 'Kubernetes allows alpha API calls within the API server. The alpha
@@ -27,20 +25,20 @@ Set the value of "AllAlpha" to "false" or remove the setting completely. (AllAlp
   tag nist: ['AC-3']
 
   only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
-    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
+    input('node_roles').include?('control-plane')
   end
 
-  kube_scheduler_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-scheduler.yaml'), 'kube-scheduler')
+  kube_scheduler_manifest = kubernetes_manifest(::File.join(input('manifests_path'), 'kube-scheduler.yaml'), 'kube-scheduler')
   describe kube_scheduler_manifest do
     its('errors') { should be_empty }
   end
 
-  kube_controller_manager_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-controller-manager.yaml'), 'kube-controller-manager')
+  kube_controller_manager_manifest = kubernetes_manifest(::File.join(input('manifests_path'), 'kube-controller-manager.yaml'), 'kube-controller-manager')
   describe kube_controller_manager_manifest do
     its('errors') { should be_empty }
   end
 
-  kube_apiserver_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-apiserver.yaml'), 'kube-apiserver')
+  kube_apiserver_manifest = kubernetes_manifest(::File.join(input('manifests_path'), 'kube-apiserver.yaml'), 'kube-apiserver')
   describe kube_apiserver_manifest do
     its('errors') { should be_empty }
   end

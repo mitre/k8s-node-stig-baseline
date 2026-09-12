@@ -1,4 +1,3 @@
-require 'kubernetes_node_inputs'
 require 'shellwords'
 
 control 'SV-242466' do
@@ -26,8 +25,8 @@ find /etc/kubernetes/pki -name "*.crt" | xargs chmod 644'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  pki_path = KubernetesNodeInputs.value('pki_path', input('pki_path'))
-  expected_mode = KubernetesNodeInputs.value('kubernetes_file_modes', input('kubernetes_file_modes'))['pki_certificate_files']
+  pki_path = input('pki_path')
+  expected_mode = input('kubernetes_file_modes')['pki_certificate_files']
   pki_search = command("find -L #{Shellwords.escape(pki_path)} \\( -type f -o -type l \\) -name '*.crt' -print0")
   pki_files = pki_search.stdout.split("\0").reject(&:empty?)
   overly_permissive_files = pki_files.select { |file_name| !file(file_name).file? || file(file_name).more_permissive_than?(expected_mode) }

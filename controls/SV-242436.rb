@@ -1,5 +1,3 @@
-require 'kubernetes_node_inputs'
-
 control 'SV-242436' do
   title 'The Kubernetes API server must have the ValidatingAdmissionWebhook
 enabled.'
@@ -35,16 +33,16 @@ Note: It is best to implement policies first and then enable the webhook, otherw
   tag nist: ['AC-6 (8)', 'AC-16 a']
 
   only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
-    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
+    input('node_roles').include?('control-plane')
   end
 
-  kube_apiserver_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-apiserver.yaml'), 'kube-apiserver')
+  kube_apiserver_manifest = kubernetes_manifest(::File.join(input('manifests_path'), 'kube-apiserver.yaml'), 'kube-apiserver')
   describe kube_apiserver_manifest do
     its('errors') { should be_empty }
   end
 
   only_if('This pre-1.25 control does not apply to Kubernetes 1.25 and newer.', impact: 0.0) do
-    KubernetesNodeInputs.value('kubernetes_minor_version', input('kubernetes_minor_version')) < 25
+    input('kubernetes_minor_version') < 25
   end
 
   describe kube_apiserver_manifest do

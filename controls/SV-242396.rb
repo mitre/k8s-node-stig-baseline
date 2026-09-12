@@ -1,4 +1,3 @@
-require 'kubernetes_node_inputs'
 require 'shellwords'
 
 control 'SV-242396' do
@@ -30,8 +29,8 @@ If the Control Plane or any Worker nodes are not using kubectl version 1.12.9 or
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 
-  kubectl_minversion = KubernetesNodeInputs.value('kubectl_minversion', input('kubectl_minversion'))
-  kubectl_version = command("#{Shellwords.escape(KubernetesNodeInputs.value('kubectl_path', input('kubectl_path')))} version --client --output=json")
+  kubectl_minversion = input('kubectl_minversion')
+  kubectl_version = command("#{Shellwords.escape(input('kubectl_path'))} version --client --output=json")
 
   describe 'kubectl client version command' do
     subject { kubectl_version }

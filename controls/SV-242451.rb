@@ -1,4 +1,3 @@
-require 'kubernetes_node_inputs'
 require 'shellwords'
 
 control 'SV-242451' do
@@ -27,7 +26,7 @@ finding.'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  pki_path = KubernetesNodeInputs.value('pki_path', input('pki_path'))
+  pki_path = input('pki_path')
   pki_search = command("find -L #{Shellwords.escape(pki_path)} -print0")
   pki_entries = pki_search.stdout.split("\0").reject(&:empty?)
   incorrectly_owned_entries = pki_entries.reject do |entry|

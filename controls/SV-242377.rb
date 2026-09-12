@@ -1,5 +1,3 @@
-require 'kubernetes_node_inputs'
-
 control 'SV-242377' do
   title 'The Kubernetes Scheduler must use TLS 1.2, at a minimum, to protect
 the confidentiality of sensitive data during electronic dissemination.'
@@ -28,10 +26,10 @@ If the setting "tls-min-version" is not configured in the Kubernetes Scheduler m
   tag nist: ['AC-17 (2)']
 
   only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
-    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
+    input('node_roles').include?('control-plane')
   end
 
-  kube_scheduler_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-scheduler.yaml'), 'kube-scheduler')
+  kube_scheduler_manifest = kubernetes_manifest(::File.join(input('manifests_path'), 'kube-scheduler.yaml'), 'kube-scheduler')
   describe kube_scheduler_manifest do
     its('errors') { should be_empty }
   end

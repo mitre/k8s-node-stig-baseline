@@ -1,5 +1,3 @@
-require 'kubernetes_node_inputs'
-
 control 'SV-242376' do
   title 'The Kubernetes Controller Manager must use TLS 1.2, at a minimum, to
 protect the confidentiality of sensitive data during electronic dissemination.'
@@ -28,10 +26,10 @@ If the setting "tls-min-version" is not configured in the Kubernetes Controller 
   tag nist: ['AC-17 (2)']
 
   only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
-    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
+    input('node_roles').include?('control-plane')
   end
 
-  kube_controller_manager_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-controller-manager.yaml'), 'kube-controller-manager')
+  kube_controller_manager_manifest = kubernetes_manifest(::File.join(input('manifests_path'), 'kube-controller-manager.yaml'), 'kube-controller-manager')
   describe kube_controller_manager_manifest do
     its('errors') { should be_empty }
   end

@@ -46,8 +46,9 @@ Use `node_roles: [worker]` for a worker and
 `node_roles: [control-plane, worker]` for a dual-role node. This required input
 has no default; provide the exact role names. Always set
 `kubernetes_minor_version` to the actual target minor version. It is required
-and has no default. Invalid roles, incomplete file-mode maps, nonabsolute paths,
-and invalid numeric values are rejected before they can bypass checks.
+and has no default. InSpec enforces input types and required values. Basic
+checks also reject unknown roles, invalid minor versions, missing or malformed
+file modes, nonpositive thresholds, and empty configuration-file lists.
 
 | Input | Default | Purpose |
 |---|---|---|
@@ -126,6 +127,14 @@ retain both assessment results. Organizational least-privilege justification
 still requires manual review. Run the skew check against every API-server
 endpoint in an HA cluster using the appropriate `kubectl_kubeconfig_path`.
 
+## Profile libraries
+
+The three local libraries keep file parsing reusable: `kubernetes_manifest.rb`
+reads static Pod settings and mounted files, `etcd_manifest.rb` applies etcd's
+configuration precedence, and `kubernetes_arguments.rb` parses flags and durations.
+Policy assertions stay in their controls. Cinc automatically loads the libraries;
+controls call them directly. Basic input checks run once in `controls/00_inputs.rb`.
+
 ## Lint and validate
 
 ```sh
@@ -134,15 +143,14 @@ bundle exec rake pre_commit_checks
 ```
 
 The vendor command replaces `vendor/`. Preserve any SAF delta output stored
-there before running it. `pre_commit_checks` runs RuboCop, the regression specs, and Cinc Auditor
+there before running it. `pre_commit_checks` runs RuboCop and Cinc Auditor
 profile validation; any failure returns a nonzero status. To run them
-individually, use `bundle exec rake lint`, `bundle exec rake spec`, and
-`bundle exec rake inspec:check`.
+individually, use `bundle exec rake lint` and `bundle exec rake inspec:check`.
 The latter retains its historical task name but invokes Cinc Auditor.
 
 The lint configuration is based on the RHEL 9 sibling profile, targets Ruby
-3.1, includes local resource libraries, and excludes vendored dependencies,
-generated mapped controls, and Kitchen artifacts. The lint workflow runs on
+3.1, includes local resource libraries, and excludes vendored dependencies
+and Kitchen artifacts. The lint workflow runs on
 pull requests and pushes to `main`.
 
 ## Test Kitchen Kind suites

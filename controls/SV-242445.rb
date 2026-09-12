@@ -1,4 +1,3 @@
-require 'kubernetes_node_inputs'
 require 'shellwords'
 
 control 'SV-242445' do
@@ -25,10 +24,10 @@ command:
   tag nist: ['CM-6 b']
 
   only_if('This control applies only to control-plane nodes that manage etcd.', impact: 0.0) do
-    KubernetesNodeInputs.value('node_roles', input('node_roles')).map(&:to_s).include?('control-plane') && KubernetesNodeInputs.value('etcd_managed_on_node', input('etcd_managed_on_node'))
+    input('node_roles').map(&:to_s).include?('control-plane') && input('etcd_managed_on_node')
   end
 
-  data_dir = KubernetesNodeInputs.value('etcd_data_dir', input('etcd_data_dir'))
+  data_dir = input('etcd_data_dir')
   etcd_data_directory = directory(data_dir)
 
   describe etcd_data_directory do

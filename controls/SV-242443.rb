@@ -1,5 +1,3 @@
-require 'kubernetes_policy'
-require 'kubernetes_node_inputs'
 require 'json'
 require 'shellwords'
 
@@ -57,10 +55,10 @@ applied within the time allowed.'
   desc 'scope', 'Host-local portion of this STIG requirement; combine with the sibling cluster profile.'
 
   only_if("This control applies to control-plane nodes declared in input('node_roles').", impact: 0.0) do
-    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
+    input('node_roles').include?('control-plane')
   end
 
-  version_command = command("#{Shellwords.escape(KubernetesNodeInputs.value('kubectl_path', input('kubectl_path')))} --kubeconfig=#{Shellwords.escape(KubernetesNodeInputs.value('kubectl_kubeconfig_path', input('kubectl_kubeconfig_path')))} version --output=json")
+  version_command = command("#{Shellwords.escape(input('kubectl_path'))} --kubeconfig=#{Shellwords.escape(input('kubectl_kubeconfig_path'))} version --output=json")
   describe 'kubectl retrieves its client version and the target API Server version' do
     subject { version_command }
     its('exit_status') { should cmp 0 }
@@ -74,9 +72,22 @@ applied within the time allowed.'
     end
     client = versions.is_a?(Hash) && versions.dig('clientVersion', 'gitVersion')
     server = versions.is_a?(Hash) && versions.dig('serverVersion', 'gitVersion')
-    describe 'kubectl is within one minor version of the contacted API Server, with the same major version' do
-      subject { KubernetesPolicy.compatible_versions?(client, server) }
+    client_version = client.to_s.match(/\Av?(\d+)\.(\d+)\.\d+/)
+    server_version = server.to_s.match(/\Av?(\d+)\.(\d+)\.\d+/)
+    describe 'kubectl and API Server report readable versions' do
+      subject { !client_version.nil? && !server_version.nil? }
       it { should eq true }
+    end
+
+    if client_version && server_version
+      describe 'kubectl and API Server major versions' do
+        subject { client_version[1] }
+        it { should eq server_version[1] }
+      end
+      describe 'kubectl is within one minor version of the contacted API Server' do
+        subject { (client_version[2].to_i - server_version[2].to_i).abs }
+        it { should be <= 1 }
+      end
     end
   end
 end

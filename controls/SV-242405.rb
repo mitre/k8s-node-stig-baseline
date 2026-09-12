@@ -1,4 +1,3 @@
-require 'kubernetes_node_inputs'
 require 'shellwords'
 
 control 'SV-242405' do
@@ -30,7 +29,7 @@ All the manifest files should be owned by root:root.'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
 
-  manifests_path = KubernetesNodeInputs.value('manifests_path', input('manifests_path'))
+  manifests_path = input('manifests_path')
   manifest_search = command("find -L #{Shellwords.escape(manifests_path)} \\( -type f -o -type l \\) -print0")
   manifests_files = manifest_search.stdout.split("\0").reject(&:empty?)
   incorrectly_owned_files = manifests_files.reject do |file_name|
