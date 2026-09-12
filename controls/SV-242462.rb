@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242462' do
   title 'The Kubernetes API Server must be set to audit log max size.'
   desc 'The Kubernetes API Server must be set for enough storage to retain log
@@ -11,7 +13,6 @@ If the setting "--audit-log-maxsize" is not set in the Kubernetes API Server man
   desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane.
 
 Set the value of "--audit-log-maxsize" to a minimum of "100".'
-  desc 'caveat', 'Kubernetes API Server process is not running on the target.'
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001335'
@@ -22,12 +23,16 @@ Set the value of "--audit-log-maxsize" to a minimum of "100".'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  unless kube_apiserver.exist?
-    impact 0.0
-    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
+    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
   end
 
-  describe kube_apiserver do
+  kube_apiserver_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-apiserver.yaml'), 'kube-apiserver')
+  describe kube_apiserver_manifest do
+    its('errors') { should be_empty }
+  end
+
+  describe kube_apiserver_manifest do
     its('audit-log-maxsize') { should cmp >= 100 }
   end
 end

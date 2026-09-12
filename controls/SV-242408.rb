@@ -1,3 +1,6 @@
+require 'kubernetes_node_inputs'
+require 'shellwords'
+
 control 'SV-242408' do
   title 'The Kubernetes manifest files must have least privileges.'
   desc 'The manifest files contain the runtime configuration of the API
@@ -17,7 +20,6 @@ To verify the change took place, run the command:
 ls -l *
 
 All the manifest files should now have privileges of "644".'
-  desc 'caveat', "Kubernetes Manifest files not present of the target at specified path #{manifests_path}."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000133-CTR-000310'
@@ -29,11 +31,11 @@ All the manifest files should now have privileges of "644".'
   tag cci: ['CCI-001499', 'CCI-000366']
   tag nist: ['CM-5 (6)', 'CM-6 b']
 
-  manifests_path = input('manifests_path')
-  expected_mode = input('kubernetes_file_modes')['manifest_files']
-  manifest_search = command("find #{manifests_path} -type f -print")
-  manifests_files = manifest_search.stdout.lines.map(&:strip).reject(&:empty?)
-  overly_permissive_files = manifests_files.select { |file_name| file(file_name).more_permissive_than?(expected_mode) }
+  manifests_path = KubernetesNodeInputs.value('manifests_path', input('manifests_path'))
+  expected_mode = KubernetesNodeInputs.value('kubernetes_file_modes', input('kubernetes_file_modes'))['manifest_files']
+  manifest_search = command("find -L #{Shellwords.escape(manifests_path)} \\( -type f -o -type l \\) -print0")
+  manifests_files = manifest_search.stdout.split("\0").reject(&:empty?)
+  overly_permissive_files = manifests_files.select { |file_name| !file(file_name).file? || file(file_name).more_permissive_than?(expected_mode) }
 
   describe 'Kubernetes manifest file discovery' do
     it "should successfully search #{manifests_path}" do

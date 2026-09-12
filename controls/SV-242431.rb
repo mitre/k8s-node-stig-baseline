@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242431' do
   title 'Kubernetes etcd must have a key file for secure communication.'
   desc 'Kubernetes stores configuration and state information in a distributed key-value store called etcd. Anyone who can write to etcd can effectively control a Kubernetes cluster. Even just reading the contents of etcd could easily provide helpful hints to a would-be attacker. Using authenticity protection, the communication can be protected against man-in-the-middle attacks/session hijacking and the insertion of false information into sessions.
@@ -24,12 +26,16 @@ Set the value of "--etcd-keyfile" to the certificate to be used for communicatio
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 
-  unless kube_apiserver.exist?
-    impact 0.0
-    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
+    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
   end
 
-  describe kube_apiserver do
+  kube_apiserver_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-apiserver.yaml'), 'kube-apiserver')
+  describe kube_apiserver_manifest do
+    its('errors') { should be_empty }
+  end
+
+  describe kube_apiserver_manifest do
     its('etcd-keyfile') { should_not be_nil }
     its('etcd-keyfile') { should_not be_empty }
   end

@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242449' do
   title 'The Kubernetes Kubelet certificate authority file must have file
 permissions set to 644 or more restrictive.'
@@ -49,7 +51,7 @@ chmod 644 <path_to_client_ca_file>'
   tag nist: ['CM-6 b']
 
   only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
-    input('node_roles').include?('control-plane')
+    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
   end
 
   describe kubelet do
@@ -57,7 +59,7 @@ chmod 644 <path_to_client_ca_file>'
   end
 
   client_ca_file = kubelet_config_file.params.dig('authentication', 'x509', 'clientCAFile').to_s
-  expected_mode = input('kubernetes_file_modes')['kubelet_client_ca_file']
+  expected_mode = KubernetesNodeInputs.value('kubernetes_file_modes', input('kubernetes_file_modes'))['kubelet_client_ca_file']
 
   describe 'Kubelet client certificate authority file path' do
     subject { client_ca_file }

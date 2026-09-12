@@ -1,3 +1,6 @@
+require 'kubernetes_node_inputs'
+require 'shellwords'
+
 control 'SV-242451' do
   title 'The Kubernetes component PKI must be owned by root.'
   desc 'The Kubernetes PKI directory contains all certificates (.crt files)
@@ -14,7 +17,6 @@ finding.'
   desc 'fix', 'Change the ownership of the PKI to root: root by executing the command:
 
     chown -R root:root /etc/kubernetes/pki/'
-  desc 'caveat', "Kubernetes PKI files not present of the target at specified path #{pki_path}."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001325'
@@ -25,9 +27,9 @@ finding.'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  pki_path = input('pki_path')
-  pki_search = command("find #{pki_path} -print")
-  pki_entries = pki_search.stdout.lines.map(&:strip).reject(&:empty?)
+  pki_path = KubernetesNodeInputs.value('pki_path', input('pki_path'))
+  pki_search = command("find -L #{Shellwords.escape(pki_path)} -print0")
+  pki_entries = pki_search.stdout.split("\0").reject(&:empty?)
   incorrectly_owned_entries = pki_entries.reject do |entry|
     pki_entry = file(entry)
     pki_entry.owned_by?('root') && pki_entry.grouped_into?('root')

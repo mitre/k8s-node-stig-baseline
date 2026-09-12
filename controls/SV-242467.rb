@@ -1,3 +1,6 @@
+require 'kubernetes_node_inputs'
+require 'shellwords'
+
 control 'SV-242467' do
   title 'The Kubernetes PKI keys must have file permissions set to 600 or more
 restrictive.'
@@ -13,7 +16,6 @@ If any of the files have permissions more permissive than "600", this is a findi
   desc 'fix', 'Change the ownership of the key files to "600" by executing the command:
 
 find /etc/kubernetes/pki -name "*.key" | xargs chmod 600'
-  desc 'caveat', "Kubernetes PKI files not present of the target at specified path #{pki_path}."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001335'
@@ -24,11 +26,11 @@ find /etc/kubernetes/pki -name "*.key" | xargs chmod 600'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  pki_path = input('pki_path')
-  expected_mode = input('kubernetes_file_modes')['pki_private_key_files']
-  pki_search = command("find #{pki_path} -type f -name '*.key' -print")
-  pki_files = pki_search.stdout.lines.map(&:strip).reject(&:empty?)
-  overly_permissive_files = pki_files.select { |file_name| file(file_name).more_permissive_than?(expected_mode) }
+  pki_path = KubernetesNodeInputs.value('pki_path', input('pki_path'))
+  expected_mode = KubernetesNodeInputs.value('kubernetes_file_modes', input('kubernetes_file_modes'))['pki_private_key_files']
+  pki_search = command("find -L #{Shellwords.escape(pki_path)} \\( -type f -o -type l \\) -name '*.key' -print0")
+  pki_files = pki_search.stdout.split("\0").reject(&:empty?)
+  overly_permissive_files = pki_files.select { |file_name| !file(file_name).file? || file(file_name).more_permissive_than?(expected_mode) }
 
   describe 'Kubernetes PKI key discovery' do
     it "should successfully search #{pki_path}" do

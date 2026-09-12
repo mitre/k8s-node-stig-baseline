@@ -12,3 +12,5 @@ fi
 
 rm -f "${KUBECONFIG_PATH}"
 rmdir "${ROOT_DIR}/.kitchen/kind" 2>/dev/null || true
+
+rm -rf "${ROOT_DIR}/.kitchen/kind/${KIND_CLUSTER_NAME}-files"

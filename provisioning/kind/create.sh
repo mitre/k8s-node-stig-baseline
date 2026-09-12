@@ -36,6 +36,32 @@ add_manifest_argument() {
   fi
 }
 
+configure_hardened_control_plane() {
+  local node_container manifest_path
+  node_container="${KIND_CLUSTER_NAME}-control-plane"
+  manifest_path="/etc/kubernetes/manifests/kube-apiserver.yaml"
+
+  docker cp "${POD_SECURITY_CONFIG}" "${node_container}:/etc/kubernetes/pod-security-admission.yaml"
+  docker cp "${ENCRYPTION_CONFIG}" "${node_container}:/etc/kubernetes/encryption-provider-config.yaml"
+
+  if ! docker exec "${node_container}" grep -Fq -- '--admission-control-config-file=/etc/kubernetes/pod-security-admission.yaml' "${manifest_path}"; then
+    docker exec "${node_container}" sed -i "/^    - kube-apiserver$/a\\    - --admission-control-config-file=/etc/kubernetes/pod-security-admission.yaml" "${manifest_path}"
+  fi
+
+  if ! docker exec "${node_container}" grep -Fq -- '--encryption-provider-config=/etc/kubernetes/encryption-provider-config.yaml' "${manifest_path}"; then
+    docker exec "${node_container}" sed -i "/^    - kube-apiserver$/a\\    - --encryption-provider-config=/etc/kubernetes/encryption-provider-config.yaml" "${manifest_path}"
+  fi
+
+  if ! docker exec "${node_container}" grep -Fq -- 'mountPath: /etc/kubernetes/pod-security-admission.yaml' "${manifest_path}"; then
+    docker exec "${node_container}" sed -i "/^    volumeMounts:/a\\    - mountPath: /etc/kubernetes/pod-security-admission.yaml\\n      name: pod-security-admission-config\\n      readOnly: true\\n    - mountPath: /etc/kubernetes/encryption-provider-config.yaml\\n      name: encryption-provider-config\\n      readOnly: true" "${manifest_path}"
+  fi
+
+  if ! docker exec "${node_container}" grep -Fq -- 'path: /etc/kubernetes/pod-security-admission.yaml' "${manifest_path}"; then
+    docker exec "${node_container}" sed -i "/^  volumes:/a\\  - hostPath:\\n      path: /etc/kubernetes/pod-security-admission.yaml\\n      type: File\\n    name: pod-security-admission-config\\n  - hostPath:\\n      path: /etc/kubernetes/encryption-provider-config.yaml\\n      type: File\\n    name: encryption-provider-config" "${manifest_path}"
+  fi
+}
+
+
 configure_hardened_node() {
   local api_manifest controller_manifest scheduler_manifest etcd_manifest kubelet_config
   api_manifest='/etc/kubernetes/manifests/kube-apiserver.yaml'
@@ -61,6 +87,8 @@ configure_hardened_node() {
   add_manifest_argument "${controller_manifest}" kube-controller-manager 'tls-min-version=VersionTLS12'
   add_manifest_argument "${scheduler_manifest}" kube-scheduler 'tls-min-version=VersionTLS12'
   add_manifest_argument "${etcd_manifest}" etcd 'tls-min-version=TLS1.2'
+  add_manifest_argument "${etcd_manifest}" etcd 'auto-tls=false'
+  add_manifest_argument "${etcd_manifest}" etcd 'peer-auto-tls=false'
 
   if ! docker exec "${KIND_NODE_CONTAINER}" grep -Fq -- 'mountPath: /etc/kubernetes/audit-policy.yaml' "${api_manifest}"; then
     docker exec "${KIND_NODE_CONTAINER}" sed -i "/^    volumeMounts:/a\\    - mountPath: /etc/kubernetes/audit-policy.yaml\\n      name: audit-policy\\n      readOnly: true\\n    - mountPath: /var/log/kubernetes/audit\\n      name: audit-log" "${api_manifest}"
@@ -104,6 +132,18 @@ fi
 kind export kubeconfig --name "${KIND_CLUSTER_NAME}" --kubeconfig "${KUBECONFIG_PATH}"
 export KUBECONFIG="${KUBECONFIG_PATH}"
 if [[ "${SUITE}" == 'hardened' ]]; then
+  require_command openssl
+  HARDENED_FILES_DIR="${ROOT_DIR}/.kitchen/kind/${KIND_CLUSTER_NAME}-files"
+  POD_SECURITY_CONFIG="${HARDENED_FILES_DIR}/pod-security-admission.yaml"
+  ENCRYPTION_CONFIG="${HARDENED_FILES_DIR}/encryption-provider-config.yaml"
+  mkdir -p "${HARDENED_FILES_DIR}"
+  chmod 0700 "${HARDENED_FILES_DIR}"
+  cp "${ROOT_DIR}/provisioning/kind/hardened/pod-security-admission.yaml" "${POD_SECURITY_CONFIG}"
+  ENCRYPTION_KEY="$(openssl rand -base64 32 | tr -d '\n')"
+  [[ -n "${ENCRYPTION_KEY}" ]] || { echo "Unable to generate test encryption key" >&2; exit 1; }
+  sed "s|__ENCRYPTION_KEY__|${ENCRYPTION_KEY}|" \
+    "${ROOT_DIR}/provisioning/kind/hardened/encryption-provider-config.yaml.template" > "${ENCRYPTION_CONFIG}"
+  configure_hardened_control_plane
   configure_hardened_node
 fi
 wait_for_cluster

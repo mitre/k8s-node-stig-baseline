@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242446' do
   title 'The Kubernetes conf files must be owned by root.'
   desc 'The Kubernetes conf files contain the arguments and settings for the Control Plane services. These services are controller and scheduler. If these files can be changed, the scheduler will be implementing the changes immediately. Many of the security settings within the document are implemented through this file.'
@@ -25,7 +27,7 @@ command:
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  kubernetes_conf_files = Array(input('kubernetes_conf_files'))
+  kubernetes_conf_files = Array(KubernetesNodeInputs.value('kubernetes_conf_files', input('kubernetes_conf_files')))
   incorrectly_owned_files = kubernetes_conf_files.reject do |file_name|
     conf_file = file(file_name)
     conf_file.exist? && conf_file.owned_by?('root') && conf_file.grouped_into?('root')

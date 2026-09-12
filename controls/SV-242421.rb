@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242421' do
   title 'Kubernetes Controller Manager must have the SSL Certificate Authority
 set.'
@@ -22,7 +24,6 @@ If the setting "--root-ca-file" is not set in the Kubernetes Controller Manager 
   desc 'fix', 'Edit the Kubernetes Controller Manager manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane.
 
 Set the value of "--root-ca-file" to path containing Approved Organizational Certificate.'
-  desc 'caveat', 'Kubernetes Controller Manager process is not running on the target.'
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000219-CTR-000550'
@@ -33,12 +34,16 @@ Set the value of "--root-ca-file" to path containing Approved Organizational Cer
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 
-  unless kube_controller_manager.exist?
-    impact 0.0
-    desc 'caveat', 'Kubernetes Controller Manager process is not running on the target.'
+  only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
+    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
   end
 
-  describe kube_controller_manager do
+  kube_controller_manager_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-controller-manager.yaml'), 'kube-controller-manager')
+  describe kube_controller_manager_manifest do
+    its('errors') { should be_empty }
+  end
+
+  describe kube_controller_manager_manifest do
     its('root-ca-file') { should_not be_nil }
     its('root-ca-file') { should_not be_empty }
   end

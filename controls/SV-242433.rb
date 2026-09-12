@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242433' do
   title 'Kubernetes etcd must have a peer-key-file set for secure
 communication.'
@@ -23,21 +25,22 @@ Set the value of "--peer-key-file" to the certificate to be used for communicati
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 
-  etcd_manifest_path = ::File.join(input('manifests_path'), 'etcd.yaml')
+  etcd_manifest_path = ::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'etcd.yaml')
   etcd_configuration = etcd_manifest(etcd_manifest_path)
 
   only_if('This control applies only to control-plane nodes that manage etcd.', impact: 0.0) do
-    input('node_roles').map(&:to_s).include?('control-plane') && input('etcd_managed_on_node')
+    KubernetesNodeInputs.value('node_roles', input('node_roles')).map(&:to_s).include?('control-plane') && KubernetesNodeInputs.value('etcd_managed_on_node', input('etcd_managed_on_node'))
   end
 
   if etcd_configuration.exist?
     describe etcd_configuration do
+      its('errors') { should be_empty }
       its('peer-key-file') { should_not be_nil }
-      its('peer-key-file') { should_not be_empty }
+      its('peer-key-file') { should match %r{\A/[^\x00\r\n]+\z} }
     end
   else
     describe file(etcd_manifest_path) do
-      it { should exist }
+      it { should be_file }
     end
   end
 end

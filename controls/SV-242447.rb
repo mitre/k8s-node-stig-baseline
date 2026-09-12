@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242447' do
   title 'The Kubernetes Kube Proxy kubeconfig must have file permissions set to 644 or more restrictive.'
   desc 'The Kubernetes Kube Proxy kubeconfig contain the argument and setting for the Control Planes. These settings contain network rules for restricting network communication between pods, clusters, and networks. If these files can be changed, data traversing between the Kubernetes Control Panel components would be compromised. Many of the security settings within the document are implemented through this file.'
@@ -29,10 +31,11 @@ chmod 644 <location from kubeconfig>.'
     desc 'caveat', 'Kube-Proxy process is not running on the target.'
   end
 
-  expected_mode = input('kubernetes_file_modes')['kube_proxy_kubeconfig_file']
+  expected_mode = KubernetesNodeInputs.value('kubernetes_file_modes', input('kubernetes_file_modes'))['kube_proxy_kubeconfig_file']
 
   describe kube_proxy do
     its('kubeconfig_file') { should_not be_nil }
+    its('kubeconfig_file') { should be_file }
     its('kubeconfig_file') { should_not be_more_permissive_than(expected_mode) }
   end
 end

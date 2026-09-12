@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242461' do
   title 'Kubernetes API Server audit logs must be enabled.'
   desc 'Kubernetes API Server validates and configures pods and services for
@@ -11,7 +13,6 @@ grep -i audit-policy-file *
 
 If the setting "audit-policy-file" is not set or is found in the Kubernetes API manifest file without valid content, this is a finding.'
   desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Set the argument "--audit-policy-file" to "log file directory".'
-  desc 'caveat', 'Kubernetes API Server process is not running on the target.'
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001335'
@@ -22,12 +23,16 @@ If the setting "audit-policy-file" is not set or is found in the Kubernetes API 
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  unless kube_apiserver.exist?
-    impact 0.0
-    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
+    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
   end
 
-  audit_policy_path = Array(kube_apiserver.params['audit-policy-file']).join
+  kube_apiserver_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-apiserver.yaml'), 'kube-apiserver')
+  describe kube_apiserver_manifest do
+    its('errors') { should be_empty }
+  end
+
+  audit_policy_path = kube_apiserver_manifest.host_path(kube_apiserver_manifest.params['audit-policy-file']).to_s
 
   describe 'Kubernetes API Server audit policy path' do
     subject { audit_policy_path }
@@ -36,15 +41,17 @@ If the setting "audit-policy-file" is not set or is found in the Kubernetes API 
 
   unless audit_policy_path.empty?
     describe file(audit_policy_path) do
-      it { should exist }
+      it { should be_file }
       its('size') { should be > 0 }
     end
 
     if file(audit_policy_path).exist? && file(audit_policy_path).size.positive?
-      describe yaml(audit_policy_path) do
-        its('apiVersion') { should match %r{\Aaudit\.k8s\.io/v\d+\z} }
-        its('kind') { should cmp 'Policy' }
-        its('rules') { should_not be_empty }
+      policy = kube_apiserver_manifest.read_mapping(audit_policy_path)
+      describe 'API Server audit policy' do
+        subject { policy }
+        its(['apiVersion']) { should match %r{\Aaudit\.k8s\.io/v\d+\z} }
+        its(['kind']) { should cmp 'Policy' }
+        its(['rules']) { should_not be_empty }
       end
     end
   end

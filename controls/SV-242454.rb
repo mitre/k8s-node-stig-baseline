@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242454' do
   title 'The Kubernetes kubeadm.conf must be owned by root.'
   desc 'The Kubernetes kubeeadm.conf contains sensitive information regarding the cluster nodes configuration. If this file can be modified, the Kubernetes Platform Plane would be degraded or compromised for malicious intent. Many of the security settings within the document are implemented through this file.'
@@ -24,7 +26,7 @@ chown root:root <kubeadm.conf path>'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  kubeadm_conf_path = input('kubeadm_conf_path')
+  kubeadm_conf_path = KubernetesNodeInputs.value('kubeadm_conf_path', input('kubeadm_conf_path'))
 
   describe file(kubeadm_conf_path) do
     it { should exist }

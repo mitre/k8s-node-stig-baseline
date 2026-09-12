@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242409' do
   title 'Kubernetes Controller Manager must disable profiling.'
   desc 'Kubernetes profiling provides the ability to analyze and troubleshoot
@@ -9,7 +11,6 @@ grep -i profiling *
 
 If the setting "profiling" is not configured in the Kubernetes Controller Manager manifest file or it is set to "True", this is a finding.'
   desc 'fix', 'Edit the Kubernetes Controller Manager manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Set the argument "--profiling value" to "false".'
-  desc 'caveat', 'Kubernetes Controller Manager process is not running on the target.'
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000141-CTR-000315'
@@ -20,12 +21,16 @@ If the setting "profiling" is not configured in the Kubernetes Controller Manage
   tag cci: ['CCI-000381']
   tag nist: ['CM-7 a']
 
-  unless kube_controller_manager.exist?
-    impact 0.0
-    desc 'caveat', 'Kubernetes Controller Manager process is not running on the target.'
+  only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
+    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
   end
 
-  describe kube_controller_manager do
+  kube_controller_manager_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-controller-manager.yaml'), 'kube-controller-manager')
+  describe kube_controller_manager_manifest do
+    its('errors') { should be_empty }
+  end
+
+  describe kube_controller_manager_manifest do
     its('profiling') { should cmp 'false' }
   end
 end

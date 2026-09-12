@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242400' do
   title 'The Kubernetes API server must have Alpha APIs disabled.'
   desc 'Kubernetes allows alpha API calls within the API server. The alpha
@@ -24,15 +26,34 @@ Set the value of "AllAlpha" to "false" or remove the setting completely. (AllAlp
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 
-  describe kube_scheduler do
+  only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
+    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
+  end
+
+  kube_scheduler_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-scheduler.yaml'), 'kube-scheduler')
+  describe kube_scheduler_manifest do
+    its('errors') { should be_empty }
+  end
+
+  kube_controller_manager_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-controller-manager.yaml'), 'kube-controller-manager')
+  describe kube_controller_manager_manifest do
+    its('errors') { should be_empty }
+  end
+
+  kube_apiserver_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-apiserver.yaml'), 'kube-apiserver')
+  describe kube_apiserver_manifest do
+    its('errors') { should be_empty }
+  end
+
+  describe kube_scheduler_manifest do
     its('feature-gates.to_s') { should_not match(/AllAlpha=true/i) }
   end
 
-  describe kube_controller_manager do
+  describe kube_controller_manager_manifest do
     its('feature-gates.to_s') { should_not match(/AllAlpha=true/i) }
   end
 
-  describe kube_apiserver do
+  describe kube_apiserver_manifest do
     its('feature-gates.to_s') { should_not match(/AllAlpha=true/i) }
   end
 end

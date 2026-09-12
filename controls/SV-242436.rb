@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242436' do
   title 'The Kubernetes API server must have the ValidatingAdmissionWebhook
 enabled.'
@@ -22,7 +24,6 @@ If a line is not returned that includes enable-admission-plugins and ValidatingA
   desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Set the argument "--enable-admission-plugins" to include "ValidatingAdmissionWebhook".  Each enabled plugin is separated by commas.
 
 Note: It is best to implement policies first and then enable the webhook, otherwise a denial of service may occur.'
-  desc 'caveat', 'Kubernetes API Server process is not running on the target.'
   impact 0.7
   tag severity: 'high'
   tag gtitle: 'SRG-APP-000342-CTR-000775'
@@ -33,16 +34,20 @@ Note: It is best to implement policies first and then enable the webhook, otherw
   tag cci: ['CCI-002233', 'CCI-002263']
   tag nist: ['AC-6 (8)', 'AC-16 a']
 
+  only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
+    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
+  end
+
+  kube_apiserver_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-apiserver.yaml'), 'kube-apiserver')
+  describe kube_apiserver_manifest do
+    its('errors') { should be_empty }
+  end
+
   only_if('This pre-1.25 control does not apply to Kubernetes 1.25 and newer.', impact: 0.0) do
-    input('kubernetes_minor_version') < 25
+    KubernetesNodeInputs.value('kubernetes_minor_version', input('kubernetes_minor_version')) < 25
   end
 
-  unless kube_apiserver.exist?
-    impact 0.0
-    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
-  end
-
-  describe kube_apiserver do
+  describe kube_apiserver_manifest do
     its('enable-admission-plugins.to_s') { should include 'ValidatingAdmissionWebhook' }
   end
 end

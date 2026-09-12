@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242450' do
   title 'The Kubernetes Kubelet certificate authority must be owned by root.'
   desc 'The Kubernetes kube proxy kubeconfig contain the argument and setting for the Control Planes. These settings contain network rules for restricting network communication between pods, clusters, and networks. If these files can be changed, data traversing between the Kubernetes Control Panel components would be compromised. Many of the security settings within the document are implemented through this file.'
@@ -42,7 +44,7 @@ chown root:root <path_to_client_ca_file>'
   tag nist: ['CM-6 b']
 
   only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
-    input('node_roles').include?('control-plane')
+    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
   end
 
   describe kubelet do

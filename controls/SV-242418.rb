@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242418' do
   title 'The Kubernetes API server must use approved cipher suites.'
   desc 'The Kubernetes API server communicates to the kubelet service on the
@@ -14,7 +16,6 @@ If the setting feature tls-cipher-suites is not set in the Kubernetes API server
 
 Set the value of "--tls-cipher-suites" to:
 "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384"'
-  desc 'caveat', 'Kubernetes API Server process is not running on the target.'
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000219-CTR-000550'
@@ -25,9 +26,13 @@ Set the value of "--tls-cipher-suites" to:
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 
-  unless kube_apiserver.exist?
-    impact 0.0
-    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
+    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
+  end
+
+  kube_apiserver_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-apiserver.yaml'), 'kube-apiserver')
+  describe kube_apiserver_manifest do
+    its('errors') { should be_empty }
   end
 
   approved_cipher_suites = %w[
@@ -38,7 +43,7 @@ Set the value of "--tls-cipher-suites" to:
   ]
 
   describe 'Kubernetes API Server TLS cipher suites' do
-    subject { kube_apiserver.tls_cipher_suites.sort }
+    subject { kube_apiserver_manifest.tls_cipher_suites.sort }
     it { should cmp approved_cipher_suites.sort }
   end
 end

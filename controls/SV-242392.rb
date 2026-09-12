@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242392' do
   title 'The Kubernetes kubelet must enable explicit authorization.'
   desc 'Kubelet is the primary agent on each node. The API server communicates
@@ -30,7 +32,7 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag nist: ['AC-3']
 
   only_if("This control applies only to worker nodes; input('node_roles') must include 'worker'.", impact: 0.0) do
-    input('node_roles').include?('worker')
+    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('worker')
   end
 
   describe kubelet do

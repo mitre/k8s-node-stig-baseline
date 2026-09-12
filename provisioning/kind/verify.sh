@@ -24,6 +24,7 @@ fi
 mkdir -p "${RESULTS_DIR}"
 kubectl wait --for=condition=Ready nodes --all --timeout=2m
 
+rm -f "${RESULT_FILE}"
 set +e
 bundle exec cinc-auditor exec "${ROOT_DIR}" \
   --target "docker://${KIND_NODE_CONTAINER}" \
@@ -43,7 +44,7 @@ if [[ ! -s "${RESULT_FILE}" ]]; then
   exit "${cinc_status}"
 fi
 bundle exec ruby -rjson -e \
-  'report = JSON.parse(File.read(ARGV.fetch(0))); exit(report.fetch("profiles").empty? ? 1 : 0)' \
+  'report = JSON.parse(File.read(ARGV.fetch(0))); exit(report.fetch("profiles").flat_map { |profile| profile.fetch("controls", []) }.empty? ? 1 : 0)' \
   "${RESULT_FILE}"
 
 if (( cinc_status != 0 )); then

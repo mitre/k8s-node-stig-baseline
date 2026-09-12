@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-245544' do
   title 'Kubernetes endpoints must use approved organizational certificate and
 key pair to protect information in transit.'
@@ -26,7 +28,6 @@ If the setting "--kubelet-client-certificate" is not configured in the Kubernete
 
 If the setting "--kubelet-client-key" is not configured in the Kubernetes API server manifest file or contains no value, this is a finding.'
   desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Set the value of "--kubelet-client-certificate" and "--kubelet-client-key" to an Approved Organizational Certificate and key pair.'
-  desc 'caveat', 'Kubernetes API Server process is not running on the target.'
   impact 0.7
   tag severity: 'high'
   tag gtitle: 'SRG-APP-000439-CTR-001080'
@@ -37,12 +38,16 @@ If the setting "--kubelet-client-key" is not configured in the Kubernetes API se
   tag cci: ['CCI-002418', 'CCI-002448']
   tag nist: ['SC-8', 'SC-12 (3)']
 
-  unless kube_apiserver.exist?
-    impact 0.0
-    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
+    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
   end
 
-  describe kube_apiserver do
+  kube_apiserver_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-apiserver.yaml'), 'kube-apiserver')
+  describe kube_apiserver_manifest do
+    its('errors') { should be_empty }
+  end
+
+  describe kube_apiserver_manifest do
     its('kubelet-client-certificate') { should_not be_nil }
     its('kubelet-client-certificate') { should_not be_empty }
     its('kubelet-client-key') { should_not be_nil }

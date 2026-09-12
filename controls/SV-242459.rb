@@ -1,3 +1,4 @@
+require 'kubernetes_node_inputs'
 require 'shellwords'
 
 control 'SV-242459' do
@@ -23,11 +24,11 @@ chmod -R 644 /var/lib/etcd/*'
   tag nist: ['CM-6 b']
 
   only_if('This control applies only to control-plane nodes that manage etcd.', impact: 0.0) do
-    input('node_roles').map(&:to_s).include?('control-plane') && input('etcd_managed_on_node')
+    KubernetesNodeInputs.value('node_roles', input('node_roles')).map(&:to_s).include?('control-plane') && KubernetesNodeInputs.value('etcd_managed_on_node', input('etcd_managed_on_node'))
   end
 
-  expected_mode = input('kubernetes_file_modes')['etcd_data_files']
-  data_dir = input('etcd_data_dir')
+  expected_mode = KubernetesNodeInputs.value('kubernetes_file_modes', input('kubernetes_file_modes'))['etcd_data_files']
+  data_dir = KubernetesNodeInputs.value('etcd_data_dir', input('etcd_data_dir'))
   etcd_data_directory = directory(data_dir)
 
   describe etcd_data_directory do
@@ -35,9 +36,9 @@ chmod -R 644 /var/lib/etcd/*'
   end
 
   if etcd_data_directory.exist?
-    etcd_search = command("find #{Shellwords.escape(data_dir)} -type f -print")
-    etcd_files = etcd_search.stdout.lines.map(&:strip).reject(&:empty?)
-    overly_permissive_files = etcd_files.select { |file_name| file(file_name).more_permissive_than?(expected_mode) }
+    etcd_search = command("find -L #{Shellwords.escape(data_dir)} \\( -type f -o -type l \\) -print0")
+    etcd_files = etcd_search.stdout.split("\0").reject(&:empty?)
+    overly_permissive_files = etcd_files.select { |file_name| !file(file_name).file? || file(file_name).more_permissive_than?(expected_mode) }
 
     describe 'Kubernetes etcd data file discovery' do
       it "should successfully search #{data_dir}" do

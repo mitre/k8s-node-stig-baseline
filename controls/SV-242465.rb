@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242465' do
   title 'The Kubernetes API Server audit log path must be set.'
   desc 'Kubernetes API Server validates and configures pods and services for
@@ -11,7 +13,6 @@ grep -i audit-log-path *
 
 If the setting audit-log-path is not set in the Kubernetes API Server manifest file or it is not set to a valid path, this is a finding.'
   desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Set the value of "--audit-log-path" to valid location.'
-  desc 'caveat', 'Kubernetes API Server process is not running on the target.'
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001335'
@@ -22,17 +23,21 @@ If the setting audit-log-path is not set in the Kubernetes API Server manifest f
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  unless kube_apiserver.exist?
-    impact 0.0
-    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
+    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
   end
 
-  describe kube_apiserver do
+  kube_apiserver_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-apiserver.yaml'), 'kube-apiserver')
+  describe kube_apiserver_manifest do
+    its('errors') { should be_empty }
+  end
+
+  describe kube_apiserver_manifest do
     its('audit-log-path') { should_not be_nil }
   end
 
-  if kube_apiserver.params['audit-log-path']
-    describe file(kube_apiserver.params['audit-log-path'].join) do
+  if kube_apiserver_manifest.params['audit-log-path']
+    describe file(kube_apiserver_manifest.host_path(kube_apiserver_manifest.params['audit-log-path']).to_s) do
       it { should exist }
     end
   end

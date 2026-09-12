@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242455' do
   title 'The Kubernetes  kubeadm.conf must have file permissions set to 644
 or more restrictive.'
@@ -28,8 +30,8 @@ chmod 644 <kubeadm.conf path>'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  kubeadm_conf_path = input('kubeadm_conf_path')
-  expected_mode = input('kubernetes_file_modes')['kubeadm_conf_file']
+  kubeadm_conf_path = KubernetesNodeInputs.value('kubeadm_conf_path', input('kubeadm_conf_path'))
+  expected_mode = KubernetesNodeInputs.value('kubernetes_file_modes', input('kubernetes_file_modes'))['kubeadm_conf_file']
 
   describe file(kubeadm_conf_path) do
     it { should exist }

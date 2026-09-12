@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242399' do
   title 'Kubernetes DynamicKubeletConfig must not be enabled.'
   desc 'Kubernetes allows a user to configure kubelets with dynamic
@@ -53,19 +55,37 @@ systemctl daemon-reload && systemctl restart kubelet)
   tag nist: ['AC-3']
 
   only_if('This control applies only to Kubernetes 1.25 and older.', impact: 0.0) do
-    input('kubernetes_minor_version') <= 25
+    KubernetesNodeInputs.value('kubernetes_minor_version', input('kubernetes_minor_version')) <= 25
   end
 
-  describe kube_scheduler do
-    its('feature-gates.to_s') { should match(/DynamicKubeletConfig=false/i) }
-  end
+  if KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
+    kube_scheduler_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-scheduler.yaml'), 'kube-scheduler')
+    describe kube_scheduler_manifest do
+      its('errors') { should be_empty }
+    end
 
-  describe kube_controller_manager do
-    its('feature-gates.to_s') { should match(/DynamicKubeletConfig=false/i) }
-  end
+    kube_controller_manager_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-controller-manager.yaml'), 'kube-controller-manager')
+    describe kube_controller_manager_manifest do
+      its('errors') { should be_empty }
+    end
 
-  describe kube_apiserver do
-    its('feature-gates.to_s') { should match(/DynamicKubeletConfig=false/i) }
+    kube_apiserver_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-apiserver.yaml'), 'kube-apiserver')
+    describe kube_apiserver_manifest do
+      its('errors') { should be_empty }
+    end
+
+    describe kube_scheduler_manifest do
+      its('feature-gates.to_s') { should match(/DynamicKubeletConfig=false/i) }
+    end
+
+    describe kube_controller_manager_manifest do
+      its('feature-gates.to_s') { should match(/DynamicKubeletConfig=false/i) }
+    end
+
+    describe kube_apiserver_manifest do
+      its('feature-gates.to_s') { should match(/DynamicKubeletConfig=false/i) }
+    end
+
   end
 
   describe kubelet do

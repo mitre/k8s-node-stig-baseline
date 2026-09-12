@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242403' do
   title 'Kubernetes API Server must generate audit records that identify what
 type of event has occurred, identify the source of the event, contain the event
@@ -43,7 +45,6 @@ Set the value of  "--audit-policy-file" to the path of a file with the following
     - level: RequestResponse
 
 Note: If the API server is running as a Pod, then the manifest will also need to be updated to mount the host system filesystem where the audit policy file resides.'
-  desc 'caveat', 'Kubernetes API Server process is not running on the target.'
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000026-CTR-000070'
@@ -55,12 +56,16 @@ Note: If the API server is running as a Pod, then the manifest will also need to
   tag cci: ['CCI-000018', 'CCI-000130', 'CCI-000131', 'CCI-000132', 'CCI-000133', 'CCI-000134', 'CCI-000135', 'CCI-000172', 'CCI-001403', 'CCI-001404', 'CCI-001487', 'CCI-001814', 'CCI-002234', 'CCI-002264']
   tag nist: ['AC-2 (4)', 'AU-3', 'AU-3 (1)', 'AU-12 c', 'CM-5 (1)', 'AC-6 (9)', 'AU-3 a', 'AU-3 b', 'AU-3 c', 'AU-3 d', 'AU-3 e', 'AU-3 f', 'AC-16 a']
 
-  unless kube_apiserver.exist?
-    impact 0.0
-    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
+    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
   end
 
-  audit_policy_path = Array(kube_apiserver.params['audit-policy-file']).join
+  kube_apiserver_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-apiserver.yaml'), 'kube-apiserver')
+  describe kube_apiserver_manifest do
+    its('errors') { should be_empty }
+  end
+
+  audit_policy_path = kube_apiserver_manifest.host_path(kube_apiserver_manifest.params['audit-policy-file']).to_s
 
   describe 'Kubernetes API Server audit policy path' do
     subject { audit_policy_path }
@@ -69,15 +74,18 @@ Note: If the API server is running as a Pod, then the manifest will also need to
 
   unless audit_policy_path.empty?
     describe file(audit_policy_path) do
-      it { should exist }
+      it { should be_file }
       its('size') { should be > 0 }
     end
 
     if file(audit_policy_path).exist?
-      describe yaml(audit_policy_path) do
-        its('apiVersion') { should match %r{\Aaudit\.k8s\.io/v\d+\z} }
-        its('kind') { should cmp 'Policy' }
-        its('rules') { should cmp [{ 'level' => 'RequestResponse' }] }
+      policy = kube_apiserver_manifest.read_mapping(audit_policy_path)
+      describe 'API Server audit policy' do
+        subject { policy }
+        its(['apiVersion']) { should match %r{\Aaudit\.k8s\.io/v\d+\z} }
+        its(['kind']) { should cmp 'Policy' }
+        its(['rules']) { should cmp [{ 'level' => 'RequestResponse' }] }
+        it('must not omit audit stages') { expect(Array(policy['omitStages'])).to be_empty }
       end
     end
   end

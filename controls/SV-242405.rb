@@ -1,3 +1,6 @@
+require 'kubernetes_node_inputs'
+require 'shellwords'
+
 control 'SV-242405' do
   title 'The Kubernetes manifests must be owned by root.'
   desc 'The manifest files contain the runtime configuration of the API
@@ -17,7 +20,6 @@ To verify the change took place, run the command:
 ls -l *
 
 All the manifest files should be owned by root:root.'
-  desc 'caveat', "Kubernetes Manifest files not present of the target at specified path #{manifests_path}."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000133-CTR-000295'
@@ -28,9 +30,9 @@ All the manifest files should be owned by root:root.'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
 
-  manifests_path = input('manifests_path')
-  manifest_search = command("find #{manifests_path} -type f -print")
-  manifests_files = manifest_search.stdout.lines.map(&:strip).reject(&:empty?)
+  manifests_path = KubernetesNodeInputs.value('manifests_path', input('manifests_path'))
+  manifest_search = command("find -L #{Shellwords.escape(manifests_path)} \\( -type f -o -type l \\) -print0")
+  manifests_files = manifest_search.stdout.split("\0").reject(&:empty?)
   incorrectly_owned_files = manifests_files.reject do |file_name|
     manifest_file = file(file_name)
     manifest_file.owned_by?('root') && manifest_file.grouped_into?('root')

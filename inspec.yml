@@ -101,11 +101,16 @@ inputs:
   - name: kubernetes_minor_version
     description: 'Kubernetes minor version used to evaluate version-specific controls'
     type: Numeric
-    value: 16
     required: true
 
   - name: streaming_connection_idle_timeout_seconds
     description: 'Minimum kubelet streaming connection idle timeout in seconds'
     type: Numeric
     value: 300
+    required: true
+
+  - name: kubectl_kubeconfig_path
+    description: 'Kubeconfig on the target control-plane node used to compare kubectl and API-server versions; assess every API-server endpoint in an HA cluster'
+    type: String
+    value: '/etc/kubernetes/admin.conf'
     required: true

@@ -45,19 +45,21 @@ kubeadm_conf_path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 Use `node_roles: [worker]` for a worker and
 `node_roles: [control-plane, worker]` for a dual-role node. This required input
 has no default; provide the exact role names. Always set
-`kubernetes_minor_version` to the target version: its compatibility default of
-`16` is not detected from the node.
+`kubernetes_minor_version` to the actual target minor version. It is required
+and has no default. Invalid roles, incomplete file-mode maps, nonabsolute paths,
+and invalid numeric values are rejected before they can bypass checks.
 
 | Input | Default | Purpose |
 |---|---|---|
 | `node_roles` | Required; no default | `control-plane`, `worker`, or both. |
-| `kubernetes_minor_version` | `16` | Selects version-specific checks; explicitly set the target's minor version. |
+| `kubernetes_minor_version` | Required; no default | Selects version-specific checks; explicitly set the target's minor version. |
 | `manifests_path` | `/etc/kubernetes/manifests` | Directory containing the node's static Pod manifests. |
 | `etcd_managed_on_node` | `true` | Whether a control-plane node hosts the etcd instance being assessed. |
 | `etcd_data_dir` | `/var/lib/etcd` | Local etcd data directory. |
 | `pki_path` | `/etc/kubernetes/pki/` | Kubernetes PKI directory. |
 | `kubeadm_conf_path` | `/etc/systemd/system/kubelet.service.d/10-kubeadm.conf` | Kubeadm-installed kubelet service drop-in, not the kubeadm executable. |
 | `kubectl_path` | `/usr/local/bin/kubectl` | kubectl executable on the target node. |
+| `kubectl_kubeconfig_path` | `/etc/kubernetes/admin.conf` | Target-node kubeconfig used for the API-server/client skew check. |
 | `kubectl_minversion` | `1.12.9` | STIG minimum client version; not a general supported-version or skew check. |
 | `kubernetes_conf_files` | `/etc/kubernetes/admin.conf`, `/etc/kubernetes/scheduler.conf`, `/etc/kubernetes/controller-manager.conf` | Files assessed for ownership and permissions. |
 | `kubernetes_file_modes` | See below | Maximum allowed permission bits for each artifact category. |
@@ -104,12 +106,25 @@ bundle exec cinc-auditor exec . -t ssh://AUDIT_USER@NODE --sudo \
   --show-progress
 ```
 
-The profile inspects processes, configuration files, manifests, ownership, and
-permissions for kube-apiserver, kube-controller-manager, kube-scheduler,
-kubelet, kube-proxy, and etcd. Distribution-specific deployments may require an
-overlay and appropriate input values. A skipped check still requires the
-follow-up described in its result; running the sibling profile does not
-necessarily automate every host-local check deferred by the cluster profile.
+The profile reads saved static Pod manifests for kube-apiserver,
+kube-controller-manager, kube-scheduler, and etcd, plus kubelet/process evidence
+and file ownership and permissions. Missing or malformed manifests fail on
+applicable control-plane nodes. Distribution-specific deployments without these
+manifests require an overlay that supplies equivalent evidence.
+
+The `etcd_manifest` resource selects the etcd container, parses its arguments,
+and reads a mounted etcd config file when configured. That file replaces flag
+and environment settings. Referenced policy/configuration files are resolved
+through the component's hostPath volume mounts, including different host and
+container paths; inaccessible or unsupported mappings produce findings.
+
+Node controls SV-254800, SV-274882, SV-254801, and SV-242443 now implement the
+host-local portions delegated by the cluster profile: admission policy contents,
+Secrets encryption configuration, kubelet PodSecurity settings, and version skew.
+These IDs intentionally occur in both profiles with complementary checks;
+retain both assessment results. Organizational least-privilege justification
+still requires manual review. Run the skew check against every API-server
+endpoint in an HA cluster using the appropriate `kubectl_kubeconfig_path`.
 
 ## Lint and validate
 
@@ -119,9 +134,10 @@ bundle exec rake pre_commit_checks
 ```
 
 The vendor command replaces `vendor/`. Preserve any SAF delta output stored
-there before running it. `pre_commit_checks` runs RuboCop and Cinc Auditor
-profile validation; either failure returns a nonzero status. To run them
-individually, use `bundle exec rake lint` and `bundle exec rake inspec:check`.
+there before running it. `pre_commit_checks` runs RuboCop, the regression specs, and Cinc Auditor
+profile validation; any failure returns a nonzero status. To run them
+individually, use `bundle exec rake lint`, `bundle exec rake spec`, and
+`bundle exec rake inspec:check`.
 The latter retains its historical task name but invokes Cinc Auditor.
 
 The lint configuration is based on the RHEL 9 sibling profile, targets Ruby
@@ -143,13 +159,14 @@ KITCHEN_LOCAL_YAML=kitchen.kind.yml bundle exec kitchen test --destroy=always ha
 The profile connects to the Kind control-plane container using Docker transport
 so it can inspect the node's Linux processes and files. `vanilla` audits an
 unmodified Kind v1.32.2 node. `hardened` adds an audit policy, retention settings,
-TLS settings, and kubelet timeout/kernel-protection settings. These fixtures
+TLS settings, admission and encryption policies, and kubelet timeout/kernel-protection settings.
+Its encryption key is generated for each run and removed with the test cluster. These fixtures
 exercise selected checks; they are not a production hardening procedure.
 
 Suite inputs are in `kind.vanilla.inputs.yml` and `kind.hardened.inputs.yml`.
-They currently point `kubeadm_conf_path` at Kind's `kubeadm-flags.env`, so the
-suite's file checks do not assess the `10-kubeadm.conf` service drop-in. Use the
-actual drop-in path for a STIG assessment.
+They point `kubeadm_conf_path` at Kind's installed
+`/etc/systemd/system/kubelet.service.d/10-kubeadm.conf` service drop-in.
+Use the actual drop-in path for other distributions.
 
 Validate saved results with the suite's SAF threshold:
 
@@ -157,6 +174,11 @@ Validate saved results with the suite's SAF threshold:
 saf validate threshold -i results/kind_vanilla.json -T kind.vanilla.threshold.yml
 saf validate threshold -i results/kind_hardened.json -T kind.hardened.threshold.yml
 ```
+
+The vanilla threshold reflects 49 passing controls out of 73 applicable checks
+on the pinned Kind image; absent admission/encryption configuration produces
+expected findings. The hardened threshold remains 90%, and both require zero
+profile errors.
 
 Install the MITRE SAF CLI separately to use those commands. JSON assessment
 results can also be opened in [Heimdall Lite](https://heimdall-lite.mitre.org/).

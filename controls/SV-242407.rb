@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242407' do
   title 'The Kubernetes KubeletConfiguration files must have file permissions set to 644 or more restrictive.'
   desc 'The kubelet configuration file contains the runtime configuration of the kubelet service. If an attacker can gain access to this file, changes can be made to open vulnerabilities and bypass user authorizations inherit within Kubernetes with RBAC implemented.'
@@ -36,9 +38,10 @@ The kubelet file should now have the permissions of "644".'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
 
-  expected_mode = input('kubernetes_file_modes')['kubelet_config_file']
+  expected_mode = KubernetesNodeInputs.value('kubernetes_file_modes', input('kubernetes_file_modes'))['kubelet_config_file']
 
   describe kubelet do
+    its('config_file') { should be_file }
     its('config_file') { should_not be_more_permissive_than(expected_mode) }
   end
 end

@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242377' do
   title 'The Kubernetes Scheduler must use TLS 1.2, at a minimum, to protect
 the confidentiality of sensitive data during electronic dissemination.'
@@ -15,7 +17,6 @@ grep -i tls-min-version *
 
 If the setting "tls-min-version" is not configured in the Kubernetes Scheduler manifest file or it is set to "VersionTLS10" or "VersionTLS11", this is a finding.'
   desc 'fix', 'Edit the Kubernetes Scheduler manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Set the value of "--tls-min-version" to "VersionTLS12" or higher.'
-  desc 'caveat', 'Kubernetes Scheduler process is not running on the target.'
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000014-CTR-000035'
@@ -26,12 +27,16 @@ If the setting "tls-min-version" is not configured in the Kubernetes Scheduler m
   tag cci: ['CCI-000068']
   tag nist: ['AC-17 (2)']
 
-  unless kube_scheduler.exist?
-    impact 0.0
-    desc 'caveat', 'Kubernetes Scheduler process is not running on the target.'
+  only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
+    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
   end
 
-  describe kube_scheduler do
+  kube_scheduler_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-scheduler.yaml'), 'kube-scheduler')
+  describe kube_scheduler_manifest do
+    its('errors') { should be_empty }
+  end
+
+  describe kube_scheduler_manifest do
     its('tls-min-version') { should_not be_nil }
     its('tls-min-version') { should_not be_empty }
     its('tls-min-version') { should_not cmp 'VersionTLS10' }

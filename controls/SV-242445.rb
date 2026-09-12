@@ -1,3 +1,4 @@
+require 'kubernetes_node_inputs'
 require 'shellwords'
 
 control 'SV-242445' do
@@ -24,10 +25,10 @@ command:
   tag nist: ['CM-6 b']
 
   only_if('This control applies only to control-plane nodes that manage etcd.', impact: 0.0) do
-    input('node_roles').map(&:to_s).include?('control-plane') && input('etcd_managed_on_node')
+    KubernetesNodeInputs.value('node_roles', input('node_roles')).map(&:to_s).include?('control-plane') && KubernetesNodeInputs.value('etcd_managed_on_node', input('etcd_managed_on_node'))
   end
 
-  data_dir = input('etcd_data_dir')
+  data_dir = KubernetesNodeInputs.value('etcd_data_dir', input('etcd_data_dir'))
   etcd_data_directory = directory(data_dir)
 
   describe etcd_data_directory do
@@ -35,8 +36,8 @@ command:
   end
 
   if etcd_data_directory.exist?
-    etcd_search = command("find #{Shellwords.escape(data_dir)} -mindepth 1 -maxdepth 1 -print")
-    etcd_entries = etcd_search.stdout.lines.map(&:strip).reject(&:empty?)
+    etcd_search = command("find -L #{Shellwords.escape(data_dir)} -mindepth 1 -maxdepth 1 -print0")
+    etcd_entries = etcd_search.stdout.split("\0").reject(&:empty?)
     incorrectly_owned_entries = etcd_entries.reject do |entry|
       etcd_entry = file(entry)
       etcd_entry.owned_by?('etcd') && etcd_entry.grouped_into?('etcd')

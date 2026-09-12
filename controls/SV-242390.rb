@@ -1,3 +1,5 @@
+require 'kubernetes_node_inputs'
+
 control 'SV-242390' do
   title 'The Kubernetes API server must have anonymous authentication disabled.'
   desc 'The Kubernetes API Server controls Kubernetes via an API interface. A user who has access to the API essentially has root access to the entire Kubernetes cluster. To control access, users must be authenticated and authorized. By allowing anonymous connections, the controls put in place to secure the API can be bypassed.
@@ -13,7 +15,6 @@ If the setting "--anonymous-auth" is set to "true" in the Kubernetes API Server 
   desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane.
 
 Set the value of  "--anonymous-auth" to "false".'
-  desc 'caveat', 'Kubernetes API Server process is not running on the target.'
   impact 0.7
   tag severity: 'high'
   tag gtitle: 'SRG-APP-000033-CTR-000100'
@@ -24,12 +25,16 @@ Set the value of  "--anonymous-auth" to "false".'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 
-  unless kube_apiserver.exist?
-    impact 0.0
-    desc 'caveat', 'Kubernetes API Server process is not running on the target.'
+  only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
+    KubernetesNodeInputs.value('node_roles', input('node_roles')).include?('control-plane')
   end
 
-  describe kube_apiserver do
+  kube_apiserver_manifest = kubernetes_manifest(::File.join(KubernetesNodeInputs.value('manifests_path', input('manifests_path')), 'kube-apiserver.yaml'), 'kube-apiserver')
+  describe kube_apiserver_manifest do
+    its('errors') { should be_empty }
+  end
+
+  describe kube_apiserver_manifest do
     its('anonymous-auth') { should_not cmp 'true' }
   end
 end
