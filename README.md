@@ -1,115 +1,162 @@
-## Kubernetes Node STIG Automated Compliance Validation Profile
+# Kubernetes Node STIG Automated Compliance Validation Profile
 
-InSpec profile to validate the secure configuration of a Kubernetes node against [DISA's](https://public.cyber.mil/stigs/downloads/) Kubernetes Secure Technical Implementation Guide (STIG) Version 1 Release 1.
+This InSpec profile evaluates the node OS requirements of the DISA Kubernetes
+Security Technical Implementation Guide (STIG), **Version 2 Release 6**. Run it
+alongside the [Kubernetes Cluster profile](https://github.com/mitre/k8s-cluster-stig-baseline),
+which assesses resources through the Kubernetes API. Run this node profile on
+each control-plane and worker node.
 
-## Getting Started  
-It is intended and recommended that InSpec and this profile be run from a __"runner"__ host (such as a DevOps orchestration server, an administrative management system, or a developer's workstation/laptop) against the target remotely using the SSH transport.
+## Requirements and setup
 
-__For the best security of the runner, always install on the runner the _latest version_ of InSpec and supporting Ruby language components.__
-
-Latest versions and installation options are available at the [InSpec](http://inspec.io/) site.
-
-The Kubernetes STIG includes security requirements for both the Kubernetes cluster itself and the nodes that comprise it. This profile includes the checks for the node portion. It is intended  to be used in conjunction with the <b>[Kubernetes Cluster](https://github.com/mitre/k8s-cluster-stig-baseline)</b> profile that performs automated compliance checks of the Kubernetes cluster.
-
-## Getting Started
-
-### Requirements
-
-#### Kubernetes Cluster
-- Kubernetes Platform deployment
-- Access to the Kubernetes Node over ssh
-- Account providing appropriate permissions to perform audit scan
-
-
-#### Required software on the InSpec Runner
-- git
-- [InSpec](https://www.chef.io/products/chef-inspec/)
-
-### Setup Environment on the InSpec Runner
-#### Install InSpec
-Go to https://www.inspec.io/downloads/ and consult the documentation for your Operating System to download and install InSpec.
-
-#### Ensure InSpec version is at least 4.23.10 
-```sh
-inspec --version
-```
-### Profile Input Values
-The default values for profile inputs are given in `inspec.yml`. These values can be overridden by creating an `inputs.yml` file -- see [the InSpec documentation for inputs](https://docs.chef.io/inspec/inputs/).
-
-```yml
-  - name: manifests_path
-    description: 'Path to Kubernetes manifest files on the target node'
-    type: string
-    value: '/etc/kubernetes/manifests'
-    required: true
-
-  - name: pki_path
-    description: 'Path to Kubernetes PKI files on the target node'
-    type: string
-    value: '/etc/kubernetes/pki/'
-    required: true
-
-  - name: kubeadm_path
-    description: 'Path to kubeadm file on the target node'
-    type: string
-    value: '/usr/local/bin/kubeadm'
-    required: true
-
-  - name: kubectl_path
-    description: 'Path to kubectl on the target node'
-    type: string
-    value: '/usr/local/bin/kubectl'
-    required: true
-
-  - name: kubernetes_conf_files
-    description: 'Path to Kubernetes conf files on the target node'
-    type: array
-    value:
-        - /etc/kubernetes/admin.conf
-        - /etc/kubernetes/scheduler.conf
-        - /etc/kubernetes/controller-manager.conf
-    required: true
-
-```
-
-### How to execute this instance  
-(See: https://www.inspec.io/docs/reference/cli/)
-
-**Execute the Kubernetes Node profile on each node in the cluster. The profile will adapt its checks based on the Kubernetes components located on the node.**
-
-#### Execute a single Control in the Profile 
-**Note**: Replace the profile's directory name - e.g. - `<Profile>` with `.` if currently in the profile's root directory.
+Use an audit runner with Git, Ruby, and Bundler. CI uses Ruby 3.1. Install the
+Gemfile dependencies, including Cinc Auditor, the community distribution
+compatible with InSpec profiles:
 
 ```sh
-inspec exec <Profile> -t ssh://TARGET_USERNAME@TARGET_IP:TARGET_PORT --sudo -i <your_PEM_KEY> --controls=<control_id> --show-progress
+bundle install
+bundle exec cinc-auditor version
 ```
 
-#### Execute a Single Control and save results as JSON 
+Bundler creates a local `Gemfile.lock`; this repository does not track it. Keep
+that file when you need to reproduce a local dependency resolution.
+
+For SSH scans, the runner needs access to each node and an account able to read
+its processes and configuration files, normally through sudo. Use another
+supported node transport when SSH is disabled, as required by the worker-node
+SSH controls. The Kind test suites use Docker transport.
+
+## Profile inputs
+
+[inspec.yml](inspec.yml) declares every input and default. Supply overrides as a
+mapping in an input file. For example, save the following as `inputs.yml` and
+set the role, version, and paths for the actual target:
+
+```yaml
+node_roles:
+  - control-plane
+# Example for Kubernetes 1.32; replace 32 with the target's actual minor version.
+kubernetes_minor_version: 32
+etcd_managed_on_node: true
+manifests_path: /etc/kubernetes/manifests
+etcd_data_dir: /var/lib/etcd
+kubeadm_conf_path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+```
+
+Use `node_roles: [worker]` for a worker and
+`node_roles: [control-plane, worker]` for a dual-role node. This required input
+has no default; provide the exact role names. Always set
+`kubernetes_minor_version` to the target version: its compatibility default of
+`16` is not detected from the node.
+
+| Input | Default | Purpose |
+|---|---|---|
+| `node_roles` | Required; no default | `control-plane`, `worker`, or both. |
+| `kubernetes_minor_version` | `16` | Selects version-specific checks; explicitly set the target's minor version. |
+| `manifests_path` | `/etc/kubernetes/manifests` | Directory containing the node's static Pod manifests. |
+| `etcd_managed_on_node` | `true` | Whether a control-plane node hosts the etcd instance being assessed. |
+| `etcd_data_dir` | `/var/lib/etcd` | Local etcd data directory. |
+| `pki_path` | `/etc/kubernetes/pki/` | Kubernetes PKI directory. |
+| `kubeadm_conf_path` | `/etc/systemd/system/kubelet.service.d/10-kubeadm.conf` | Kubeadm-installed kubelet service drop-in, not the kubeadm executable. |
+| `kubectl_path` | `/usr/local/bin/kubectl` | kubectl executable on the target node. |
+| `kubectl_minversion` | `1.12.9` | STIG minimum client version; not a general supported-version or skew check. |
+| `kubernetes_conf_files` | `/etc/kubernetes/admin.conf`, `/etc/kubernetes/scheduler.conf`, `/etc/kubernetes/controller-manager.conf` | Files assessed for ownership and permissions. |
+| `kubernetes_file_modes` | See below | Maximum allowed permission bits for each artifact category. |
+| `audit_log_retention_days` | `30` | Minimum configured local audit-log retention. |
+| `streaming_connection_idle_timeout_seconds` | `300` | Minimum configured kubelet streaming idle timeout. |
+
+The etcd manifest and data controls apply to control-plane nodes where
+`etcd_managed_on_node` is `true`. Set it to `false` only for external etcd and
+arrange a separate assessment of that instance. The manifest controls expect
+`etcd.yaml` under `manifests_path`. Paths refer to the target node's filesystem.
+
+File-mode defaults enforce the unmodified STIG requirements. Overrides are
+organizational tailoring. If overriding `kubernetes_file_modes`, supply the
+complete mapping so every category retains a value:
+
+```yaml
+kubernetes_file_modes:
+  manifest_files: '0644'
+  kubelet_config_file: '0644'
+  kube_proxy_kubeconfig_file: '0644'
+  kubelet_client_ca_file: '0644'
+  kubelet_kubeconfig_file: '0644'
+  kubeadm_conf_file: '0644'
+  etcd_data_files: '0644'
+  kubernetes_conf_files: '0644'
+  pki_certificate_files: '0644'
+  pki_private_key_files: '0600'
+```
+
+## Run an assessment
+
+Run commands from the profile directory. Replace the SSH target and private-key
+path with the audit account's connection details.
+
 ```sh
-inspec exec <Profile> -t ssh://TARGET_USERNAME@TARGET_IP:TARGET_PORT --sudo -i <your_PEM_KEY> --controls=<control_id> --show-progress --reporter json:results.json
+# Run all controls and save results.
+bundle exec cinc-auditor exec . -t ssh://AUDIT_USER@NODE --sudo \
+  -i ~/.ssh/audit_key --input-file inputs.yml --show-progress \
+  --reporter cli json:results.json
+
+# Run one control.
+bundle exec cinc-auditor exec . -t ssh://AUDIT_USER@NODE --sudo \
+  -i ~/.ssh/audit_key --input-file inputs.yml --controls SV-242379 \
+  --show-progress
 ```
 
-#### Execute All Controls in the Profile 
+The profile inspects processes, configuration files, manifests, ownership, and
+permissions for kube-apiserver, kube-controller-manager, kube-scheduler,
+kubelet, kube-proxy, and etcd. Distribution-specific deployments may require an
+overlay and appropriate input values. A skipped check still requires the
+follow-up described in its result; running the sibling profile does not
+necessarily automate every host-local check deferred by the cluster profile.
+
+## Lint and validate
+
 ```sh
-inspec exec <Profile>  -t ssh://TARGET_USERNAME@TARGET_IP:TARGET_PORT --sudo -i <your_PEM_KEY> --show-progress
+bundle exec cinc-auditor vendor . --overwrite
+bundle exec rake pre_commit_checks
 ```
 
-#### Execute all the Controls in the Profile and save results as JSON 
+The vendor command replaces `vendor/`. Preserve any SAF delta output stored
+there before running it. `pre_commit_checks` runs RuboCop and Cinc Auditor
+profile validation; either failure returns a nonzero status. To run them
+individually, use `bundle exec rake lint` and `bundle exec rake inspec:check`.
+The latter retains its historical task name but invokes Cinc Auditor.
+
+The lint configuration is based on the RHEL 9 sibling profile, targets Ruby
+3.1, includes local resource libraries, and excludes vendored dependencies,
+generated mapped controls, and Kitchen artifacts. The lint workflow runs on
+pull requests and pushes to `main`.
+
+## Test Kitchen Kind suites
+
+Both disposable suites require Docker Desktop (or Docker Engine), `kind`, and
+`kubectl` in addition to Ruby and Bundler. Vendor the profile as shown above,
+then run:
+
 ```sh
-inspec exec <Profile> -t ssh://TARGET_USERNAME@TARGET_IP:TARGET_PORT --sudo -i <your_PEM_KEY> --show-progress  --reporter json:results.json
+KITCHEN_LOCAL_YAML=kitchen.kind.yml bundle exec kitchen test --destroy=always vanilla
+KITCHEN_LOCAL_YAML=kitchen.kind.yml bundle exec kitchen test --destroy=always hardened
 ```
 
-## Check Overview
+The profile connects to the Kind control-plane container using Docker transport
+so it can inspect the node's Linux processes and files. `vanilla` audits an
+unmodified Kind v1.32.2 node. `hardened` adds an audit policy, retention settings,
+TLS settings, and kubelet timeout/kernel-protection settings. These fixtures
+exercise selected checks; they are not a production hardening procedure.
 
-**Kubernetes Components**
+Suite inputs are in `kind.vanilla.inputs.yml` and `kind.hardened.inputs.yml`.
+They currently point `kubeadm_conf_path` at Kind's `kubeadm-flags.env`, so the
+suite's file checks do not assess the `10-kubeadm.conf` service drop-in. Use the
+actual drop-in path for a STIG assessment.
 
-This profile evaluates the STIG compliance of the following Kubernetes Components by evaluating their process configuration:
+Validate saved results with the suite's SAF threshold:
 
-- kube-apiserver
-- kube-controller-manager
-- kube-scheduler
-- kubelet
-- kube-proxy
-- etcd
+```sh
+saf validate threshold -i results/kind_vanilla.json -T kind.vanilla.threshold.yml
+saf validate threshold -i results/kind_hardened.json -T kind.hardened.threshold.yml
+```
 
-If these components are not in use in the target cluster or named differently, the profile has to be adapted for the target K8S distribution using an [InSpec Profile Overlay](https://blog.chef.io/understanding-inspec-profile-inheritance).
+Install the MITRE SAF CLI separately to use those commands. JSON assessment
+results can also be opened in [Heimdall Lite](https://heimdall-lite.mitre.org/).

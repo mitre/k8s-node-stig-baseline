@@ -1,22 +1,15 @@
-# !/usr/bin/env rake
-
-require 'rake/testtask'
 require 'rubocop/rake_task'
 
 namespace :inspec do
-  desc 'validate the inspec profile'
+  desc 'Validate the profile with Cinc Auditor'
   task :check do
-    system 'bundle exec cinc-auditor check .'
+    sh 'bundle', 'exec', 'cinc-auditor', 'check', '.'
   end
 end
 
-begin
-  RuboCop::RakeTask.new(:lint) do |task|
-    task.options += %w[--display-cop-names --no-color --parallel]
-  end
-rescue LoadError
-  puts 'rubocop is not available. Install the rubocop gem to run the lint tests.'
+RuboCop::RakeTask.new(:lint) do |task|
+  task.options += %w[--display-cop-names --no-color --parallel]
 end
 
-desc 'pre-commit checks'
+desc 'Run lint and profile validation'
 task pre_commit_checks: [:lint, 'inspec:check']
