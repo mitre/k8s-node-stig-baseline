@@ -127,6 +127,14 @@ retain both assessment results. Organizational least-privilege justification
 still requires manual review. Run the skew check against every API-server
 endpoint in an HA cluster using the appropriate `kubectl_kubeconfig_path`.
 
+Node review evidence includes the actual PodSecurity configuration-file path,
+including a separately referenced policy file. SV-245544 retains its required
+certificate/key flag checks and adds organizational approval review with the
+resolved file paths and public certificate subject, issuer, serial, and validity
+period. It does not read or report private-key contents. Etcd TLS result labels
+identify whether settings came from manifest arguments, environment variables,
+or a mounted configuration file; environment values are not included in labels.
+
 ## Profile libraries
 
 The three local libraries keep file parsing reusable: `kubernetes_manifest.rb`

@@ -40,7 +40,8 @@ If the setting "--kubelet-client-key" is not configured in the Kubernetes API se
     input('node_roles').include?('control-plane')
   end
 
-  kube_apiserver_manifest = kubernetes_manifest(::File.join(input('manifests_path'), 'kube-apiserver.yaml'), 'kube-apiserver')
+  manifest_path = ::File.join(input('manifests_path'), 'kube-apiserver.yaml')
+  kube_apiserver_manifest = kubernetes_manifest(manifest_path, 'kube-apiserver')
   describe kube_apiserver_manifest do
     its('errors') { should be_empty }
   end
@@ -50,5 +51,21 @@ If the setting "--kubelet-client-key" is not configured in the Kubernetes API se
     its('kubelet-client-certificate') { should_not be_empty }
     its('kubelet-client-key') { should_not be_nil }
     its('kubelet-client-key') { should_not be_empty }
+  end
+
+  certificate_path = kube_apiserver_manifest.host_path(kube_apiserver_manifest.params['kubelet-client-certificate'])
+  key_path = kube_apiserver_manifest.host_path(kube_apiserver_manifest.params['kubelet-client-key'])
+  certificate_details = 'Certificate metadata unavailable: the certificate could not be located or read.'
+  if certificate_path && file(certificate_path).file?
+    begin
+      certificate = x509_certificate(certificate_path)
+      certificate_details = "subject=#{certificate.subject_dn}; issuer=#{certificate.issuer_dn}; serial=#{certificate.serial}; valid from #{certificate.not_before} until #{certificate.not_after}" if certificate.certificate?
+    rescue OpenSSL::X509::CertificateError, Inspec::Exceptions::ResourceFailed
+      certificate_details = 'Certificate metadata unavailable: the referenced file could not be read as an X.509 certificate.'
+    end
+  end
+
+  describe 'Organizational approval of the API Server kubelet client certificate and key' do
+    skip "Confirm that the certificate and key pair are approved for API Server-to-kubelet authentication. Manifest: #{manifest_path}; certificate: #{certificate_path || 'unresolved'}; key: #{key_path || 'unresolved'}. #{certificate_details}"
   end
 end

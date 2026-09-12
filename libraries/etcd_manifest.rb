@@ -7,15 +7,21 @@ class EtcdManifest < KubernetesManifest
 
   def initialize(path)
     super(path, 'etcd')
+    @configuration_source = "command/args in #{path}"
     apply_environment
     config_path = params['config-file']
     apply_config_file(config_path) if params.key?('config-file')
   end
 
+  def to_s
+    "etcd TLS settings from #{@configuration_source}"
+  end
+
   private
 
   def apply_environment
-    Array(container['env']).each { |variable| apply_variable(variable) }
+    environment_names = Array(container['env']).filter_map { |variable| apply_variable(variable) }
+    @configuration_source += "; environment variables #{environment_names.join(', ')}" unless environment_names.empty?
     @errors << 'Cannot resolve etcd envFrom settings from a node manifest' unless Array(container['envFrom']).empty?
   end
 
@@ -27,10 +33,12 @@ class EtcdManifest < KubernetesManifest
 
     @errors << "Cannot resolve etcd environment variable #{variable['name']}" if variable['valueFrom']
     @params[flag] = variable['value']
+    variable['name']
   end
 
   def apply_config_file(config_path)
     path = host_path(config_path)
+    @configuration_source = path ? "configuration file #{path} (referenced by #{@path})" : "unresolved config-file #{config_path.inspect} in #{@path}"
     config = path ? read_mapping(path) : {}
     # A configuration file replaces flags and environment settings, rather than merging.
     @params = {}

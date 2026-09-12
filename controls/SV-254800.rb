@@ -66,9 +66,10 @@ Best Practice: https://kubernetes.io/docs/concepts/security/pod-security-policy/
   plugins = Array(policy['plugins']).select { |entry| entry.is_a?(Hash) && entry['name'] == 'PodSecurity' }
   plugin = plugins.length == 1 ? plugins.first : {}
   configuration = plugin['configuration']
+  configuration_path = policy_path
   if plugin['path']
-    plugin_path = manifest.host_path(plugin['path'])
-    configuration = plugin_path ? manifest.read_mapping(plugin_path) : {}
+    configuration_path = manifest.host_path(plugin['path'])
+    configuration = configuration_path ? manifest.read_mapping(configuration_path) : {}
   end
 
   describe manifest do
@@ -115,7 +116,7 @@ Best Practice: https://kubernetes.io/docs/concepts/security/pod-security-policy/
     end
 
     describe 'PodSecurity defaults and exemptions represent organizational least privilege' do
-      skip "Review defaults #{defaults.inspect} and exemptions #{configuration['exemptions'].inspect} from #{policy_path} against namespace policies and documented organizational requirements."
+      skip "Review defaults #{defaults.inspect} and exemptions #{configuration['exemptions'].inspect} from #{configuration_path} (admission configuration: #{policy_path}) against namespace policies and documented organizational requirements."
     end
   end
 end
