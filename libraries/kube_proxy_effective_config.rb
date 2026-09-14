@@ -10,7 +10,8 @@ class KubeProxyEffectiveConfig < Inspec.resource(1)
 
   attr_reader :errors, :params, :configuration_path, :kubeconfig_path
 
-  def initialize(process_name = nil)
+  # InSpec's resource registration wrapper initializes the resource base.
+  def initialize(process_name = nil) # rubocop:disable Lint/MissingSuper
     @process_name = process_name || inspec.kubernetes.kube_proxy_bin
     @errors = []
     @params = {}
@@ -43,6 +44,10 @@ class KubeProxyEffectiveConfig < Inspec.resource(1)
     @params = KubernetesArguments.parse(argv)
     apply_k3s_component_arguments(argv) if @process_name.match?(/k3s/)
 
+    resolve_kubeconfig_source
+  end
+
+  def resolve_kubeconfig_source
     if @params.key?('kubeconfig')
       set_kubeconfig(@params['kubeconfig'], '--kubeconfig')
     elsif @params.key?('config')
@@ -99,20 +104,19 @@ class KubeProxyEffectiveConfig < Inspec.resource(1)
   end
 
   def read_process_mapping(path)
-    resolved = process_path(path)
-    target = inspec.file(resolved)
-    unless target.file? && target.content.is_a?(String)
-      @errors << "Kube-proxy configuration #{path} is missing or unreadable"
-      return nil
-    end
+    target = inspec.file(process_path(path))
+    return configuration_error("Kube-proxy configuration #{path} is missing or unreadable") unless target.file? && target.content.is_a?(String)
 
     mapping = YAML.safe_load(target.content)
     return mapping if mapping.is_a?(Hash)
 
-    @errors << "Kube-proxy configuration #{path} must be a YAML mapping"
-    nil
+    configuration_error("Kube-proxy configuration #{path} must be a YAML mapping")
   rescue Psych::Exception
-    @errors << "Kube-proxy configuration #{path} contains invalid or unsupported YAML"
+    configuration_error("Kube-proxy configuration #{path} contains invalid or unsupported YAML")
+  end
+
+  def configuration_error(message)
+    @errors << message
     nil
   end
 
