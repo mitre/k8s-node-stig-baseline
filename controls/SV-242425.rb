@@ -46,8 +46,11 @@ systemctl daemon-reload && systemctl restart kubelet'
     its('tls-cert-file') { should be_nil }
   end
 
-  describe kubelet_config_file do
-    its('tlsCertFile') { should_not be_nil }
-    its('tlsCertFile') { should_not be_empty }
+  tls_cert_file = kubelet_config_file.params['tlsCertFile']
+  describe 'Kubelet tlsCertFile configuration' do
+    it 'is configured as a non-empty path' do
+      expect(tls_cert_file).to be_a(String), 'tlsCertFile must be configured as a string path'
+      expect(tls_cert_file.strip).not_to be_empty, 'tlsCertFile must not be empty'
+    end
   end
 end

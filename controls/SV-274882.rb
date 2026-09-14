@@ -68,32 +68,38 @@ The encryption config must specify the Secret's resource and provider. Below is 
     its('errors') { should be_empty }
   end
 
-  describe 'Encryption configuration format' do
-    it('uses EncryptionConfiguration') { expect(policy['kind']).to eq 'EncryptionConfiguration' }
-    it('uses the supported API version') { expect(policy['apiVersion']).to eq 'apiserver.config.k8s.io/v1' }
-  end
+  if manifest.errors.empty?
+    describe 'Encryption configuration format' do
+      it('uses EncryptionConfiguration') { expect(policy['kind']).to eq 'EncryptionConfiguration' }
+      it('uses the supported API version') { expect(policy['apiVersion']).to eq 'apiserver.config.k8s.io/v1' }
+    end
 
-  # Kubernetes applies the first matching resource rule and its first provider.
-  secret_rule = Array(policy['resources']).find do |rule|
-    rule.is_a?(Hash) && (Array(rule['resources']) & ['secrets', 'secrets.', '*.', '*.*']).any?
-  end
-  first_provider = secret_rule && Array(secret_rule['providers']).first
-  provider_name = first_provider.is_a?(Hash) && first_provider.keys.first
-  provider_settings = first_provider.is_a?(Hash) && first_provider[provider_name]
+    # Kubernetes applies the first matching resource rule and its first provider.
+    secret_rule = Array(policy['resources']).find do |rule|
+      rule.is_a?(Hash) && (Array(rule['resources']) & ['secrets', 'secrets.', '*.', '*.*']).any?
+    end
+    describe 'Encryption configuration includes a rule for Secrets' do
+      subject { !secret_rule.nil? }
+      it { should eq true }
+    end
 
-  describe 'Encryption configuration includes a rule for Secrets' do
-    subject { !secret_rule.nil? }
-    it { should eq true }
-  end
+    if secret_rule
+      first_provider = Array(secret_rule['providers']).first
+      provider_name = first_provider.is_a?(Hash) && first_provider.keys.first
+      provider_settings = first_provider.is_a?(Hash) && first_provider[provider_name]
 
-  # Report only the provider name, never encryption key material.
-  describe 'The first provider for Secrets uses encryption instead of identity' do
-    subject { provider_name }
-    it { should be_in %w[aescbc aesgcm secretbox kms] }
-  end
+      # Report only the provider name, never encryption key material.
+      describe 'The first provider for Secrets uses encryption instead of identity' do
+        subject { provider_name }
+        it { should be_in %w[aescbc aesgcm secretbox kms] }
+      end
 
-  describe 'The encryption provider has configuration settings' do
-    subject { provider_settings.is_a?(Hash) && !provider_settings.empty? && first_provider.size == 1 }
-    it { should eq true }
+      if first_provider.is_a?(Hash)
+        describe 'The encryption provider has configuration settings' do
+          subject { provider_settings.is_a?(Hash) && !provider_settings.empty? && first_provider.size == 1 }
+          it { should eq true }
+        end
+      end
+    end
   end
 end

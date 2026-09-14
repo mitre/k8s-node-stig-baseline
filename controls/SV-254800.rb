@@ -63,60 +63,68 @@ Best Practice: https://kubernetes.io/docs/concepts/security/pod-security-policy/
   manifest = kubernetes_manifest(::File.join(input('manifests_path'), 'kube-apiserver.yaml'), 'kube-apiserver')
   policy_path = manifest.host_path(manifest.params['admission-control-config-file'])
   policy = policy_path ? manifest.read_mapping(policy_path) : {}
-  plugins = Array(policy['plugins']).select { |entry| entry.is_a?(Hash) && entry['name'] == 'PodSecurity' }
-  plugin = plugins.length == 1 ? plugins.first : {}
-  configuration = plugin['configuration']
-  configuration_path = policy_path
-  if plugin['path']
-    configuration_path = manifest.host_path(plugin['path'])
-    configuration = configuration_path ? manifest.read_mapping(configuration_path) : {}
-  end
 
   describe manifest do
     its('errors') { should be_empty }
   end
 
-  describe 'Admission configuration format' do
-    it('uses AdmissionConfiguration') { expect(policy['kind']).to eq 'AdmissionConfiguration' }
-    it('uses a supported API version') { expect(policy['apiVersion'].to_s).to match(%r{\Aapiserver\.config\.k8s\.io/v1(?:alpha1|beta1)?\z}) }
-  end
-
-  describe 'Admission configuration contains one PodSecurity plugin' do
-    subject { plugins.length }
-    it { should eq 1 }
-  end
-
-  configuration = {} unless configuration.is_a?(Hash)
-  describe 'PodSecurity configuration type' do
-    subject { configuration['kind'] }
-    it { should eq 'PodSecurityConfiguration' }
-  end
-
-  describe 'PodSecurity configuration API version' do
-    subject { configuration['apiVersion'].to_s }
-    it { should match(%r{\Apod-security\.admission\.config\.k8s\.io/v1(?:alpha1|beta1)?\z}) }
-  end
-
-  defaults = configuration['defaults']
-  describe 'PodSecurity configuration defines defaults' do
-    subject { defaults.is_a?(Hash) }
-    it { should eq true }
-  end
-
-  if defaults.is_a?(Hash)
-    %w[enforce audit warn].each do |mode|
-      describe "PodSecurity #{mode} level" do
-        subject { defaults.fetch(mode, 'privileged') }
-        it { should be_in %w[privileged baseline restricted] }
-      end
-      describe "PodSecurity #{mode} version" do
-        subject { defaults.fetch("#{mode}-version", 'latest') }
-        it { should match(/\A(?:latest|v1\.\d+)\z/) }
-      end
+  if manifest.errors.empty?
+    describe 'Admission configuration format' do
+      it('uses AdmissionConfiguration') { expect(policy['kind']).to eq 'AdmissionConfiguration' }
+      it('uses a supported API version') { expect(policy['apiVersion'].to_s).to match(%r{\Aapiserver\.config\.k8s\.io/v1(?:alpha1|beta1)?\z}) }
     end
 
-    describe 'PodSecurity defaults and exemptions represent organizational least privilege' do
-      skip "Review defaults #{defaults.inspect} and exemptions #{configuration['exemptions'].inspect} from #{configuration_path} (admission configuration: #{policy_path}) against namespace policies and documented organizational requirements."
+    plugins = Array(policy['plugins']).select { |entry| entry.is_a?(Hash) && entry['name'] == 'PodSecurity' }
+    describe 'Admission configuration contains one PodSecurity plugin' do
+      subject { plugins.length }
+      it { should eq 1 }
+    end
+
+    if plugins.length == 1
+      plugin = plugins.first
+      configuration = plugin['configuration']
+      configuration_path = policy_path
+      if plugin['path']
+        configuration_path = manifest.host_path(plugin['path'])
+        configuration = configuration_path ? manifest.read_mapping(configuration_path) : nil
+      end
+
+      if manifest.errors.empty?
+        describe 'PodSecurity configuration type' do
+          subject { configuration.is_a?(Hash) && configuration['kind'] }
+          it { should eq 'PodSecurityConfiguration' }
+        end
+
+        if configuration.is_a?(Hash)
+          describe 'PodSecurity configuration API version' do
+            subject { configuration['apiVersion'].to_s }
+            it { should match(%r{\Apod-security\.admission\.config\.k8s\.io/v1(?:alpha1|beta1)?\z}) }
+          end
+
+          defaults = configuration['defaults']
+          describe 'PodSecurity configuration defines defaults' do
+            subject { defaults.is_a?(Hash) }
+            it { should eq true }
+          end
+
+          if defaults.is_a?(Hash)
+            %w[enforce audit warn].each do |mode|
+              describe "PodSecurity #{mode} level" do
+                subject { defaults.fetch(mode, 'privileged') }
+                it { should be_in %w[privileged baseline restricted] }
+              end
+              describe "PodSecurity #{mode} version" do
+                subject { defaults.fetch("#{mode}-version", 'latest') }
+                it { should match(/\A(?:latest|v1\.\d+)\z/) }
+              end
+            end
+
+            describe 'PodSecurity defaults and exemptions represent organizational least privilege' do
+              skip "Review defaults #{defaults.inspect} and exemptions #{configuration['exemptions'].inspect} from #{configuration_path} (admission configuration: #{policy_path}) against namespace policies and documented organizational requirements."
+            end
+          end
+        end
+      end
     end
   end
 end

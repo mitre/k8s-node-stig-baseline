@@ -34,10 +34,10 @@ If the setting "tls-min-version" is not configured in the Kubernetes Controller 
     its('errors') { should be_empty }
   end
 
-  describe kube_controller_manager_manifest do
-    its('tls-min-version') { should_not be_nil }
-    its('tls-min-version') { should_not be_empty }
-    its('tls-min-version') { should_not cmp 'VersionTLS10' }
-    its('tls-min-version') { should_not cmp 'VersionTLS11' }
+  if kube_controller_manager_manifest.errors.empty?
+    describe 'Controller Manager minimum TLS version' do
+      subject { kube_controller_manager_manifest.params['tls-min-version'] }
+      it { should be_in %w[VersionTLS12 VersionTLS13] }
+    end
   end
 end

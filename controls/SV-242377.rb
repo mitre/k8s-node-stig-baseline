@@ -34,10 +34,10 @@ If the setting "tls-min-version" is not configured in the Kubernetes Scheduler m
     its('errors') { should be_empty }
   end
 
-  describe kube_scheduler_manifest do
-    its('tls-min-version') { should_not be_nil }
-    its('tls-min-version') { should_not be_empty }
-    its('tls-min-version') { should_not cmp 'VersionTLS10' }
-    its('tls-min-version') { should_not cmp 'VersionTLS11' }
+  if kube_scheduler_manifest.errors.empty?
+    describe 'Scheduler minimum TLS version' do
+      subject { kube_scheduler_manifest.params['tls-min-version'] }
+      it { should be_in %w[VersionTLS12 VersionTLS13] }
+    end
   end
 end

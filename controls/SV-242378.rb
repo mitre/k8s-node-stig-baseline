@@ -34,10 +34,10 @@ If the setting "tls-min-version" is not configured in the Kubernetes API Server 
     its('errors') { should be_empty }
   end
 
-  describe kube_apiserver_manifest do
-    its('tls-min-version') { should_not be_nil }
-    its('tls-min-version') { should_not be_empty }
-    its('tls-min-version') { should_not cmp 'VersionTLS10' }
-    its('tls-min-version') { should_not cmp 'VersionTLS11' }
+  if kube_apiserver_manifest.errors.empty?
+    describe 'API Server minimum TLS version' do
+      subject { kube_apiserver_manifest.params['tls-min-version'] }
+      it { should be_in %w[VersionTLS12 VersionTLS13] }
+    end
   end
 end

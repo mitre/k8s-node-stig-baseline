@@ -31,8 +31,9 @@ Set the value of "--request-timeout" greater than "0".'
 
   timeout = KubernetesArguments.duration(kube_apiserver_manifest.params['request-timeout'])
   describe 'API Server request timeout is a positive duration' do
-    subject { timeout }
-    it { should_not be_nil }
-    it { should be > 0 }
+    it 'is configured with a valid duration greater than zero' do
+      expect(timeout).not_to be_nil, 'The API Server --request-timeout must be configured with a valid Kubernetes duration'
+      expect(timeout).to be > 0
+    end
   end
 end

@@ -14,7 +14,7 @@ finding.'
 command:
 
     chown root:root <location from kubeconfig>.'
-  desc 'caveat', 'Kube-Proxy process is not running on the target.'
+  desc 'caveat', "Set input('kube_proxy_expected') to false only when an alternative network proxy implementation makes kube-proxy inapplicable on this node."
   impact 0.5
   tag severity: 'medium'
   tag gtitle: 'SRG-APP-000516-CTR-001325'
@@ -25,14 +25,28 @@ command:
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 
-  unless kube_proxy.exist?
-    impact 0.0
-    desc 'caveat', 'Kube-Proxy process is not running on the target.'
+  only_if("This control is not applicable when input('kube_proxy_expected') is false because an alternative network proxy implementation is in use.", impact: 0.0) do
+    input('kube_proxy_expected')
   end
 
-  describe kube_proxy do
-    its('kubeconfig_file') { should_not be_nil }
-    its('kubeconfig_file') { should be_owned_by('root') }
-    its('kubeconfig_file') { should be_grouped_into('root') }
+  effective_config = kube_proxy_effective_config
+
+  describe 'Kube-proxy process' do
+    subject { effective_config.exist? }
+    it { should eq true }
+  end
+
+  if effective_config.exist?
+    describe effective_config do
+      its('errors') { should be_empty }
+    end
+
+    if effective_config.errors.empty?
+      describe "Kube-proxy kubeconfig #{effective_config.kubeconfig_path}" do
+        subject { effective_config.kubeconfig_file }
+        it { should be_owned_by('root') }
+        it { should be_grouped_into('root') }
+      end
+    end
   end
 end

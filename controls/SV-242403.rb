@@ -63,27 +63,29 @@ Note: If the API server is running as a Pod, then the manifest will also need to
     its('errors') { should be_empty }
   end
 
-  audit_policy_path = kube_apiserver_manifest.host_path(kube_apiserver_manifest.params['audit-policy-file']).to_s
+  audit_policy_path = kube_apiserver_manifest.host_path(kube_apiserver_manifest.params['audit-policy-file'])
 
-  describe 'Kubernetes API Server audit policy path' do
-    subject { audit_policy_path }
-    it { should_not be_empty }
-  end
-
-  unless audit_policy_path.empty?
-    describe file(audit_policy_path) do
+  if kube_apiserver_manifest.errors.empty?
+    audit_policy_file = file(audit_policy_path)
+    describe audit_policy_file do
       it { should be_file }
-      its('size') { should be > 0 }
     end
 
-    if file(audit_policy_path).exist?
+    if audit_policy_file.file?
+      describe 'Kubernetes API Server audit policy file' do
+        subject { audit_policy_file.size }
+        it { should be > 0 }
+      end
+
       policy = kube_apiserver_manifest.read_mapping(audit_policy_path)
-      describe 'API Server audit policy' do
-        subject { policy }
-        its(['apiVersion']) { should match %r{\Aaudit\.k8s\.io/v\d+\z} }
-        its(['kind']) { should cmp 'Policy' }
-        its(['rules']) { should cmp [{ 'level' => 'RequestResponse' }] }
-        it('must not omit audit stages') { expect(Array(policy['omitStages'])).to be_empty }
+      if kube_apiserver_manifest.errors.empty?
+        describe 'API Server audit policy' do
+          subject { policy }
+          its(['apiVersion']) { should match %r{\Aaudit\.k8s\.io/v\d+\z} }
+          its(['kind']) { should cmp 'Policy' }
+          its(['rules']) { should cmp [{ 'level' => 'RequestResponse' }] }
+          it('must not omit audit stages') { expect(Array(policy['omitStages'])).to be_empty }
+        end
       end
     end
   end
