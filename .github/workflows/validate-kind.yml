@@ -1,0 +1,117 @@
+name: Kind Node Testing
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate Kubernetes node STIG profile (${{ matrix.suite }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [vanilla, hardened]
+    permissions:
+      contents: read
+    env:
+      CHEF_LICENSE: accept-silent
+      KITCHEN_LOCAL_YAML: kitchen.kind.yml
+      LC_ALL: en_US.UTF-8
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Set short git commit SHA
+        run: echo "COMMIT_SHORT_SHA=$(git rev-parse --short ${{ github.sha }})" >> "$GITHUB_ENV"
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@e5517072e87f198d9533967ae13d97c11b604005 # v1.99.0
+        with:
+          ruby-version: '3.1'
+
+      - name: Install profile dependencies
+        run: |
+          echo 'gem: --no-document' >> ~/.gemrc
+          bundle install
+          bundle exec cinc-auditor vendor . --overwrite
+
+      - name: Check the InSpec profile
+        run: bundle exec cinc-auditor check .
+
+      - name: Install Kind and kubectl
+        uses: helm/kind-action@ef37e7f390d99f746eb8b610417061a60e82a6cc # v1
+        with:
+          install_only: true
+          version: v0.33.0
+          kubectl_version: v1.32.0
+
+      - name: Run Kitchen Kind suite
+        id: kitchen
+        continue-on-error: true
+        run: bundle exec kitchen test --destroy=always ${{ matrix.suite }}
+
+      - name: Create SAF JSON summary
+        if: always() && hashFiles(format('results/kind_{0}.json', matrix.suite)) != ''
+        continue-on-error: true
+        uses: mitre/saf_action@a19f76ed3721c14aa8a1afb8eded117d8bf16a5d # v1.9.0
+        with:
+          command_string: "view summary -f json -i results/kind_${{ matrix.suite }}.json -o results/kind_${{ matrix.suite }}-data.json"
+
+      - name: Display SAF results summary
+        if: always() && hashFiles(format('results/kind_{0}.json', matrix.suite)) != ''
+        continue-on-error: true
+        uses: mitre/saf_action@a19f76ed3721c14aa8a1afb8eded117d8bf16a5d # v1.9.0
+        with:
+          command_string: "view summary -i results/kind_${{ matrix.suite }}.json"
+
+      - name: Generate Markdown summary
+        if: always() && hashFiles(format('results/kind_{0}-data.json', matrix.suite)) != ''
+        continue-on-error: true
+        run: |
+          python markdown-summary.py < results/kind_${{ matrix.suite }}-data.json > results/kind_${{ matrix.suite }}-markdown-summary.md
+          cat results/kind_${{ matrix.suite }}-markdown-summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Validate scan threshold
+        if: always() && hashFiles(format('results/kind_{0}.json', matrix.suite)) != ''
+        uses: mitre/saf_action@a19f76ed3721c14aa8a1afb8eded117d8bf16a5d # v1.9.0
+        with:
+          command_string: "validate threshold -i results/kind_${{ matrix.suite }}.json -T kind.${{ matrix.suite }}.threshold.yml"
+
+      - name: Upload results to Heimdall
+        if: always() && hashFiles(format('results/kind_{0}.json', matrix.suite)) != ''
+        continue-on-error: true
+        env:
+          SAF_HEIMDALL_UPLOAD_KEY: ${{ secrets.SAF_HEIMDALL_UPLOAD_KEY }}
+        run: |
+          curl -# -s -F data=@results/kind_${{ matrix.suite }}.json \
+            -F "filename=k8s-node-kind-${{ matrix.suite }}-${{ env.COMMIT_SHORT_SHA }}.json" \
+            -F "public=true" \
+            -F "evaluationTags=${{ env.COMMIT_SHORT_SHA }},${{ github.repository }},${{ github.workflow }},${{ matrix.suite }},kind" \
+            -H "Authorization: Api-Key $SAF_HEIMDALL_UPLOAD_KEY" \
+            "${{ vars.SAF_HEIMDALL_URL }}/evaluations"
+
+      - name: Upload Kind assessment results
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: kind-${{ matrix.suite }}-results
+          path: results/
+          if-no-files-found: warn
+
+      - name: Remove Kind resources
+        if: always()
+        run: bundle exec kitchen destroy ${{ matrix.suite }} || true
+
+      - name: Confirm Kitchen completed
+        if: always() && steps.kitchen.outcome != 'success'
+        run: exit 1
