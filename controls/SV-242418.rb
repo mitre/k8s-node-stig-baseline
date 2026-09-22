@@ -33,15 +33,17 @@ Set the value of "--tls-cipher-suites" to:
     its('errors') { should be_empty }
   end
 
-  approved_cipher_suites = %w[
-    TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
-    TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-    TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-    TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-  ]
+  required_cipher_suites = input('required_tls_cipher_suites')
+  configured_cipher_suites = kube_apiserver_manifest.tls_cipher_suites
+  missing_cipher_suites = required_cipher_suites - configured_cipher_suites
 
   describe 'Kubernetes API Server TLS cipher suites' do
-    subject { kube_apiserver_manifest.tls_cipher_suites.sort }
-    it { should cmp approved_cipher_suites.sort }
+    it 'is configured with a non-empty --tls-cipher-suites list' do
+      expect(configured_cipher_suites).not_to be_empty, 'The API Server --tls-cipher-suites must be set to a non-empty list'
+    end
+    # The check text requires containment, so a configured superset is compliant.
+    it "includes every suite in input('required_tls_cipher_suites')" do
+      expect(missing_cipher_suites).to be_empty, "Required TLS cipher suites missing from --tls-cipher-suites:\n\t- #{missing_cipher_suites.join("\n\t- ")}"
+    end
   end
 end
