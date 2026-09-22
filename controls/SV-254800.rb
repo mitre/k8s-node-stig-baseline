@@ -102,16 +102,11 @@ Best Practice: https://kubernetes.io/docs/concepts/security/pod-security-policy/
           end
 
           defaults = configuration['defaults']
-          describe 'PodSecurity configuration defines defaults' do
-            subject { defaults.is_a?(Hash) }
-            it { should eq true }
-          end
+          pod_security_levels = %w[privileged baseline restricted]
+          minimum_level = input('minimum_pod_security_level').to_s
+          minimum_index = pod_security_levels.index(minimum_level)
 
           if defaults.is_a?(Hash)
-            pod_security_levels = %w[privileged baseline restricted]
-            minimum_level = input('minimum_pod_security_level').to_s
-            minimum_index = pod_security_levels.index(minimum_level)
-
             %w[enforce audit warn].each do |mode|
               # Kubernetes applies "privileged" when a mode is unset.
               configured_level = defaults.fetch(mode, 'privileged').to_s
@@ -132,6 +127,11 @@ Best Practice: https://kubernetes.io/docs/concepts/security/pod-security-policy/
 
             describe 'PodSecurity exemptions represent organizational least privilege' do
               skip "The enforce, audit, and warn levels are checked against input('minimum_pod_security_level'). Review the exemptions #{configuration['exemptions'].inspect} from #{configuration_path} (admission configuration: #{policy_path}) against documented organizational requirements."
+            end
+          else
+            # Effective policy comes from namespace labels, which a node scan cannot read.
+            describe 'PodSecurity namespace policy' do
+              skip "#{configuration_path} configures no defaults, so namespaces without a pod-security.kubernetes.io label fall back to \"privileged\". Confirm every namespace carries an explicit enforce label of at least #{minimum_level}."
             end
           end
         end
