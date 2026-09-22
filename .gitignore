@@ -3,4 +3,5 @@ inspec.lock
 *.json
 .kitchen/
 results/
-Gemfile.lock
+vendor/
+.bundle/
