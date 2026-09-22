@@ -31,8 +31,10 @@ Set the value of "--client-ca-file" to path containing Approved Organizational C
     its('errors') { should be_empty }
   end
 
-  describe kube_apiserver_manifest do
-    its('client-ca-file') { should_not be_nil }
-    its('client-ca-file') { should_not be_empty }
+  if kube_apiserver_manifest.errors.empty?
+    describe kube_apiserver_manifest do
+      its('client-ca-file') { should_not be_nil }
+      its('client-ca-file') { should_not be_empty }
+    end
   end
 end

@@ -34,7 +34,9 @@ Remove the setting "--token-auth-file".'
     its('errors') { should be_empty }
   end
 
-  describe kube_apiserver_manifest do
-    its('token-auth-file') { should be_nil }
+  if kube_apiserver_manifest.errors.empty?
+    describe kube_apiserver_manifest do
+      its('token-auth-file') { should be_nil }
+    end
   end
 end

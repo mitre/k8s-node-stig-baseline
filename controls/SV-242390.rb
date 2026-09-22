@@ -32,7 +32,9 @@ Set the value of  "--anonymous-auth" to "false".'
     its('errors') { should be_empty }
   end
 
-  describe kube_apiserver_manifest do
-    its('anonymous-auth') { should_not cmp 'true' }
+  if kube_apiserver_manifest.errors.empty?
+    describe kube_apiserver_manifest do
+      its('anonymous-auth') { should_not cmp 'true' }
+    end
   end
 end

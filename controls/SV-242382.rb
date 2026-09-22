@@ -31,7 +31,9 @@ Set the value of "--authorization-mode" to "Node,RBAC".'
     its('errors') { should be_empty }
   end
 
-  describe kube_apiserver_manifest do
-    its('authorization-mode') { should cmp 'Node,RBAC' }
+  if kube_apiserver_manifest.errors.empty?
+    describe kube_apiserver_manifest do
+      its('authorization-mode') { should cmp 'Node,RBAC' }
+    end
   end
 end

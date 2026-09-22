@@ -34,7 +34,9 @@ If the setting bind-address is not set to "127.0.0.1" or is not found in the Kub
     its('errors') { should be_empty }
   end
 
-  describe kube_controller_manager_manifest do
-    its('bind-address') { should cmp '127.0.0.1' }
+  if kube_controller_manager_manifest.errors.empty?
+    describe kube_controller_manager_manifest do
+      its('bind-address') { should cmp '127.0.0.1' }
+    end
   end
 end

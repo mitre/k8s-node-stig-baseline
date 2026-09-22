@@ -29,7 +29,9 @@ Set the value of "--use-service-account-credentials" to "true".'
     its('errors') { should be_empty }
   end
 
-  describe kube_controller_manager_manifest do
-    its('use-service-account-credentials') { should cmp 'true' }
+  if kube_controller_manager_manifest.errors.empty?
+    describe kube_controller_manager_manifest do
+      its('use-service-account-credentials') { should cmp 'true' }
+    end
   end
 end

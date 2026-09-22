@@ -46,11 +46,13 @@ If the setting "--kubelet-client-key" is not configured in the Kubernetes API se
     its('errors') { should be_empty }
   end
 
-  describe kube_apiserver_manifest do
-    its('kubelet-client-certificate') { should_not be_nil }
-    its('kubelet-client-certificate') { should_not be_empty }
-    its('kubelet-client-key') { should_not be_nil }
-    its('kubelet-client-key') { should_not be_empty }
+  if kube_apiserver_manifest.errors.empty?
+    describe kube_apiserver_manifest do
+      its('kubelet-client-certificate') { should_not be_nil }
+      its('kubelet-client-certificate') { should_not be_empty }
+      its('kubelet-client-key') { should_not be_nil }
+      its('kubelet-client-key') { should_not be_empty }
+    end
   end
 
   certificate_path = kube_apiserver_manifest.host_path(kube_apiserver_manifest.params['kubelet-client-certificate'])

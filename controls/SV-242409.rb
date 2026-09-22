@@ -28,7 +28,9 @@ If the setting "profiling" is not configured in the Kubernetes Controller Manage
     its('errors') { should be_empty }
   end
 
-  describe kube_controller_manager_manifest do
-    its('profiling') { should cmp 'false' }
+  if kube_controller_manager_manifest.errors.empty?
+    describe kube_controller_manager_manifest do
+      its('profiling') { should cmp 'false' }
+    end
   end
 end

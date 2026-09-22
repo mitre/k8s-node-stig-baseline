@@ -30,8 +30,10 @@ If the setting audit-log-path is not set in the Kubernetes API Server manifest f
     its('errors') { should be_empty }
   end
 
-  describe kube_apiserver_manifest do
-    its('audit-log-path') { should_not be_nil }
+  if kube_apiserver_manifest.errors.empty?
+    describe kube_apiserver_manifest do
+      its('audit-log-path') { should_not be_nil }
+    end
   end
 
   if kube_apiserver_manifest.params['audit-log-path']

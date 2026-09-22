@@ -40,10 +40,12 @@ If the setting tls-cert-file and private-key-file is not set in the Kubernetes A
     its('errors') { should be_empty }
   end
 
-  describe kube_apiserver_manifest do
-    its('tls-cert-file') { should_not be_nil }
-    its('tls-cert-file') { should_not be_empty }
-    its('tls-private-key-file') { should_not be_nil }
-    its('tls-private-key-file') { should_not be_empty }
+  if kube_apiserver_manifest.errors.empty?
+    describe kube_apiserver_manifest do
+      its('tls-cert-file') { should_not be_nil }
+      its('tls-cert-file') { should_not be_empty }
+      its('tls-private-key-file') { should_not be_nil }
+      its('tls-private-key-file') { should_not be_empty }
+    end
   end
 end

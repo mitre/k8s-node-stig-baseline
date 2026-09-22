@@ -27,7 +27,9 @@ If the setting "audit-log-maxage" is not set in the Kubernetes API Server manife
     its('errors') { should be_empty }
   end
 
-  describe kube_apiserver_manifest do
-    its('audit-log-maxage') { should cmp >= input('audit_log_retention_days') }
+  if kube_apiserver_manifest.errors.empty?
+    describe kube_apiserver_manifest do
+      its('audit-log-maxage') { should cmp >= input('audit_log_retention_days') }
+    end
   end
 end

@@ -27,7 +27,9 @@ If the setting "audit-log-maxbackup" is not set in the Kubernetes API Server man
     its('errors') { should be_empty }
   end
 
-  describe kube_apiserver_manifest do
-    its('audit-log-maxbackup') { should cmp >= 10 }
+  if kube_apiserver_manifest.errors.empty?
+    describe kube_apiserver_manifest do
+      its('audit-log-maxbackup') { should cmp >= 10 }
+    end
   end
 end

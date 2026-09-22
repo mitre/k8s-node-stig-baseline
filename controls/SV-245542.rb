@@ -31,7 +31,9 @@ If "basic-auth-file" is set in the Kubernetes API server manifest file this is a
     its('errors') { should be_empty }
   end
 
-  describe kube_apiserver_manifest do
-    its('basic-auth-file') { should be_nil }
+  if kube_apiserver_manifest.errors.empty?
+    describe kube_apiserver_manifest do
+      its('basic-auth-file') { should be_nil }
+    end
   end
 end

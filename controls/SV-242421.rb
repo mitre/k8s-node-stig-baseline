@@ -41,8 +41,10 @@ Set the value of "--root-ca-file" to path containing Approved Organizational Cer
     its('errors') { should be_empty }
   end
 
-  describe kube_controller_manager_manifest do
-    its('root-ca-file') { should_not be_nil }
-    its('root-ca-file') { should_not be_empty }
+  if kube_controller_manager_manifest.errors.empty?
+    describe kube_controller_manager_manifest do
+      its('root-ca-file') { should_not be_nil }
+      its('root-ca-file') { should_not be_empty }
+    end
   end
 end

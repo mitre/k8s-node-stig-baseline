@@ -33,8 +33,10 @@ Set the value of "--etcd-certfile" to the certificate to be used for communicati
     its('errors') { should be_empty }
   end
 
-  describe kube_apiserver_manifest do
-    its('etcd-certfile') { should_not be_nil }
-    its('etcd-certfile') { should_not be_empty }
+  if kube_apiserver_manifest.errors.empty?
+    describe kube_apiserver_manifest do
+      its('etcd-certfile') { should_not be_nil }
+      its('etcd-certfile') { should_not be_empty }
+    end
   end
 end

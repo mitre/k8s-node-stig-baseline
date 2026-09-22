@@ -31,8 +31,10 @@ Set the value of "--etcd-cafile" to the Certificate Authority for etcd.'
     its('errors') { should be_empty }
   end
 
-  describe kube_apiserver_manifest do
-    its('etcd-cafile') { should_not be_nil }
-    its('etcd-cafile') { should_not be_empty }
+  if kube_apiserver_manifest.errors.empty?
+    describe kube_apiserver_manifest do
+      its('etcd-cafile') { should_not be_nil }
+      its('etcd-cafile') { should_not be_empty }
+    end
   end
 end

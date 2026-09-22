@@ -30,7 +30,9 @@ Set the value of "--audit-log-maxsize" to a minimum of "100".'
     its('errors') { should be_empty }
   end
 
-  describe kube_apiserver_manifest do
-    its('audit-log-maxsize') { should cmp >= 100 }
+  if kube_apiserver_manifest.errors.empty?
+    describe kube_apiserver_manifest do
+      its('audit-log-maxsize') { should cmp >= 100 }
+    end
   end
 end

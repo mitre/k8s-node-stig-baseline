@@ -30,7 +30,9 @@ Set the value of "--secure-port" to a value greater than "0".'
     its('errors') { should be_empty }
   end
 
-  describe kube_apiserver_manifest do
-    its('secure-port') { should cmp > 0 }
+  if kube_apiserver_manifest.errors.empty?
+    describe kube_apiserver_manifest do
+      its('secure-port') { should cmp > 0 }
+    end
   end
 end
