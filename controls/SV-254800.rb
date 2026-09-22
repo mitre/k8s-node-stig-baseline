@@ -108,10 +108,21 @@ Best Practice: https://kubernetes.io/docs/concepts/security/pod-security-policy/
           end
 
           if defaults.is_a?(Hash)
+            pod_security_levels = %w[privileged baseline restricted]
+            minimum_level = input('minimum_pod_security_level').to_s
+            minimum_index = pod_security_levels.index(minimum_level)
+
             %w[enforce audit warn].each do |mode|
+              # Kubernetes applies "privileged" when a mode is unset.
+              configured_level = defaults.fetch(mode, 'privileged').to_s
+              configured_index = pod_security_levels.index(configured_level)
+
               describe "PodSecurity #{mode} level" do
-                subject { defaults.fetch(mode, 'privileged') }
-                it { should be_in %w[privileged baseline restricted] }
+                it "is at least the #{minimum_level} standard" do
+                  expect(minimum_index).not_to be_nil, "input('minimum_pod_security_level') must be one of #{pod_security_levels.join(', ')}; got #{minimum_level.inspect}"
+                  # An unrecognized level indexes to nil, which be >= reports as a failure.
+                  expect(configured_index).to be >= minimum_index, "#{mode} is #{configured_level.inspect}; input('minimum_pod_security_level') requires at least #{minimum_level} (#{pod_security_levels.join(' < ')})"
+                end
               end
               describe "PodSecurity #{mode} version" do
                 subject { defaults.fetch("#{mode}-version", 'latest') }
@@ -119,8 +130,8 @@ Best Practice: https://kubernetes.io/docs/concepts/security/pod-security-policy/
               end
             end
 
-            describe 'PodSecurity defaults and exemptions represent organizational least privilege' do
-              skip "Review defaults #{defaults.inspect} and exemptions #{configuration['exemptions'].inspect} from #{configuration_path} (admission configuration: #{policy_path}) against namespace policies and documented organizational requirements."
+            describe 'PodSecurity exemptions represent organizational least privilege' do
+              skip "The enforce, audit, and warn levels are checked against input('minimum_pod_security_level'). Review the exemptions #{configuration['exemptions'].inspect} from #{configuration_path} (admission configuration: #{policy_path}) against documented organizational requirements."
             end
           end
         end

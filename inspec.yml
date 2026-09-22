@@ -125,6 +125,13 @@ inputs:
       pki_private_key_files: '0600'
     required: true
 
+  # SV-254800
+  - name: minimum_pod_security_level
+    description: 'Weakest Pod Security Standards level accepted for the PodSecurity enforce, audit, and warn defaults. Ordered privileged < baseline < restricted; "privileged" applies no restrictions. Raise to "restricted" to require the hardened standard.'
+    type: String
+    value: 'baseline'
+    required: true
+
   # SV-242418
   - name: required_tls_cipher_suites
     description: 'TLS cipher suites the API Server must offer. The configured list must contain every entry; additional approved suites are permitted.'
