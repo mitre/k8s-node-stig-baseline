@@ -37,7 +37,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@e5517072e87f198d9533967ae13d97c11b604005 # v1.99.0
         with:
-          ruby-version: '3.1'
+          ruby-version: '3.4'
 
       - name: Install profile dependencies
         run: |
@@ -81,11 +81,30 @@ jobs:
           python markdown-summary.py < results/kind_${{ matrix.suite }}-data.json > results/kind_${{ matrix.suite }}-markdown-summary.md
           cat results/kind_${{ matrix.suite }}-markdown-summary.md >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Validate scan threshold
+      - name: Validate control-plane scan threshold
         if: always() && hashFiles(format('results/kind_{0}.json', matrix.suite)) != ''
         uses: mitre/saf_action@a19f76ed3721c14aa8a1afb8eded117d8bf16a5d # v1.9.0
         with:
           command_string: "validate threshold -i results/kind_${{ matrix.suite }}.json -T kind.${{ matrix.suite }}.threshold.yml"
+
+      - name: Display SAF results summary (worker)
+        if: always() && hashFiles(format('results/kind_{0}_worker.json', matrix.suite)) != ''
+        continue-on-error: true
+        uses: mitre/saf_action@a19f76ed3721c14aa8a1afb8eded117d8bf16a5d # v1.9.0
+        with:
+          command_string: "view summary -i results/kind_${{ matrix.suite }}_worker.json"
+
+      - name: Validate worker scan threshold
+        if: always() && hashFiles(format('results/kind_{0}_worker.json', matrix.suite)) != ''
+        uses: mitre/saf_action@a19f76ed3721c14aa8a1afb8eded117d8bf16a5d # v1.9.0
+        with:
+          command_string: "validate threshold -i results/kind_${{ matrix.suite }}_worker.json -T kind.${{ matrix.suite }}.worker.threshold.yml"
+
+      - name: Confirm the worker scan produced a result
+        if: always() && steps.kitchen.outcome == 'success' && hashFiles(format('results/kind_{0}_worker.json', matrix.suite)) == ''
+        run: |
+          echo "Kitchen succeeded but no worker result was produced; the worker node was not scanned." >&2
+          exit 1
 
       - name: Upload results to Heimdall
         if: always() && hashFiles(format('results/kind_{0}.json', matrix.suite)) != ''
@@ -93,12 +112,15 @@ jobs:
         env:
           SAF_HEIMDALL_UPLOAD_KEY: ${{ secrets.SAF_HEIMDALL_UPLOAD_KEY }}
         run: |
-          curl -# -s -F data=@results/kind_${{ matrix.suite }}.json \
-            -F "filename=k8s-node-kind-${{ matrix.suite }}-${{ env.COMMIT_SHORT_SHA }}.json" \
-            -F "public=true" \
-            -F "evaluationTags=${{ env.COMMIT_SHORT_SHA }},${{ github.repository }},${{ github.workflow }},${{ matrix.suite }},kind" \
-            -H "Authorization: Api-Key $SAF_HEIMDALL_UPLOAD_KEY" \
-            "${{ vars.SAF_HEIMDALL_URL }}/evaluations"
+          for role_file in results/kind_${{ matrix.suite }}.json results/kind_${{ matrix.suite }}_worker.json; do
+            [ -f "$role_file" ] || continue
+            curl -# -s -F "data=@${role_file}" \
+              -F "filename=k8s-node-kind-$(basename "$role_file" .json)-${{ env.COMMIT_SHORT_SHA }}.json" \
+              -F "public=true" \
+              -F "evaluationTags=${{ env.COMMIT_SHORT_SHA }},${{ github.repository }},${{ github.workflow }},${{ matrix.suite }},kind" \
+              -H "Authorization: Api-Key $SAF_HEIMDALL_UPLOAD_KEY" \
+              "${{ vars.SAF_HEIMDALL_URL }}/evaluations"
+          done
 
       - name: Upload Kind assessment results
         if: always()
