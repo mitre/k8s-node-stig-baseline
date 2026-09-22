@@ -1,3 +1,4 @@
+require 'json'
 require 'shellwords'
 
 control 'SV-242396' do
@@ -38,8 +39,24 @@ If the Control Plane or any Worker nodes are not using kubectl version 1.12.9 or
   end
 
   if kubectl_version.exit_status.zero?
-    describe json(content: kubectl_version.stdout) do
-      its(%w[clientVersion gitVersion]) { should cmp >= kubectl_minversion }
+    begin
+      client = JSON.parse(kubectl_version.stdout)
+    rescue JSON::ParserError
+      client = {}
+    end
+    reported = client.is_a?(Hash) ? client.dig('clientVersion', 'gitVersion') : nil
+
+    # kubectl prefixes gitVersion with "v", which Gem::Version cannot parse.
+    reported_version = reported.to_s[/\Av?(\d+\.\d+(?:\.\d+)?)/, 1]
+    minimum_version = kubectl_minversion.to_s[/\Av?(\d+\.\d+(?:\.\d+)?)/, 1]
+
+    describe 'kubectl client version' do
+      it "is reported and is at least #{kubectl_minversion}" do
+        expect(reported_version).not_to be_nil, "Could not read a version from kubectl output: #{reported.inspect}"
+        expect(minimum_version).not_to be_nil, "input('kubectl_minversion') is not a version number: #{kubectl_minversion.inspect}"
+        expect(Gem::Version.new(reported_version)).to be >= Gem::Version.new(minimum_version),
+                                                      "kubectl is #{reported}, which is older than the required #{kubectl_minversion}"
+      end
     end
   end
 end
