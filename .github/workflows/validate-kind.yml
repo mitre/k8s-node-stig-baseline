@@ -35,7 +35,7 @@ jobs:
         run: echo "COMMIT_SHORT_SHA=$(git rev-parse --short ${{ github.sha }})" >> "$GITHUB_ENV"
 
       - name: Set up Ruby
-        uses: ruby/setup-ruby@e5517072e87f198d9533967ae13d97c11b604005 # v1.99.0
+        uses: ruby/setup-ruby@14594264cd68ce8a2345dd349bc3d138a4ef85c8 # v1.327.0
         with:
           ruby-version: '3.4'
 
