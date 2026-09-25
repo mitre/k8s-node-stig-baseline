@@ -1,0 +1,11 @@
+---
+# Shared Test Kitchen configuration. Environment-specific settings belong in
+# kitchen.kind.yml, which is merged through KITCHEN_LOCAL_YAML.
+platforms:
+  - name: kind
+
+provisioner:
+  name: dummy
+
+suites:
+  - name: vanilla

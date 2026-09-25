@@ -1,0 +1,17 @@
+---
+# Inputs for the Kind v1.32.2 worker node in the vanilla suite.
+node_roles:
+  - worker
+manifests_path: /etc/kubernetes/manifests
+# A kind worker does not host etcd or the control-plane static Pods.
+etcd_managed_on_node: false
+etcd_data_dir: /var/lib/etcd
+pki_path: /etc/kubernetes/pki/
+kubeadm_conf_path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+kubectl_path: /usr/bin/kubectl
+kubectl_minversion: 1.12.9
+kubernetes_conf_files:
+  - /etc/kubernetes/kubelet.conf
+kubernetes_minor_version: 32
+audit_log_retention_days: 30
+streaming_connection_idle_timeout_seconds: 300

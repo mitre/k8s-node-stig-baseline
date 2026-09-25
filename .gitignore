@@ -1,3 +1,7 @@
 
 inspec.lock
 *.json
+.kitchen/
+results/
+vendor/
+.bundle/
