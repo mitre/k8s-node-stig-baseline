@@ -1,0 +1,4 @@
+# Worker-node scan for the vanilla suite; only the error gate is enforced.
+error:
+  total:
+    max: 0

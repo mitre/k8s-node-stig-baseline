@@ -1,0 +1,34 @@
+---
+# Test Kitchen's Exec driver manages the local lifecycle hooks. The verifier
+# audits the Linux node container, so no Kitchen container or SSH transport is
+# required.
+platforms:
+  - name: kind
+
+provisioner:
+  name: dummy
+
+driver:
+  name: exec
+
+verifier:
+  name: shell
+  command: 'true'
+
+suites:
+  - name: vanilla
+    lifecycle:
+      pre_create:
+        - local: ./provisioning/kind/create.sh vanilla
+      pre_verify:
+        - local: ./provisioning/kind/verify.sh vanilla
+      post_destroy:
+        - local: ./provisioning/kind/destroy.sh vanilla
+  - name: hardened
+    lifecycle:
+      pre_create:
+        - local: ./provisioning/kind/create.sh hardened
+      pre_verify:
+        - local: ./provisioning/kind/verify.sh hardened
+      post_destroy:
+        - local: ./provisioning/kind/destroy.sh hardened

@@ -1,0 +1,51 @@
+control 'SV-242436' do
+  title 'The Kubernetes API server must have the ValidatingAdmissionWebhook
+enabled.'
+  desc 'Enabling the admissions webhook allows for Kubernetes to apply
+policies against objects that are to be created, read, updated, or deleted. By
+applying a pod security policy, control can be given to not allow images to be
+instantiated that run as the root user. If pods run as the root user, the pod
+then has root privileges to the host system and all the resources it has. An
+attacker can use this to attack the Kubernetes cluster. By implementing a
+policy that does not allow root or privileged pods, the pod users are limited
+in what the pod can do and access.'
+  desc 'check', 'Prior to version 1.21, to enforce security policiesPod Security Policies (psp) were used. Those are now deprecated and will be removed from version 1.25.
+
+Migrate from PSP to PSA:
+https://kubernetes.io/docs/tasks/configure-pod-container/migrate-from-psp/
+
+Pre-version 1.25 Check:
+Change to the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Run the command:
+grep -i ValidatingAdmissionWebhook *
+
+If a line is not returned that includes enable-admission-plugins and ValidatingAdmissionWebhook, this is a finding.'
+  desc 'fix', 'Edit the Kubernetes API Server manifest file in the /etc/kubernetes/manifests directory on the Kubernetes Control Plane. Set the argument "--enable-admission-plugins" to include "ValidatingAdmissionWebhook".  Each enabled plugin is separated by commas.
+
+Note: It is best to implement policies first and then enable the webhook, otherwise a denial of service may occur.'
+  impact 0.7
+  tag severity: 'high'
+  tag gtitle: 'SRG-APP-000342-CTR-000775'
+  tag gid: 'V-242436'
+  tag rid: 'SV-242436r961359_rule'
+  tag stig_id: 'CNTR-K8-002000'
+  tag fix_id: 'F-45669r863897_fix'
+  tag cci: ['CCI-002233', 'CCI-002263']
+  tag nist: ['AC-6 (8)', 'AC-16 a']
+
+  only_if("This control applies only to control-plane nodes; input('node_roles') must include 'control-plane'.", impact: 0.0) do
+    input('node_roles').include?('control-plane')
+  end
+
+  kube_apiserver_manifest = kubernetes_manifest(::File.join(input('manifests_path'), 'kube-apiserver.yaml'), 'kube-apiserver')
+  describe kube_apiserver_manifest do
+    its('errors') { should be_empty }
+  end
+
+  only_if('This pre-1.25 control does not apply to Kubernetes 1.25 and newer.', impact: 0.0) do
+    input('kubernetes_minor_version') < 25
+  end
+
+  describe kube_apiserver_manifest do
+    its('enable-admission-plugins.to_s') { should include 'ValidatingAdmissionWebhook' }
+  end
+end
